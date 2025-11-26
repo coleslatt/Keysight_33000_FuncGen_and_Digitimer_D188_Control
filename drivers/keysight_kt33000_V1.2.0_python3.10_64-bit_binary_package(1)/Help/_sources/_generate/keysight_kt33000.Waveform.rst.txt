@@ -1,0 +1,14 @@
+
+Waveform
+=========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: Waveform
+    :members:
+    :exclude-members: name
+
+
+
+

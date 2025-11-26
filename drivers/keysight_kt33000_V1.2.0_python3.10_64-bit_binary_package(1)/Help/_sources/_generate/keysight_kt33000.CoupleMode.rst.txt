@@ -1,0 +1,14 @@
+
+CoupleMode
+===========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: CoupleMode
+    :members:
+    :exclude-members: name
+
+
+
+

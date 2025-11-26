@@ -1,0 +1,14 @@
+
+SyncMode
+=========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: SyncMode
+    :members:
+    :exclude-members: name
+
+
+
+

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Kt33000OutputChannelFM &#8212; Kt33000 1.2.0 Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=d59dc883" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kt33000OutputChannelFSK" href="keysight_kt33000.Kt33000OutputChannelFSK.html" />
+    <link rel="prev" title="Kt33000OutputChannelBurst" href="keysight_kt33000.Kt33000OutputChannelBurst.html" /> 
+  </head><body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td valign="top"><a href="../index.html"><h1 style="font-size: 2em;">Kt33000 Driver Python API</h1></a></td>
+        <td align="right"><a href="https://www.keysight.com" target="_blank"><img src="../_static\keysight.gif" alt="keysight.gif"></a></td>
+</tr></table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelFSK.html" title="Kt33000OutputChannelFSK"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelBurst.html" title="Kt33000OutputChannelBurst"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" accesskey="U">Kt33000OutputChannel</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelFM</a></li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="kt33000outputchannelfm">
+<h1>Kt33000OutputChannelFM<a class="headerlink" href="#kt33000outputchannelfm" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Access interface members using: <code class="docutils literal notranslate"><span class="pre">driver.output_channels[&lt;name_or_index&gt;].fm</span></code></div>
+<div class="line">Where <code class="docutils literal notranslate"><span class="pre">driver</span></code> is a reference to the driver’s root interface returned by the <a class="reference internal" href="../programming.html#creating-a-driver-instance"><span class="std std-ref">constructor</span></a>.</div>
+</div>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Kt33000OutputChannelFM</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM" title="keysight_kt33000.Kt33000OutputChannelFM"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM</span></code></a> interface.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.deviation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deviation</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.deviation" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the peak frequency deviation in Hz. This value represents the peak variation in frequency of the modulated waveform from the carrier frequency.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : 1 μHz to 15.05 (limited to 150 kHz for RAMP); default 100 Hz.
+<br />&#8226;Typical Return : +1.000000000000000E+03
+<br />&#8226;The deviation cannot exceed the carrier frequency. If you attempt to set a deviation that exceeds the
+carrier frequency (with FM enabled), the instrument will adjust the deviation to the maximum value
+allowed for that carrier frequency. From the remote interface, a "Settings conflict" error will also be
+generated.
+<br />&#8226;The carrier frequency plus the deviation cannot exceed the selected function's maximum frequency
+plus 100 kHz. If you attempt to set the deviation to an invalid value, the instrument adjusts it to the
+maximum value allowed with the present carrier frequency. The remote interface also generates a
+"Data out of range" error.
+<br />&#8226;If the deviation causes the carrier waveform to exceed a frequency boundary for the current duty cycle
+(square waveform only), the instrument will adjust the duty cycle to the maximum value allowed with
+the present carrier frequency. From the remote interface, a "Settings conflict" error will also be generated.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.enabled" title="Link to this definition">¶</a></dt>
+<dd><p>Enables or disables modulation.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : 0 (OFF) or 1 (ON). Default 0(OFF).
+<br />&#8226;To avoid multiple waveform changes, enable modulation after configuring the other modulation parameters.
+<br />&#8226;Only one modulation mode may be enabled at a time.
+<br />&#8226;The instrument will not enable modulation with sweep or burst enabled. When you enable modulation, the sweep or burst mode is turned off.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.get_deviation">
+<span class="sig-name descname"><span class="pre">get_deviation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.get_deviation" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the maximum or minimum peak frequency deviation in hertz for the specified channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>deviation (MaxMinDef) - Peak Frequency deviation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum or minimum peak frequency deviation in hertz.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.get_internal_frequency">
+<span class="sig-name descname"><span class="pre">get_internal_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.get_internal_frequency" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the maximum or minimum frequency of the modulating waveform in Hertz(Hz) for the specified channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>int_frequency (MaxMinDef) - Frequency of the modulating waveform.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum or minimum frequency of the modulating waveform in Hertz(Hz).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.internal_frequency">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">internal_frequency</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.internal_frequency" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the frequency of the modulating waveform. The modulating source waveform operates at that frequency, within the frequency limits of that waveform.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter can be from 1 μHz to the maximum allowed for the internal function. Default 10 Hz.
+<br />&#8226;Typical Return : +1.000000000000000E+04
+<br />&#8226;When you select an arbitrary waveform as the modulating source, the frequency changes to the frequency of the arbitrary waveform, which is based on the sample rate and the number of points in the
+arbitrary waveform.
+<br />&#8226;This command should be used only with the internal modulation source (i.e FMSource is set to Internal).
+<br />&#8226;When using an arbitrary waveform for the modulating source, changing this parameter also changes
+the cached metadata representing the arbitrary waveform's sample rate. You can also change the modulating frequency of an arbitrary waveform with ArbitraryWaveformSamplingRate. These commands and the modulation
+frequency command are directly coupled in order to keep the arbitrary waveform behaving exactly as
+it was last played. If you later turn modulation off and select that same arbitrary waveform as the current function, its sample rate (and corresponding frequency based upon the number of points) will be
+the same as it was when played as the modulation source.
+<br />&#8226;If the internal function is Triangle, UpRamp, or DnRamp, the maximum frequency is limited to 200
+kHz on the EDU33210 Series and 33500 Series or 800 kHz on the 33600 Series. If the internal function is PRBS, the frequency refers to bit rate and is limited.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.internal_function">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">internal_function</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.internal_function" title="Link to this definition">¶</a></dt>
+<dd><p>Selects the shape of the modulating waveform for the specified channel.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.Waveform.html#keysight_kt33000.Waveform" title="keysight_kt33000.Waveform">Waveform</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter: Sinusoid, Square, Ramp, NRamp, Triangle, Noise, PRBS or Arbitrary. Default Sinusoid.
+<br />&#8226;Typical Return : Sinusoid, Square, Ramp, NRamp, Triangle, Noise, PRBS, or Arbitrary.
+<br />&#8226;This command should be used only with the internal modulation source (i.e FMSource Internal).
+<br />&#8226;Some combinations of carrier and internal function are not allowed: PRBS carrier and PRBS internal
+function, ARB carrier and ARB internal function.
+<br />&#8226;You can use noise as the modulating waveform, but you cannot use noise, pulse, or DC as the carrier.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.set_deviation">
+<span class="sig-name descname"><span class="pre">set_deviation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.set_deviation" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the maximum, minimum or default peak frequency deviation in hertz for the specified channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>deviation (MaxMinDef) - Peak Frequency deviation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.set_internal_frequency">
+<span class="sig-name descname"><span class="pre">set_internal_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelFM</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.set_internal_frequency" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the maximum, minimum or default frequency of the modulating waveform in Hertz(Hz) for the specified channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>int_frequency (MaxMinDef) - Frequency of the modulating waveform.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelFM.source">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelFM.source" title="Link to this definition">¶</a></dt>
+<dd><p>Selects the source of the modulating signal for the specified channel.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.ModulationSource.html#keysight_kt33000.ModulationSource" title="keysight_kt33000.ModulationSource">ModulationSource</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter: Internal, External, Channel1 or Channel2. Default Internal.
+<br />&#8226;Typical Return : Internal, External, Channel1, or Channel2.
+<br />&#8226;If you select External, the carrier waveform is modulated with an external waveform
+<br />&#8226;If you select the External modulating source, the deviation is controlled by the ±5 V signal
+level (optionally ±1 V on the 33600 Series) on the rear-panel Modulation In connector. For
+example, if the frequency deviation is 100 kHz, then a +5 V signal level (optionally +1 V on the
+33600 Series) corresponds to a 100 kHz increase in frequency. Lower external signal levels produce less deviation and negative signal levels reduce the frequency below the carrier frequency.
+<br />&#8226;A channel may not be its own modulation source.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Kt33000OutputChannelFM</a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM</span></code></a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.deviation"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.deviation</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.enabled"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.enabled</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.get_deviation"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.get_deviation()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.get_internal_frequency"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.get_internal_frequency()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.internal_frequency"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.internal_frequency</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.internal_function"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.internal_function</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.set_deviation"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.set_deviation()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.set_internal_frequency"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.set_internal_frequency()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelFM.source"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelFM.source</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelBurst.html"
+                          title="previous chapter">Kt33000OutputChannelBurst</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelFSK.html"
+                          title="next chapter">Kt33000OutputChannelFSK</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelFSK.html" title="Kt33000OutputChannelFSK"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelBurst.html" title="Kt33000OutputChannelBurst"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" >Kt33000OutputChannel</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelFM</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2021-2025, Keysight Technologies.  v1.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

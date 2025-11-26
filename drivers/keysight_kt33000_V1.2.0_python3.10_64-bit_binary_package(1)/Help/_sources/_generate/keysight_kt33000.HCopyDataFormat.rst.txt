@@ -1,0 +1,14 @@
+
+HCopyDataFormat
+================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: HCopyDataFormat
+    :members:
+    :exclude-members: name
+
+
+
+

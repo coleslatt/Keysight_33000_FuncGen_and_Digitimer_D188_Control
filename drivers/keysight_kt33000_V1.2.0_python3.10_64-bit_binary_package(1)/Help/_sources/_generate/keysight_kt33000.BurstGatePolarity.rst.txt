@@ -1,0 +1,14 @@
+
+BurstGatePolarity
+==================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: BurstGatePolarity
+    :members:
+    :exclude-members: name
+
+
+
+

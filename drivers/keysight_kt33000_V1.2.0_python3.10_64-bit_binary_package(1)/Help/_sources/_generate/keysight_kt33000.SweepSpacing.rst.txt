@@ -1,0 +1,14 @@
+
+SweepSpacing
+=============
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: SweepSpacing
+    :members:
+    :exclude-members: name
+
+
+
+

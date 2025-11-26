@@ -1,0 +1,14 @@
+
+PRBSSequenceType
+=================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: PRBSSequenceType
+    :members:
+    :exclude-members: name
+
+
+
+

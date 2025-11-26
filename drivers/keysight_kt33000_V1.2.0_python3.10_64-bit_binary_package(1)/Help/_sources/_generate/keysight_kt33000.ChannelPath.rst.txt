@@ -1,0 +1,14 @@
+
+ChannelPath
+============
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: ChannelPath
+    :members:
+    :exclude-members: name
+
+
+
+

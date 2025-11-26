@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Kt33000OutputChannelOutputSync &#8212; Kt33000 1.2.0 Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=d59dc883" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kt33000OutputChannelOutputTrigger" href="keysight_kt33000.Kt33000OutputChannelOutputTrigger.html" />
+    <link rel="prev" title="Kt33000OutputChannelOutputList" href="keysight_kt33000.Kt33000OutputChannelOutputList.html" /> 
+  </head><body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td valign="top"><a href="../index.html"><h1 style="font-size: 2em;">Kt33000 Driver Python API</h1></a></td>
+        <td align="right"><a href="https://www.keysight.com" target="_blank"><img src="../_static\keysight.gif" alt="keysight.gif"></a></td>
+</tr></table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputTrigger.html" title="Kt33000OutputChannelOutputTrigger"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputList.html" title="Kt33000OutputChannelOutputList"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" >Kt33000OutputChannel</a> &#187;</li>
+          <li class="nav-item nav-item-6"><a href="keysight_kt33000.Kt33000OutputChannelOutput.html" accesskey="U">Kt33000OutputChannelOutput</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelOutputSync</a></li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="kt33000outputchanneloutputsync">
+<h1>Kt33000OutputChannelOutputSync<a class="headerlink" href="#kt33000outputchanneloutputsync" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Access interface members using: <code class="docutils literal notranslate"><span class="pre">driver.output_channels[&lt;name_or_index&gt;].output.sync</span></code></div>
+<div class="line">Where <code class="docutils literal notranslate"><span class="pre">driver</span></code> is a reference to the driver’s root interface returned by the <a class="reference internal" href="../programming.html#creating-a-driver-instance"><span class="std std-ref">constructor</span></a>.</div>
+</div>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputSync">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Kt33000OutputChannelOutputSync</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputSync" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputSync" title="keysight_kt33000.Kt33000OutputChannelOutputSync"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputSync</span></code></a> interface.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputSync.enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.enabled" title="Link to this definition">¶</a></dt>
+<dd><p>Disables (OFF) or enables (ON) the front panel Sync connector.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : 0 (OFF) or 1 (ON). Default 1 (ON).
+<br />&#8226;Disabling the Sync signal reduces output distortion at lower amplitudes.
+<br />&#8226;When Sync is disabled, the output level on the Sync connector is a logic "low."
+<br />&#8226;Inverting a waveform (<a href="keysight_kt33000.OutputPolarity.html">OutputPolarity</a> set to Inverted) does not invert the Sync signal.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputSync.mode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.mode" title="Link to this definition">¶</a></dt>
+<dd><p>Specifies normal Sync behavior (Normal), forces Sync to follow the carrier waveform (Carrier), or indicates marker position (Marker).</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.SyncMode.html#keysight_kt33000.SyncMode" title="keysight_kt33000.SyncMode">SyncMode</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : Normal, Carrier or Marker. Default Normal.
+<br />&#8226;Typical Return : Normal, Carrier, or Marker.
+<br />&#8226;The following table details the command's behavior:
+
+<table style="width:100%">
+    <tr>
+        <th>&lt;mode&gt;</th>
+        <th>Sync Behaviour</th>
+        <th>Conditions</th>
+    </tr>
+    <tr>
+        <td rowspan="4">Normal</td>
+        <td>Sync follows envelope of burst signal.</td>
+        <td>When BurstEnabled is set to ON.</td>
+    </tr>
+    <tr>
+        <td>Sync follows envelope of sweep signal.</td>
+        <td>When SweepEnabled is set to ON.</td>
+    </tr>
+    <tr>
+        <td>Sync follows modulating signal.</td>
+        <td>When modulating and modulation source is Internal.</td>
+    </tr>
+    <tr>
+        <td>Sync follows Function signal.</td>
+        <td>All other conditions.</td>
+    </tr>
+    <tr>
+        <td rowspan="3">Carrier</td>
+        <td>Sync follows current MarkerPoint setting.</td>
+        <td>When Function is Arbitrary.</td>
+    </tr>
+    <tr>
+        <td>Sync follows BurstEnabled is set to ON.</td>
+        <td>When Function is not Arbitrary.</td>
+    </tr>
+    <tr>
+        <td>Sync follows Function signal.</td>
+        <td>All other conditions.</td>
+    </tr>
+    <tr>
+        <td rowspan="5">Marker</td>
+        <td>Sync follows current MarkerPoint setting.</td>
+        <td>When in CW mode and Function is Arbitrary <br />When modulating, modulation source is internal, and
+Function is Arbitrary or &lt;modulation&gt; Internal function is Arbitrary <br />When modulating, modulation source is external, and
+Function is Arbitrary</td>
+    </tr>
+    <tr>
+        <td>Sync follows current
+MarkerCycle setting.</td>
+        <td>When BurstEnabled is ON.</td>
+    </tr>
+    <tr>
+        <td>Sync follows current
+MarkerFrequency
+setting.</td>
+        <td>When SweepEnabled is ON</td>
+    </tr>
+    <tr>
+        <td>Sync follows modulating signal.</td>
+        <td>When modulating, modulation source is not external,
+Function is not Arbitrary, and internal function is not Arbitrary</td>
+    </tr>
+    <tr>
+        <td>Sync follows Function signal.</td>
+        <td>All other conditions.</td>
+    </tr>
+</table></dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputSync.polarity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">polarity</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.polarity" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the desired output polarity of the Sync output to trigger external equipment that may require falling or rising edge triggers.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.SyncPolarity.html#keysight_kt33000.SyncPolarity" title="keysight_kt33000.SyncPolarity">SyncPolarity</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : Normal or Inverted. Default Normal.
+<br />&#8226;Typical Return : Normal or Inverted.
+<br />&#8226;<b>Normal: </b>voltage on Sync output connector is near zero, and rises when a Sync event occurs.
+Voltage stays high (approximately 3.3 V into high impedance) until Sync signal is de-asserted, when it
+falls back to near zero.
+<br />&#8226;<b>Inverted: </b>opposite of NORMal.
+<br />&#8226;The Sync signal may be derived from either channel in a two-channel instrument (OutputSyncMode).</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputSync.source">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.source" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the source for the Sync output connector.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.SyncSource.html#keysight_kt33000.SyncSource" title="keysight_kt33000.SyncSource">SyncSource</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : Channel1 or Channel2. Default Channel1.
+<br />&#8226;Typical Return : Channel1 or Channel2.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Kt33000OutputChannelOutputSync</a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputSync"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputSync</span></code></a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.enabled"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputSync.enabled</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.mode"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputSync.mode</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.polarity"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputSync.polarity</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputSync.source"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputSync.source</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelOutputList.html"
+                          title="previous chapter">Kt33000OutputChannelOutputList</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelOutputTrigger.html"
+                          title="next chapter">Kt33000OutputChannelOutputTrigger</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputTrigger.html" title="Kt33000OutputChannelOutputTrigger"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputList.html" title="Kt33000OutputChannelOutputList"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" >Kt33000OutputChannel</a> &#187;</li>
+          <li class="nav-item nav-item-6"><a href="keysight_kt33000.Kt33000OutputChannelOutput.html" >Kt33000OutputChannelOutput</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelOutputSync</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2021-2025, Keysight Technologies.  v1.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

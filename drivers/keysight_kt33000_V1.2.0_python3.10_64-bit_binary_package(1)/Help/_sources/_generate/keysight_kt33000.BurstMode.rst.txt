@@ -1,0 +1,14 @@
+
+BurstMode
+==========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: BurstMode
+    :members:
+    :exclude-members: name
+
+
+
+

@@ -1,0 +1,14 @@
+
+FreqMode
+=========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: FreqMode
+    :members:
+    :exclude-members: name
+
+
+
+

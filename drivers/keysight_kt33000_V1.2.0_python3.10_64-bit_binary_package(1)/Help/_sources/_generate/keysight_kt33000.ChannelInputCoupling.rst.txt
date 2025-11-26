@@ -1,0 +1,14 @@
+
+ChannelInputCoupling
+=====================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: ChannelInputCoupling
+    :members:
+    :exclude-members: name
+
+
+
+
