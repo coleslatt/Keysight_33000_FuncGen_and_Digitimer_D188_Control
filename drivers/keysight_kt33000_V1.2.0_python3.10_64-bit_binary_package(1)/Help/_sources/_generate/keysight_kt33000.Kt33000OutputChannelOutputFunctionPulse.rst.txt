@@ -1,0 +1,19 @@
+
+Kt33000OutputChannelOutputFunctionPulse
+========================================
+    | Access interface members using: ``driver.output_channels[<name_or_index>].output_function.pulse``
+    | Where ``driver`` is a reference to the driver's root interface returned by the :ref:`constructor <programming:Creating a Driver Instance>`.
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: Kt33000OutputChannelOutputFunctionPulse
+    :members:
+    :exclude-members: get_name_by_index, items
+
+
+
+**Child Interfaces**
+
+
+.. toctree::
+   keysight_kt33000.Kt33000OutputChannelOutputFunctionPulseTransition

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Kt33000Memory &#8212; Kt33000 1.2.0 Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=d59dc883" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kt33000OutputChannelCollection" href="keysight_kt33000.Kt33000OutputChannelCollection.html" />
+    <link rel="prev" title="Kt33000Display" href="keysight_kt33000.Kt33000Display.html" /> 
+  </head><body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td valign="top"><a href="../index.html"><h1 style="font-size: 2em;">Kt33000 Driver Python API</h1></a></td>
+        <td align="right"><a href="https://www.keysight.com" target="_blank"><img src="../_static\keysight.gif" alt="keysight.gif"></a></td>
+</tr></table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelCollection.html" title="Kt33000OutputChannelCollection"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000Display.html" title="Kt33000Display"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" accesskey="U">Kt33000</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000Memory</a></li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="kt33000memory">
+<h1>Kt33000Memory<a class="headerlink" href="#kt33000memory" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Access interface members using: <code class="docutils literal notranslate"><span class="pre">driver.memory</span></code></div>
+<div class="line">Where <code class="docutils literal notranslate"><span class="pre">driver</span></code> is a reference to the driver’s root interface returned by the <a class="reference internal" href="../programming.html#creating-a-driver-instance"><span class="std std-ref">constructor</span></a>.</div>
+</div>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Kt33000Memory</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.Kt33000Memory"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kt33000Memory</span></code></a> interface.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.copy" title="Link to this definition">¶</a></dt>
+<dd><p>Copies source file to destination file on Mass MemoryType device.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name. The file name must include any file extension.</p></li>
+<li><p><strong>destination_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name. The file name must include any file extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">To copy a file to a file of the same name in a different folder, you can specify just the &lt;drive&gt; and/or
+&lt;path&gt; for destination.
+<br /><b>Format for a &lt;file&gt;:</b>
+<br />The format for &lt;file1&gt; and &lt;file2&gt; is "[&lt;drive&gt;:&lt;path&gt;]&lt;file_name&gt;", where &lt;drive&gt; can be INTernal
+or USB, and &lt;path&gt; must be an absolute folder path.
+    <br /><blockquote>&#8226;INTernal specifies the internal flash file system. USB specifies a front panel USB storage device.
+    <br />&#8226;If &lt;drive&gt;:&lt;path&gt; is omitted, the folder specified by MemoryCurrentDirectory is used.
+    <br />&#8226;Absolute paths begin with "\" or "/" and start at the root folder of &lt;drive&gt;.
+    <br />&#8226;Folder and file names cannot contain the following characters: \ / : \* ? &quot;  &#124;  &lt; &gt; 
+    <br />&#8226;The combination of folder and file name cannot exceed 240 characters.
+    <br />&#8226;The source file and folder and the destination folder must exist and cannot be marked hidden or system.
+    <br />&#8226;If the destination file exists, it is overwritten, unless marked as hidden or system.
+    <br />&#8226;If &lt;drive&gt; is omitted:
+    <br /><blockquote>&#8226;The path is treated as a relative path and appended to the folder specified by MemoryCurrentDirectory.
+    <br />&#8226;Absolute paths are NOT allowed.
+
+    </blockquote>
+
+    </blockquote></dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.copy_sequence_file">
+<span class="sig-name descname"><span class="pre">copy_sequence_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.copy_sequence_file" title="Link to this definition">¶</a></dt>
+<dd><p>Copies a sequence from source to destination. The file names must include any file extension. Use the extension .seq for text format.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid sequence file name. The file name must include any file extension.</p></li>
+<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid sequence file name. The file name must include any file extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;This command is only supported on 33500 series and 33600 series Function Generator.
+<br />&#8226;The format for &lt;source&gt; and &lt;destination&gt; is "[[&lt;drive&gt;:]&lt;path&gt;]&lt;file_name&gt;", where &lt;drive&gt; can be
+INTernal or USB, and &lt;path&gt; is a file path.
+<br /><blockquote>&#8226;Internal specifies the internal flash file system. USB specifies a front panel USB storage device.
+    <br />&#8226;If &lt;drive&gt; is specified, &lt;path&gt; is interpreted as an absolute path. Absolute paths begin with "\" or
+"/" and start at the root folder of &lt;drive&gt;.
+    <br />&#8226;If &lt;drive&gt; is omitted, &lt;path&gt; is relative to the folder specified by MemoryCurrentDirectory. Relative
+paths must not begin with "\" or "/".
+    <br />&#8226;Folder and file names cannot contain the following characters: \ / : \* ? &quot; &#124;  &lt; &gt; 
+    <br />&#8226;The combination of folder and file name cannot exceed 240 characters.
+    <br />&#8226;The source file and folder and the destination folder must exist and cannot be marked hidden or system.
+    <br />&#8226;If the destination file exists, it is overwritten, unless marked as hidden or system.
+    <br />&#8226;To copy a sequence file to a sequence file of the same name in a different folder, you can specify
+just the &lt;drive&gt; and/or &lt;path&gt; for &lt;destination&gt;
+    </blockquote></dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.create" title="Link to this definition">¶</a></dt>
+<dd><p>Creates or opens the specified filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any new or existing filename.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.create_dir">
+<span class="sig-name descname"><span class="pre">create_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.create_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Makes a new directory (folder) on the mass storage medium.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>directory_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any directory name, including the mass storage unit specifier, default INT:</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">The instrument resets the default folder to the internal flash file system root directory ("INT:\") after
+the <a href="C7CEE0BD_40EE_4316_9623_E2912B24841A.html">Reset command</a>.
+<br /><b>Format for a &lt;folder&gt;:</b>
+<br />The format for &lt;folder&gt; is "&lt;drive&gt;:&lt;path&gt;", where &lt;drive&gt; can be INTernal or USB, and &lt;path&gt; is an
+absolute folder path.
+<br /><blockquote>&#8226;INTernal specifies the internal flash file system. USB specifies a front panel USB storage device.
+       <br />&#8226;Absolute paths begin with "\" or "/" and start at the root folder of &lt;drive&gt;.
+    <br />&#8226;The folder name specified in <path> cannot exceed 240 characters.
+    <br />&#8226;The specified folder must exist and cannot be marked hidden or system.
+    <br />&#8226;If &lt;drive&gt;:&lt;path&gt; is omitted, the folder specified by MemoryCurrentDirectory is used.
+    <br />&#8226;If &lt;drive&gt; is omitted:
+    <br /><blockquote>&#8226;The path is treated as a relative path and appended to the folder specified by MemoryCurrentDirectory.
+    <br />&#8226;Absolute paths are NOT allowed.</blockquote>
+      </blockquote></dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.current_dir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_dir</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.current_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Selects the default folder for the Memory commands. This folder must exist and is used when folder or file names do not include a drive and folder name.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">Parameter can be any directory name, including the mass storage unit specifier, default INT:\</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.download_file">
+<span class="sig-name descname"><span class="pre">download_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.download_file" title="Link to this definition">¶</a></dt>
+<dd><p>Downloads data from a file on the host computer (Source) to a local file in the instrument (Destination).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Source Filename.</p></li>
+<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Destination filename.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.get_catalog">
+<span class="sig-name descname"><span class="pre">get_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.get_catalog" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of all files in the current mass storage directory, including internal storage and the USB drive.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid folder name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<ul class="simple">
+<li><p><strong>memoryUsed</strong> (float) : Number of bytes of storage currently used in the folder.</p></li>
+<li><p><strong>memoryFree</strong> (float) : The number of bytes of storage currently available.</p></li>
+<li><p><strong>listOfFiles</strong> (str) : A list of all files in the current mass storage directory.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
+</dd>
+<dt class="field-even">Remarks<span class="colon">:</span></dt>
+<dd class="field-even">&#8226;The catalog takes the following form:
+<br />&lt;mem_used&gt;,&lt;mem_free&gt;{,"&lt;file listing&gt;"}
+<br />&#8226;The instrument returns two numeric values and a string for each file in the folder. The first numeric
+value indicates the number of bytes of storage used on the drive. The second indicates the number of
+bytes of storage available. Each &lt;file listing&gt; is in the format "&lt;file_name&gt;,&lt;file_type&gt;,&lt;file_size&gt;"
+(the quotation marks are also returned), where &lt;file_name&gt; is the name of the file including file extension, if any; &lt;file_type&gt; is either STAT for STATe (.sta) files, ASC for DATA (.csv) files, FOLD for folders,
+or null for all other file extensions; &lt;file_size&gt; is the size of the file in bytes.
+<br />&#8226;If no files exist, only &lt;mem_used&gt;,&lt;mem_free&gt; is returned.
+<br />&#8226;Because the instrument uses a small amount of space in the flash file system for internal use, the
+&lt;mem_used&gt; value will not be zero even if no user files exist on the drive.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.get_catalog_data_files">
+<span class="sig-name descname"><span class="pre">get_catalog_data_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.get_catalog_data_files" title="Link to this definition">¶</a></dt>
+<dd><p>Returns a list of all the arbitrary sequence (.seq) files and folders, as well as arbitrary waveform (.arb/.barb) files in a folder.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid folder name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<ul class="simple">
+<li><p><strong>memoryUsed</strong> (float) : Number of bytes of storage currently used in the folder.</p></li>
+<li><p><strong>memoryFree</strong> (float) : The number of bytes of storage currently available.</p></li>
+<li><p><strong>listOfFiles</strong> (str) : List of all the arbitrary sequence (.seq) files and folders, as well as arbitrary waveform (.arb/.barb) files in a folder.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
+</dd>
+<dt class="field-even">Remarks<span class="colon">:</span></dt>
+<dd class="field-even">&#8226;The instrument returns two numeric values and a string for each .seq and .arb/.barb file in the selected
+folder. The first numeric value indicates the number of bytes of storage used on the drive. The second
+indicates the number of bytes of storage available. Each &lt;file listing&gt; is in the format
+"&lt;filename&gt;,&lt;file_type&gt;,&lt;file_size&gt;" (the quotation marks are also returned), where &lt;filename&gt; is
+the name of the file including file extension, if any; &lt;file_type&gt; is FOLD for folders, ARB for arb segments, or SEQUENCE for arb sequence files; &lt;file_size&gt; is the size of the file in bytes.
+<br />&#8226;If no .seq, .arb, or .barb files exist, only &lt;mem_used&gt;,&lt;mem_free&gt; is returned.
+<br />&#8226;Because the instrument uses a small amount of space in the flash file system for internal use, the
+&lt;mem_used&gt; value will not be zero even if no user files exist on the drive.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.get_catalog_state_files">
+<span class="sig-name descname"><span class="pre">get_catalog_state_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.get_catalog_state_files" title="Link to this definition">¶</a></dt>
+<dd><p>Lists all state files (.sta file extension) in a folder.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid folder name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>A tuple containing:</p>
+<ul class="simple">
+<li><p><strong>memoryUsed</strong> (float) : Number of bytes of storage currently used in the folder.</p></li>
+<li><p><strong>memoryFree</strong> (float) : The number of bytes of storage currently available.</p></li>
+<li><p><strong>listOfFiles</strong> (str) : List of all state files in a folder.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
+</dd>
+<dt class="field-even">Remarks<span class="colon">:</span></dt>
+<dd class="field-even">&#8226;Format for returned catalog:
+<br />&lt;mem_used&gt;,&lt;mem_free&gt;{,"&lt;file listing&gt;"}
+<br />&#8226;The instrument returns two numeric values and a string for each state file in the selected folder. The
+first numeric value indicates the number of bytes of storage used on the drive. The second indicates
+the number of bytes of storage available. Each &lt;file listing&gt; is in the format "&lt;file_name&gt;,&lt;file_
+type&gt;,&lt;file_size&gt;" (the quotes are also returned), where &lt;file_name&gt; is the name of the file including
+file extension, if any; &lt;file_type&gt; is STAT for STATe (.sta) files; &lt;file_size&gt; is the size of the file in bytes.
+<br />&#8226;If no state files exist, only &lt;mem_used&gt;,&lt;mem_free&gt; is returned.
+<br />&#8226;Because the instrument uses a small amount of space in the flash file system for internal use, the
+&lt;mem_used&gt; value will not be zero even if no user files exist on the drive.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.get_state_catalog">
+<span class="sig-name descname"><span class="pre">get_state_catalog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.get_state_catalog" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the names assigned to locations 0 through 4.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Typical Return : “AUTO_RECALL”,”STATE_1”,”STATE_2”,”STATE_3”,”STATE_4”.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.load" title="Link to this definition">¶</a></dt>
+<dd><p>Loads a complete instrument setup, using a named file on the mass storage.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name on current mass storage directory.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;These commands allow you to duplicate instrument conditions from some previous time.
+<br />&#8226;This command loads the current instrument setup.
+<br />&#8226;Instrument setup files used by these commands contain much more than the state files. They also contain stored states and arbitrary waveforms, GPIB and LAN parameters, number format, beep on/off, display options, and help language.
+<br />&#8226;If the destination file exists, it is overwritten, unless marked as hidden or system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.load_frequency_list_file">
+<span class="sig-name descname"><span class="pre">load_frequency_list_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.load_frequency_list_file" title="Link to this definition">¶</a></dt>
+<dd><p>Loads a frequency list file (.lst).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name on the mass memory device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;A frequency list file contains a comma-separated sequence of ASCII numbers, with the first number
+representing the number of frequencies in the list.
+<br />&#8226;If the destination file exists, it is overwritten, unless marked as hidden or system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.load_state">
+<span class="sig-name descname"><span class="pre">load_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.load_state" title="Link to this definition">¶</a></dt>
+<dd><p>Loads the current instrument state to a state file. The file name optionally includes the folder name and the .sta file extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name on the current directory.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.move">
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.move" title="Link to this definition">¶</a></dt>
+<dd><p>This method moves or renames Source file to destination file.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid sequence file name. The file name must include any file extension.</p></li>
+<li><p><strong>destination_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid sequence file name. The file name must include any file extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;To simply rename a file, specify the same folder for &lt;file1&gt; and &lt;file2&gt;.
+<br />&#8226;To move a file to a file of the same name in a different folder, you can specify just the &lt;drive&gt;:&lt;path&gt;
+for &lt;file2&gt;.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.remove_dir">
+<span class="sig-name descname"><span class="pre">remove_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">directory_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.remove_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Removes a directory (folder) on the mass storage medium.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>directory_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any directory name, including the mass storage unit specifier, default INT:</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">You can only remove an empty folder (no files). Otherwise, the instrument generates a "Directory not
+empty" error.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.remove_file">
+<span class="sig-name descname"><span class="pre">remove_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.remove_file" title="Link to this definition">¶</a></dt>
+<dd><p>This method removes a file from the specified mass storage device. The file name must include any file extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name, including file extension.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.store">
+<span class="sig-name descname"><span class="pre">store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.store" title="Link to this definition">¶</a></dt>
+<dd><p>Saves a complete instrument setup, using a named file on the mass storage.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name on current mass storage directory</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;These commands allow you to duplicate instrument conditions from some previous time.
+<br />&#8226;This command loads the current instrument setup.
+<br />&#8226;Instrument setup files used by these commands contain much more than the state files. They also contain stored states and arbitrary waveforms, GPIB and LAN parameters, number format, beep on/off, display options, and help language.
+<br />&#8226;If the destination file exists, it is overwritten, unless marked as hidden or system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.store_frequency_list_file">
+<span class="sig-name descname"><span class="pre">store_frequency_list_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.store_frequency_list_file" title="Link to this definition">¶</a></dt>
+<dd><p>Stores a frequency list file (.lst).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name on the mass memory device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;A frequency list file contains a comma-separated sequence of ASCII numbers, with the first number
+representing the number of frequencies in the list.
+<br />&#8226;If the destination file exists, it is overwritten, unless marked as hidden or system.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.store_state">
+<span class="sig-name descname"><span class="pre">store_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.store_state" title="Link to this definition">¶</a></dt>
+<dd><p>Stores the current instrument state to a state file. The file name optionally includes the folder name and the .sta file extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Any valid file name on the current directory .</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000Memory.upload_file">
+<span class="sig-name descname"><span class="pre">upload_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000Memory" title="keysight_kt33000.keysight_kt33000.Kt33000Memory"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000Memory</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000Memory.upload_file" title="Link to this definition">¶</a></dt>
+<dd><p>Uploads the contents of a file from the instrument to the host computer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Source filename.</p></li>
+<li><p><strong>destination</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Destination filename.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Kt33000Memory</a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory</span></code></a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.copy"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.copy()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.copy_sequence_file"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.copy_sequence_file()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.create"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.create()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.create_dir"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.create_dir()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.current_dir"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.current_dir</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.download_file"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.download_file()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.get_catalog"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.get_catalog()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.get_catalog_data_files"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.get_catalog_data_files()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.get_catalog_state_files"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.get_catalog_state_files()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.get_state_catalog"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.get_state_catalog()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.load"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.load()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.load_frequency_list_file"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.load_frequency_list_file()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.load_state"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.load_state()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.move"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.move()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.remove_dir"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.remove_dir()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.remove_file"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.remove_file()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.store"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.store()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.store_frequency_list_file"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.store_frequency_list_file()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.store_state"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.store_state()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000Memory.upload_file"><code class="docutils literal notranslate"><span class="pre">Kt33000Memory.upload_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000Display.html"
+                          title="previous chapter">Kt33000Display</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html"
+                          title="next chapter">Kt33000OutputChannelCollection</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelCollection.html" title="Kt33000OutputChannelCollection"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000Display.html" title="Kt33000Display"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000Memory</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2021-2025, Keysight Technologies.  v1.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

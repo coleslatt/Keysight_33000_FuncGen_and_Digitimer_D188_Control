@@ -1,0 +1,14 @@
+
+MaxMinDef
+==========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: MaxMinDef
+    :members:
+    :exclude-members: name
+
+
+
+

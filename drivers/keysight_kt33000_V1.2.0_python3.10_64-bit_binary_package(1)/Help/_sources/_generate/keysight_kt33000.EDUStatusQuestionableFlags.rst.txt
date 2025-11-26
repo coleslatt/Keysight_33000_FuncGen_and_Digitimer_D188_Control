@@ -1,0 +1,14 @@
+
+EDUStatusQuestionableFlags
+===========================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: EDUStatusQuestionableFlags
+    :members:
+    :exclude-members: name
+
+
+
+

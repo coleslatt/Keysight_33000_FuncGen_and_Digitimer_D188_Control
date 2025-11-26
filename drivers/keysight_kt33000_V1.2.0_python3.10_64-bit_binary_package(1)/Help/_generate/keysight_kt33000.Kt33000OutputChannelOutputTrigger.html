@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Kt33000OutputChannelOutputTrigger &#8212; Kt33000 1.2.0 Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=d59dc883" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kt33000OutputChannelOutputVoltage" href="keysight_kt33000.Kt33000OutputChannelOutputVoltage.html" />
+    <link rel="prev" title="Kt33000OutputChannelOutputSync" href="keysight_kt33000.Kt33000OutputChannelOutputSync.html" /> 
+  </head><body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td valign="top"><a href="../index.html"><h1 style="font-size: 2em;">Kt33000 Driver Python API</h1></a></td>
+        <td align="right"><a href="https://www.keysight.com" target="_blank"><img src="../_static\keysight.gif" alt="keysight.gif"></a></td>
+</tr></table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputVoltage.html" title="Kt33000OutputChannelOutputVoltage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputSync.html" title="Kt33000OutputChannelOutputSync"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" >Kt33000OutputChannel</a> &#187;</li>
+          <li class="nav-item nav-item-6"><a href="keysight_kt33000.Kt33000OutputChannelOutput.html" accesskey="U">Kt33000OutputChannelOutput</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelOutputTrigger</a></li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="kt33000outputchanneloutputtrigger">
+<h1>Kt33000OutputChannelOutputTrigger<a class="headerlink" href="#kt33000outputchanneloutputtrigger" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Access interface members using: <code class="docutils literal notranslate"><span class="pre">driver.output_channels[&lt;name_or_index&gt;].output.trigger</span></code></div>
+<div class="line">Where <code class="docutils literal notranslate"><span class="pre">driver</span></code> is a reference to the driver’s root interface returned by the <a class="reference internal" href="../programming.html#creating-a-driver-instance"><span class="std std-ref">constructor</span></a>.</div>
+</div>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputTrigger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Kt33000OutputChannelOutputTrigger</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger" title="keysight_kt33000.Kt33000OutputChannelOutputTrigger"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputTrigger</span></code></a> interface.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputTrigger.enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger.enabled" title="Link to this definition">¶</a></dt>
+<dd><p>Disables (OFF) or enables (ON) the “trigger out” signal for sweep and burst modes.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : 0 (OFF) or 1 (ON). Default 0 (OFF).
+<br />&#8226;When enabled, a pulse with the specified edge direction (OutputTriggerSlope) is output from the
+rear-panel Ext Trig connector at the beginning of the burst or sweep.
+<br/>&#8226;In triggered burst mode:
+ <br/>&nbsp;&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> Immediate, instrument outputs square wave with 50% duty cycle from
+the Ext Trig connector. The waveform period equals the burst period (BurstInternalPeriod).
+ <br/>&nbsp;&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> External or <a href="CC6483F9_98F1_47BE_A2A8_A3651BC660EB.html">BurstMode </a> set to Gated, the instrument disables "trigger out."
+The rear-panel Ext Trig connector cannot be used for both operations simultaneously (an externally-triggered waveform uses the same connector to trigger sweep or burst).
+ <br/>&nbsp;&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> Bus, the instrument outputs a pulse (&gt;1 μs pulse width on the EDU33210 Series and 33500
+Series, and 100 ns on the 33600 Series) from the Ext Trig connector at the beginning of each sweep
+or burst.
+<br/>&#8226;In frequency sweep mode:
+ <br/>&nbsp;&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> Immediate, the instrument outputs a square wave with a 50% duty
+cycle (the rising edge is the sweep trigger) from the Ext Trig connector. Waveform period equals to
+the sweep time (SweepTime).
+ <br/>&nbsp;&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> External, instrument disables the "trigger out" signal. The rear-panel
+Ext Trig connector cannot be used for both operations simultaneously (an externally-triggered
+sweep uses the same connector to trigger the sweep).
+ <br/>&nbsp;&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> Bus, the instrument outputs a pulse (&gt;1 μs pulse width on the EDU33210 Series and33500
+Series, and 100 ns on the 33600 Series) from the Ext Trig connector at the beginning of each sweep
+or burst.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputTrigger.slope">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">slope</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger.slope" title="Link to this definition">¶</a></dt>
+<dd><p>Selects whether the instrument uses the rising edge or falling edge for the “trigger out” signal.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.TriggerSlope.html#keysight_kt33000.TriggerSlope" title="keysight_kt33000.TriggerSlope">TriggerSlope</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : Positive or Negative. Default Positive.
+<br />&#8226;Typical Return : Positive or Negative.
+<br />&#8226;Positive outputs a rising edge pulse; Negative outputs a falling edge pulse.
+<br />&#8226;When enabled using OutputTriggerEnabled , a pulse with the specified edge direction is output from the
+rear-panel Trig Out connector at the beginning of a sweep or burst.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelOutputTrigger.source">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger.source" title="Link to this definition">¶</a></dt>
+<dd><p>Selects the source channel used by trigger output on a two-channel instrument.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.TriggerSource.html#keysight_kt33000.TriggerSource" title="keysight_kt33000.TriggerSource">TriggerSource</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : Channel1 or Channel2. Default Channel1.
+<br />&#8226;Typical Return : Channel1 or Channel2.
+<br />&#8226;In a two-channel instrument, either channel may be source channel for the trigger output, but channel 2 is not valid for dual arbitrary (IQ) waveforms.</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Kt33000OutputChannelOutputTrigger</a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputTrigger</span></code></a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger.enabled"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputTrigger.enabled</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger.slope"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputTrigger.slope</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelOutputTrigger.source"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelOutputTrigger.source</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelOutputSync.html"
+                          title="previous chapter">Kt33000OutputChannelOutputSync</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelOutputVoltage.html"
+                          title="next chapter">Kt33000OutputChannelOutputVoltage</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputVoltage.html" title="Kt33000OutputChannelOutputVoltage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelOutputSync.html" title="Kt33000OutputChannelOutputSync"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" >Kt33000OutputChannel</a> &#187;</li>
+          <li class="nav-item nav-item-6"><a href="keysight_kt33000.Kt33000OutputChannelOutput.html" >Kt33000OutputChannelOutput</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelOutputTrigger</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2021-2025, Keysight Technologies.  v1.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

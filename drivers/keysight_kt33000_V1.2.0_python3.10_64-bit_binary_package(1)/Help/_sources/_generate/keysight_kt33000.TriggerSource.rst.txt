@@ -1,0 +1,14 @@
+
+TriggerSource
+==============
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: TriggerSource
+    :members:
+    :exclude-members: name
+
+
+
+

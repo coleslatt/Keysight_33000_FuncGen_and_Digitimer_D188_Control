@@ -1,0 +1,14 @@
+
+FunctionShape
+==============
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: FunctionShape
+    :members:
+    :exclude-members: name
+
+
+
+

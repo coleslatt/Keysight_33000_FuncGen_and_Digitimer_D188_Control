@@ -1,0 +1,14 @@
+
+DualArbFormat
+==============
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: DualArbFormat
+    :members:
+    :exclude-members: name
+
+
+
+

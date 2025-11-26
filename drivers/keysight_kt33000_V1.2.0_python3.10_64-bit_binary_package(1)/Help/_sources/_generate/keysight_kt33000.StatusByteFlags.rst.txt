@@ -1,0 +1,14 @@
+
+StatusByteFlags
+================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: StatusByteFlags
+    :members:
+    :exclude-members: name
+
+
+
+

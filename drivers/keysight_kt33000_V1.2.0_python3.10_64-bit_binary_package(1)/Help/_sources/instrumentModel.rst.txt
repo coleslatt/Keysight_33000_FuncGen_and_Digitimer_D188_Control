@@ -1,0 +1,18 @@
+.. _instrumentModel:
+
+**********************************
+ Instrument Model Support
+**********************************
+
+** Instrument Model Families **
+
+    | Supported instrument models are grouped into instrument families based on common feature support within the family.
+    | The keysight_kt33000 uses the following models:
+ 
+    | **Default Instrument Model**: EDU33212A
+    
+    
+    
+    | ** Instrument Models:** 
+	   
+	| 33522A, 33521A, 33509B, 33519B, 33510B, 33520B, 33511B, 33521B, 33512B, 33522B, 33609A, 33610A, 33620A, 33621A, 33622A, 33611A, 33619A, 33612A, EDU33211A, EDU33212A, 33210A, 33220A, 33502A, FG33531A, FG33532A

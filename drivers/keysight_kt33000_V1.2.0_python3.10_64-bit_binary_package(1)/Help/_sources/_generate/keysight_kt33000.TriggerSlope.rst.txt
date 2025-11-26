@@ -1,0 +1,14 @@
+
+TriggerSlope
+=============
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: TriggerSlope
+    :members:
+    :exclude-members: name
+
+
+
+

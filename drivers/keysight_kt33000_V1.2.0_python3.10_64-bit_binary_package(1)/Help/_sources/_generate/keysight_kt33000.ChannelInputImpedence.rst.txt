@@ -1,0 +1,14 @@
+
+ChannelInputImpedence
+======================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: ChannelInputImpedence
+    :members:
+    :exclude-members: name
+
+
+
+

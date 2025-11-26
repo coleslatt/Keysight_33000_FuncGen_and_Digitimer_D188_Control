@@ -1,0 +1,14 @@
+
+SRateCouplingMode
+==================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: SRateCouplingMode
+    :members:
+    :exclude-members: name
+
+
+
+

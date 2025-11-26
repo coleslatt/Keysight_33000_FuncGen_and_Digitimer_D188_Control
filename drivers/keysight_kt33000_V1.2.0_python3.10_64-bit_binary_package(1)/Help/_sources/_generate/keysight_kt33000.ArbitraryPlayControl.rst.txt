@@ -1,0 +1,14 @@
+
+ArbitraryPlayControl
+=====================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: ArbitraryPlayControl
+    :members:
+    :exclude-members: name
+
+
+
+

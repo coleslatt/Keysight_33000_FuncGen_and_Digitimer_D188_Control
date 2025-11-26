@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Kt33000OutputChannelBurst &#8212; Kt33000 1.2.0 Documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css?v=d59dc883" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <script src="../_static/documentation_options.js?v=6efca38a"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kt33000OutputChannelFM" href="keysight_kt33000.Kt33000OutputChannelFM.html" />
+    <link rel="prev" title="Kt33000OutputChannelBPSK" href="keysight_kt33000.Kt33000OutputChannelBPSK.html" /> 
+  </head><body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td valign="top"><a href="../index.html"><h1 style="font-size: 2em;">Kt33000 Driver Python API</h1></a></td>
+        <td align="right"><a href="https://www.keysight.com" target="_blank"><img src="../_static\keysight.gif" alt="keysight.gif"></a></td>
+</tr></table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelFM.html" title="Kt33000OutputChannelFM"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelBPSK.html" title="Kt33000OutputChannelBPSK"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" accesskey="U">Kt33000OutputChannel</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelBurst</a></li> 
+      </ul>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="kt33000outputchannelburst">
+<h1>Kt33000OutputChannelBurst<a class="headerlink" href="#kt33000outputchannelburst" title="Link to this heading">¶</a></h1>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Access interface members using: <code class="docutils literal notranslate"><span class="pre">driver.output_channels[&lt;name_or_index&gt;].burst</span></code></div>
+<div class="line">Where <code class="docutils literal notranslate"><span class="pre">driver</span></code> is a reference to the driver’s root interface returned by the <a class="reference internal" href="../programming.html#creating-a-driver-instance"><span class="std std-ref">constructor</span></a>.</div>
+</div>
+</div></blockquote>
+<dl class="py class">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Kt33000OutputChannelBurst</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="Link to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.Kt33000OutputChannelBurst"><code class="xref py py-class docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst</span></code></a> interface.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.enabled">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.enabled" title="Link to this definition">¶</a></dt>
+<dd><p>Disables (false) or enables (true) the burst mode.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter : 0 (OFF) or 1 (ON). Default 0(OFF).
+<br />&#8226;Output phase is set to 0 when burst is enabled.
+<br />&#8226;To avoid multiple waveform changes, enable the burst mode after configuring the other burst parameters.
+<br />&#8226;The instrument will not allow the burst mode to be enabled at the same time that sweep or any modulation mode is enabled. When you enable burst, the sweep or modulation mode is turned off.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.gate_polarity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gate_polarity</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.gate_polarity" title="Link to this definition">¶</a></dt>
+<dd><p>Selects true-high (Normal) or true-low (Inverted) logic levels on the rear-panel Ext Trig connector for an externally gated burst. Default Normal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.BurstGatePolarity.html#keysight_kt33000.BurstGatePolarity" title="keysight_kt33000.BurstGatePolarity">BurstGatePolarity</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.get_internal_period">
+<span class="sig-name descname"><span class="pre">get_internal_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta" title="(in Python v3.13)"><span class="pre">datetime.timedelta</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.get_internal_period" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the maximum or minimum value of burst period in seconds for internally-triggered bursts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>int_period (MaxMinDef) - Burst period</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum or minimum value of burst period in seconds.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>datetime.timedelta</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.get_number_of_cycles">
+<span class="sig-name descname"><span class="pre">get_number_of_cycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_of_cycles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.get_number_of_cycles" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the maximum or minimum number of cycles to be output per burst (triggered burst mode only).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>no_of_cycles (MaxMinDef) - Number of cycles per burst.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum or minimum number of cycles to be output per burst.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.get_phase">
+<span class="sig-name descname"><span class="pre">get_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.get_phase" title="Link to this definition">¶</a></dt>
+<dd><p>Returns the maximum or minimum value of starting phase angle in degrees or radians for the burst.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>phase (MaxMinDef) - Starting Phase anglr for burst.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Maximum or minimum value of starting phase angle in degrees or radians.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.internal_period">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">internal_period</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.internal_period" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the burst period for internally-triggered bursts.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta" title="(in Python v3.13)">datetime.timedelta</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter can be from 1 µs to 8000 s, default 10 ms.
+<br />&#8226;Typical Return : +1.200000000000000E+01
+<br />&#8226;The burst period is the time between the starts of consecutive bursts.
+<br />&#8226;This is used only when Immediate triggering is enabled (i.e when <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> is Immediate). It is ignored
+when manual or external triggering is enabled (or with gated burst mode).
+<br />&#8226;On the EDU33210 Series, burst period must satisfy the following formula:   
+    <blockquote> <br /> Burst Period &ge; (Burst Count &#47; Waveform Frequency)&#43; 1 μs.</blockquote> 
+<br />&#8226;On the 33500 Series, burst period must satisfy the following formula:
+    <blockquote> <br />Burst Period &ge; (Burst Count &#47; Waveform Frequency) &#43; 1 μs.</blockquote>
+<br />&#8226;On the 33600 Series, burst period must satisfy the following formula:
+    <blockquote> <br />Burst Period &ge; (Burst Count &#47; Waveform Frequency) &#43; 500 ns, with a minimum Burst Period of 1 μs.</blockquote>
+<br />&#8226;If the burst period is too short, the instrument will increase it as needed to continuously re-trigger the
+burst. From the remote interface, a "Settings conflict" error will also be generated.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.mode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mode</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.mode" title="Link to this definition">¶</a></dt>
+<dd><p>Selects the burst mode Triggered or Gated. Default Triggered.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.BurstMode.html#keysight_kt33000.BurstMode" title="keysight_kt33000.BurstMode">BurstMode</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;In Triggered Burst mode, the instrument outputs a waveform for a number of cycles (burst count) each time a trigger is received from the trigger source.
+<br />&#8226;In Gated Burst mode, the output waveform is on or off, based on the signal at the rear-panel Ext Trig
+connector. Select this signal's polarity using <a href="keysight_kt33000.BurstGatePolarity.html">BurstGatePolarity</a>. When the gate signal is true, the
+instrument outputs a continuous waveform. When the gate signal goes false, the current waveform
+cycle is completed and the instrument stops and remains at the voltage level corresponding to the
+waveform's starting burst phase. For a noise waveform, the output stops immediately when the gate
+signal goes false.
+<br />&#8226;In Gated Burst mode, burst count, burst period, and trigger source are ignored (these are used for the triggered
+burst mode only). If a manual trigger is received (Trigger), it is ignored and no error will be generated.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.number_of_cycles">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">number_of_cycles</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.number_of_cycles" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the number of cycles to be output per burst (triggered burst mode only). For the no. of cycles, AWG is able to receive multiple triggers and generates the required waveform cycles at the output.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter can be a whole number from 1 (default) to 100,000,000.
+<br />&#8226;Typical Return : +5.000000000000000E+01
+<br />&#8226;With <a href="keysight_kt33000.TriggerSource.html">TriggerSource</a> Immediate, burst count must be less than the product of the maximum
+burst period (8000 s) and the waveform frequency, as shown below.
+<br />Burst Count &lt; (Maximum Burst Period)(Waveform Frequency)
+<br />&#8226;Increase the burst period up to its maximum value to accommodate the burst count (but the waveform frequency will not be changed). From the remote interface, a "Settings conflict" error will also be
+generated.
+<br />&#8226;When gated burst mode is selected, the burst count is ignored. However, if you change the burst
+count while in the gated mode, the instrument remembers the new count and used it when the
+triggered mode is selected.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.phase">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.phase" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the starting phase angle for the burst.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;Parameter can be from -360 to +360 degrees, -2π to +2π radians, or -(period) to +(period). Default 0.
+<br />&#8226;Typical Return : +6.0000000000000E+01
+<br />&#8226;When burst is enabled, the output phase is set to 0.
+<br />&#8226;For sine, square, and ramp, 0 degrees is the point at which the waveform crosses 0 V (or DC offset) in a
+positive-going direction. For arbitrary waveforms, 0 degrees is the first waveform point. Start phase
+has no effect on noise.
+<br />&#8226;For arbitrary waveforms on the EDU33210 Series and 33500 Series, this command is only available if the waveform is
+1,000,000 points or less.
+<br />&#8226;Start phase also used in gated burst mode. When the gate signal goes false, the current waveform
+cycle finishes, and output remains at the voltage level of the starting burst phase.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.phase_unit">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase_unit</span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.phase_unit" title="Link to this definition">¶</a></dt>
+<dd><p>Specifies the angle units that displayed on the screen and used for specifying angles. The selected units are used for setting the starting phase for a burst in Degree, Radians or Second. Default Degree.</p>
+<dl class="field-list">
+<dt class="field-odd">Access<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ReadWrite</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="keysight_kt33000.AngleUnits.html#keysight_kt33000.AngleUnits" title="keysight_kt33000.AngleUnits">AngleUnits</a></p>
+</dd>
+<dt class="field-odd">Remarks<span class="colon">:</span></dt>
+<dd class="field-odd">&#8226;The Second option is only available for the 33600 Series.
+<br />&#8226;The front panel display always shows degrees, regardless of this command setting.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.set_internal_period">
+<span class="sig-name descname"><span class="pre">set_internal_period</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">int_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_internal_period" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the maximum, minimum or default value of burst period in seconds for internally-triggered bursts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>int_period (MaxMinDef) - Burst period</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.set_number_of_cycles">
+<span class="sig-name descname"><span class="pre">set_number_of_cycles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_of_cycles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_number_of_cycles" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the maximum or minimum number of cycles to be output per burst (triggered burst mode only).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>no_of_cycles (MaxMinDef) - Number of cycles per burst.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.set_number_of_cycles_infinity">
+<span class="sig-name descname"><span class="pre">set_number_of_cycles_infinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_number_of_cycles_infinity" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the number of cycles to infinity per burst (triggered burst mode only).</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Remarks<span class="colon">:</span></dt>
+<dd class="field-even">This method informs AWG to continuously generate the output waveform after receiving the first trigger.</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="keysight_kt33000.Kt33000OutputChannelBurst.set_phase">
+<span class="sig-name descname"><span class="pre">set_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst" title="keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst"><span class="pre">keysight_kt33000.keysight_kt33000.Kt33000OutputChannelBurst</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="keysight_kt33000.MaxMinDef.html#keysight_kt33000.MaxMinDef" title="keysight_kt33000.keysight_kt33000.MaxMinDef"><span class="pre">keysight_kt33000.keysight_kt33000.MaxMinDef</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_phase" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the maximum, minimum or default value of starting phase angle in degrees or radians for the burst.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>phase (MaxMinDef) - Starting Phase anglr for burst.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Kt33000OutputChannelBurst</a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst</span></code></a><ul>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.enabled"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.enabled</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.gate_polarity"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.gate_polarity</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.get_internal_period"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.get_internal_period()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.get_number_of_cycles"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.get_number_of_cycles()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.get_phase"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.get_phase()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.internal_period"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.internal_period</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.mode"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.mode</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.number_of_cycles"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.number_of_cycles</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.phase"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.phase</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.phase_unit"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.phase_unit</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_internal_period"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.set_internal_period()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_number_of_cycles"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.set_number_of_cycles()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_number_of_cycles_infinity"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.set_number_of_cycles_infinity()</span></code></a></li>
+<li><a class="reference internal" href="#keysight_kt33000.Kt33000OutputChannelBurst.set_phase"><code class="docutils literal notranslate"><span class="pre">Kt33000OutputChannelBurst.set_phase()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelBPSK.html"
+                          title="previous chapter">Kt33000OutputChannelBPSK</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="keysight_kt33000.Kt33000OutputChannelFM.html"
+                          title="next chapter">Kt33000OutputChannelFM</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelFM.html" title="Kt33000OutputChannelFM"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="keysight_kt33000.Kt33000OutputChannelBPSK.html" title="Kt33000OutputChannelBPSK"
+             >previous</a> |</li>
+        <li><a href="../index.html">home</a> |&nbsp;</li>
+        <!-- DP- Not using 'search' link on header and footer as it does not work in the 
+                 htmlHelp .chm file and is available from the sidebar in html help. -->
+        <!--<li><a href="../search.html">search</a>|&nbsp;</li>-->
+
+          <li class="nav-item nav-item-1"><a href="../reference.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="hierarchy.html" >API Interfaces Hierarchy</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="keysight_kt33000.Kt33000.html" >Kt33000</a> &#187;</li>
+          <li class="nav-item nav-item-4"><a href="keysight_kt33000.Kt33000OutputChannelCollection.html" >Kt33000OutputChannelCollection</a> &#187;</li>
+          <li class="nav-item nav-item-5"><a href="keysight_kt33000.Kt33000OutputChannel.html" >Kt33000OutputChannel</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Kt33000OutputChannelBurst</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2021-2025, Keysight Technologies.  v1.2.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

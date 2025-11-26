@@ -1,0 +1,14 @@
+
+StatusStandardEventFlags
+=========================
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: StatusStandardEventFlags
+    :members:
+    :exclude-members: name
+
+
+
+

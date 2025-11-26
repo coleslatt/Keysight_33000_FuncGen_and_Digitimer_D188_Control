@@ -1,0 +1,14 @@
+
+MemoryType
+===========
+
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: MemoryType
+    :members:
+    :exclude-members: name
+
+
+
+

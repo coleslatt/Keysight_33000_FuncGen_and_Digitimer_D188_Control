@@ -1,0 +1,15 @@
+
+Kt33000OutputChannelSweepFrequency
+===================================
+    | Access interface members using: ``driver.output_channels[<name_or_index>].sweep.frequency``
+    | Where ``driver`` is a reference to the driver's root interface returned by the :ref:`constructor <programming:Creating a Driver Instance>`.
+
+.. currentmodule:: keysight_kt33000
+
+.. autoclass:: Kt33000OutputChannelSweepFrequency
+    :members:
+    :exclude-members: get_name_by_index, items
+
+
+
+
