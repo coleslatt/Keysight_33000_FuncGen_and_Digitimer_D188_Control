@@ -12,6 +12,8 @@ A simple package for controlling a Keysight 33000 Series Function Generator and 
 
 ## Installation
 
+** Make sure you've installed the Keysight Library Suite here: https://www.keysight.com/find/iosuite
+
 1. Using Windows Powershell, clone the repo with:
 ```
 git clone https://github.com/coleslatt/Keysight_33000_FuncGen_and_Digitimer_D188_Control.git
