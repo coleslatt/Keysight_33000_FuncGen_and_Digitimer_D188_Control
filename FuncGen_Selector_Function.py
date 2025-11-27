@@ -180,82 +180,207 @@ def func_gen_control(
     ppw=0,
     pw = 1e-3,
     channel = 1,
-    state = 1,
+    state = 0,
     arb_name: Literal["CARDIAC", "D_LORENTZ", "GAUSSIAN", "HAVERSINE", "LORENTZ", "NEG_RAMP", "SINC", "EXP_FALL", "EXP_RISE"] = "EXP_FALL",
     trigger = False,
+    trigger_pw = 1e-3,
     d188 = False,
     d188_channel = 1,
     d188_led = True
     ):
 
     """
-    Configure and enable/disable a Keysight 33512B output channel.
+    Configure and optionally enable a Keysight 33512B output channel.
 
-    This helper wraps common settings for the function generator, including
-    waveform shape, frequency, voltage levels, channel selection, and optional
-    arbitrary waveform loading. It assumes a global `driver` object
-    (ks.Kt33000 instance), a global `ks` module (keysight_kt33000), and NumPy
-    imported as `np`.
+    This helper:
+      * Opens a Keysight 33512B driver session (using resource name "33512B").
+      * Selects output channel 1 or 2.
+      * Configures waveform type, frequency, amplitude, and pulse width.
+      * Optionally selects a built-in arbitrary waveform or a custom ARB mode.
+      * Optionally configures channel 2 as a 0–5 V trigger output.
+      * Optionally sends a command to an external D188 controller.
+      * Prints a human-readable summary of the configuration and then closes
+        the driver session.
 
     Parameters
     ----------
     freq : float, default 60
-        Output frequency in Hz. Used both for standard waveforms and
-        arbitrary waveforms.
-    shape : {'sine', 'square', 'ramp', 'pulse', 'arb', 'arbitrary', 'triangle'}, default 'sine'
-        Waveform shape to generate. 'arb' / 'arbitrary' selects arbitrary
-        waveform mode on the instrument.
+        Output frequency in hertz (Hz) for the main channel. Used for:
+          * Standard waveforms (sine, square, ramp, triangle, pulse).
+          * Arbitrary waveforms (ARB).
+          * Channel 2 trigger output if ``trigger=True``.
+
+    shape : {'sine', 'square', 'ramp', 'pulse', 'arb', 'arbitrary', 'triangle'}, \
+            default 'sine'
+        Waveform shape for the main output channel.
+          * ``'sine'``: Sinusoidal waveform.
+          * ``'square'``: Square wave.
+          * ``'ramp'``: Sawtooth/ramp waveform.
+          * ``'pulse'``: Pulse waveform (uses ``pw`` as pulse width).
+          * ``'triangle'``: Triangle wave.
+          * ``'arb'`` or ``'arbitrary'``: Arbitrary waveform mode. If
+            ``custom == 'no'`` a built-in ARB waveform named by ``arb_name``
+            is selected. If ``custom == 'yes'``, the channel is left in
+            ARB mode for a user-defined arbitrary waveform (custom
+            generator currently commented out).
+
     v_min : float, default -1
-        Low output voltage level in volts. Ignored if left at the default
-        together with `v_max` and `vpp` is changed; in that case v_min/v_max
-        are recomputed from `vpp`.
+        Low (minimum) output level in volts for the main channel.
+        Together with ``v_max`` this defines the DC levels for non-ARB
+        waveforms. If both ``v_min == -1`` and ``v_max == 1`` (their
+        defaults) and ``vpp`` is changed away from 2, then
+        ``v_min`` and ``v_max`` are recomputed as ``± vpp / 2`` and
+        those values are applied instead.
+
     v_max : float, default 1
-        High output voltage level in volts. See `v_min` and `vpp`.
+        High (maximum) output level in volts for the main channel.
+        See ``v_min`` and ``vpp`` for how the three interact.
+
     vpp : float, default 2
-        Peak-to-peak voltage. If `vpp` is not 2 while `v_min == -1` and
-        `v_max == 1`, then v_min/v_max are set to +/- vpp/2. Otherwise the
-        explicitly provided `v_min` and `v_max` are used.
-    custom : {'yes', 'no'}, default 'no'
-        Whether to load a custom arbitrary waveform generated in Python.
-        If 'yes' and `shape` is arbitrary, an internal pulse-like waveform
-        is generated and loaded into volatile memory.
+        Peak-to-peak amplitude in volts. If ``vpp != 2`` while
+        ``v_min == -1`` and ``v_max == 1``, the function derives
+        symmetric levels:
+        ``v_min = -vpp/2``, ``v_max = +vpp/2``.
+        If you explicitly override ``v_min`` and/or ``v_max``, those
+        explicit levels are used and ``vpp`` is treated as informational.
+
+    custom : str, {'yes', 'no'}, default 'no'
+        Custom arbitrary waveform mode flag.
+          * ``'no'``: Use standard shapes or built-in ARB waveforms.
+          * ``'yes'``: Put the main channel into ARB mode for a user-defined
+            waveform and set ARB rate units to frequency. (The actual
+            custom waveform creation / download is currently commented out
+            and must be implemented separately.)
+        The string is compared case-insensitively; values like "no", "NO",
+        "false", "0" are treated as disabled in the verbose summary.
+
+    pph : float, default 0
+        Pre-pulse height parameter for custom ARB waveforms (dimensionless).
+        Intended to represent either:
+          * A fraction of the main pulse amplitude if ``0 <= pph <= 1``
+            (interpreted as a percentage in the summary), or
+          * A relative/absolute amplitude parameter if outside [0, 1].
+        Currently used only in the verbose summary and for potential future
+        custom ARB generation.
+
+    ppw : float, default 0
+        Pre-pulse width parameter for custom ARB waveforms. Interpreted as:
+          * A fraction of the main pulse width when ``0 <= ppw <= 1``, or
+          * A duration in seconds when outside [0, 1] (formatted as ms/µs
+            in the summary).
+        As with ``pph``, currently used only in the verbose summary and for
+        potential custom ARB generation.
+
     pw : float, default 1e-3
-        Pulse width in seconds. Used for pulse waveforms and for the internal
-        arbitrary waveform generator.
+        Pulse width for the main channel, in seconds.
+          * For ``shape == 'pulse'``, this is applied to
+            ``ch.output_function.pulse.width``.
+          * For custom ARB modes, it is intended to describe the total
+            duration of the complex pulse (used by the custom waveform
+            helpers when enabled).
+
     channel : int, {1, 2}, default 1
-        Output channel to configure (1-based index).
-    state : {0, 1}, default 1
-        Whether to turn the selected channel output on or off.
-    arb_name : Literal["CARDIAC", "D_LORENTZ", "GAUSSIAN", "HAVERSINE", "LORENTZ",
-                       "NEG_RAMP", "SINC", "EXP_FALL", "EXP_RISE"], default "EXP_FALL"
-        Name of a built-in arbitrary waveform to load from instrument
-        memory when `shape == 'arb'` and `custom == 'no'`.
+        Main output channel to configure (1-based index).
+          * ``1`` → channel index 0 in the underlying driver.
+          * ``2`` → channel index 1 in the underlying driver.
+        Any other value raises ``ValueError``.
+
+    state : int, {0, 1}, default 0
+        Output enable state for the main channel.
+          * ``1`` → turn the main channel output ON (and, if
+            ``trigger=True``, also enable the trigger channel and
+            phase-lock / synchronize channels).
+          * ``0`` → turn the main channel output OFF (and, if
+            ``trigger=True``, also disable the trigger channel).
+        Any other value raises ``ValueError``.
+
+    arb_name : Literal["CARDIAC", "D_LORENTZ", "GAUSSIAN", "HAVERSINE",
+                       "LORENTZ", "NEG_RAMP", "SINC", "EXP_FALL", "EXP_RISE"], \
+                default "EXP_FALL"
+        Name of a built-in arbitrary waveform stored in instrument memory.
+        Used only when:
+          * ``shape in {'arb', 'arbitrary'}``, and
+          * ``custom == 'no'``.
+        In that case the existing arbitrary waveform is cleared and the
+        specified built-in ARB file
+        ``INT:\\BUILTIN\\{arb_name}.arb`` is opened and selected, and its
+        frequency is set to ``freq``.
+
+    trigger : bool, default False
+        If ``True``, configure channel 2 as a 0–5 V pulse train that can be
+        used as a trigger:
+          * Channel 2 is set to pulse shape with frequency ``freq``.
+          * Channel 2 levels are 0 V (low) and 5 V (high).
+          * Channel 2 pulse width is fixed at 1 ms.
+          * Channel 2 load is set to high impedance.
+          * When ``state == 1``, both channels are enabled and the generator
+            attempts to synchronize channel phase.
+        If ``False``, channel 2 is explicitly disabled.
+
+    d188 : bool, default False
+        If ``True``, send a command to an attached Digitimer D188 (or
+        compatible) device via ``D188_Controller(d188_channel, d188_led)``.
+        The precise behavior depends on your implementation of
+        ``D188_Controller`` (not defined in this function).
+
+    d188_channel : int, default 1
+        D188 output channel to select when ``d188=True``. Must be an
+        integer in the range 1–8 inclusive. Any value outside this range
+        raises ``ValueError``.
+
+    d188_led : bool, default True
+        Desired state of the D188 front-panel LED when ``d188=True``.
+        Interpreted and applied by ``D188_Controller``. Also reported as
+        ``ON``/``OFF`` in the verbose summary.
 
     Behavior
     --------
-    - Maps `shape` to the corresponding Keysight `FunctionShape`.
-    - Selects channel 1 or 2 from the global `driver`.
-    - Sets the output load to infinity (high impedance).
-    - If `custom == 'yes'`, generates an internal pulse-like arbitrary
-      waveform, loads it into memory, and selects it.
-    - If `shape == 'arb'` and `custom == 'no'`, clears the existing arbitrary
-      waveform and selects the specified built-in arbitrary waveform `arb_name`.
-    - Sets frequency, waveform shape, pulse width (for pulse shape), and
-      high/low voltage levels.
-    - Enables or disables the channel output according to `state`.
-    - Sets the display ARB rate units to frequency.
+    - Creates a new Keysight driver instance with:
+        ``resource_name='33512B', id_query=True, reset=False``.
+    - Selects the specified output channel and sets its load to infinity
+      (high impedance).
+    - Maps ``shape`` to the corresponding Keysight ``FunctionShape`` and
+      configures the main channel waveform accordingly.
+    - If ``custom == 'yes'``, puts the main channel in ARB mode and sets
+      ARB rate units to frequency, leaving room for user-defined waveform
+      download (currently commented out).
+    - If ``shape in {'arb', 'arbitrary'}`` and ``custom == 'no'``, clears the
+      current arbitrary waveform and selects the built-in waveform named
+      by ``arb_name``.
+    - Applies ``freq``, voltage levels (via ``v_min``, ``v_max``, ``vpp``),
+      and pulse width (for pulse shape).
+    - If ``trigger == True``, configures channel 2 as a 0–5 V, 1 ms-wide
+      pulse train at frequency ``freq`` and synchronizes channels when
+      enabling output.
+    - If ``d188 == True``, calls ``D188_Controller(d188_channel, d188_led)``.
+    - Prints a detailed, human-readable configuration summary (including
+      units and descriptive labels) to stdout.
+    - Closes the driver session before returning.
+
+    Returns
+    -------
+    None
+        The function configures the instrument via side effects and prints
+        a summary; it does not return a value.
 
     Raises
     ------
     ValueError
-        If `shape` is not one of the supported strings.
-        If `channel` is not 1 or 2.
-        If `state` is not 'on' or 'off'.
+        If ``shape`` is not one of the supported values.
+        If ``channel`` is not 1 or 2.
+        If ``state`` is not 0 or 1.
+        If ``d188_channel`` is not an integer in the range 1–8 when
+        ``d188 == True``.
 
     Notes
     -----
-    This function configures the instrument via side effects on the global
-    `driver` and does not return a value.
+    - This function opens and closes a new driver session on every call.
+      If you need high-throughput or repeated reconfiguration, you may want
+      to refactor it to accept an existing ``ks.Kt33000`` driver instance
+      instead of creating a new one internally.
+    - The custom ARB waveform generation is currently stubbed out; enabling
+      it requires implementing and calling a helper such as
+      ``custom_waveform_pp2``.
     """
     
     resource_name = "33512B"
@@ -359,7 +484,7 @@ def func_gen_control(
         ch2.output.frequency = freq
         ch2.output.voltage.high = 5
         ch2.output.voltage.low = 0
-        ch2.output_function.pulse.width = 1e-3
+        ch2.output_function.pulse.width = trigger_pw
         
     if (state == 1):
         ch.output.enabled = 1
@@ -448,7 +573,18 @@ def func_gen_control(
         f"  Output State:         {_on_off(state)}",
         f"  Arb Waveform Name:    {arb_name!r}",
         f"  External Trigger:     {_yes_no(trigger)}",
+
+    ])
+
+    if trigger:
+        summary_lines.append(f"  Trigger Pulse Width:  {_format_pw(trigger_pw)}")
+    
+    summary_lines.extend([
         f"  D188 Control:         {_yes_no(d188)}",
+    ])
+    
+    if d188:
+        summary_lines.extend([
         f"  D188 Channel:         {d188_channel}",
         f"  D188 Front-panel LED: {_on_off(d188_led)}",
         "========================================",
