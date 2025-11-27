@@ -11,22 +11,26 @@ Set-Location -Path $PSScriptRoot
 # 1. Create venv if it doesn't exist
 if (-not (Test-Path ".venv")) {
     Write-Host "Creating virtual environment in '.venv'..."
-    python -m venv .venv
-} else {
-    Write-Host "Virtual environment '.venv' already exists – skipping creation."
+    py -3.10 -m venv .venv
+}
+else {
+    Write-Host "Virtual environment '.venv' already exists, skipping creation."
 }
 
 # 2. Activate the venv in this PowerShell session
 Write-Host "Activating virtual environment..."
-. .\.venv\Scripts\Activate.ps1   # note the leading dot and space
+. ".\.venv\Scripts\Activate.ps1"   # dot-source so activation affects this session
 
-# 3. Upgrade pip
-Write-Host "Upgrading pip..."
-python -m pip install --upgrade pip
+# Path to the venv's python explicitly
+$venvPython = ".\.venv\Scripts\python.exe"
+
+# 3. Upgrade pip *inside the venv*
+Write-Host "Upgrading pip in the virtual environment..."
+& $venvPython -m pip install --upgrade pip
 
 # 4. Install project requirements
-Write-Host "Installing dependencies from requirements.txt..."
-pip install -r requirements.txt
+Write-Host "Installing dependencies from requirements.txt into the virtual environment..."
+& $venvPython -m pip install -r "requirements.txt"
 
 Write-Host ""
 Write-Host "✅ Done!"
