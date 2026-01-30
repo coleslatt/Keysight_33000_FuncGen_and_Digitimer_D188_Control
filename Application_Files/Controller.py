@@ -103,6 +103,9 @@ class ControllerMain(QDialog):
         # current = self.ui.doubleSpinBox_5.value()  # Current (mA)
         
         d188_channel = self.ui.spinBox_7.value()  # D188 Channel Number
+
+        print(d188_channel)
+
         self.ui.textBrowser_10.setText(f"{d188_channel}")
 
         ch_balance = True if self.ui.ch1_on_2.isChecked() else False  #  Charge Balance
@@ -156,6 +159,8 @@ class ControllerMain(QDialog):
         # On/Off (Channel 1)
         state = 1 if self.ui.ch1_on.isChecked() else 0  # "On" vs "Off" 
 
+        print(state)
+
         # Reverse (Channel 1)
         reverse = 1 if self.ui.radioButton_16.isChecked() else 0  # "On" vs "Off" 
     
@@ -167,10 +172,11 @@ class ControllerMain(QDialog):
             custom=custom,
             channel=1,
             state=state,
+            d188 = True,
             d188_channel=d188_channel,
             charge_balance=ch_balance,
             reverse = reverse,
-            auto_k = auto_k
+            # auto_k = auto_k
         )
 
         if freq_hz != 0:
@@ -186,6 +192,8 @@ class ControllerMain(QDialog):
         else:
             kwargs["v_min"] = v_min
             kwargs["v_max"] = v_max
+
+        # func_gen_control_stateful(**kwargs)
 
 
         # 4) Call your existing hardware function
@@ -270,7 +278,7 @@ class ControllerMain(QDialog):
             state=state,
             charge_balance=ch_balance2,
             reverse = reverse,
-            auto_k = auto_k
+            # auto_k = auto_k
         )
 
         if freq_hz != 0:

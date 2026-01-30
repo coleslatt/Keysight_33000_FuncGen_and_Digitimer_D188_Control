@@ -551,6 +551,8 @@ def func_gen_control(
         
         print('Charge Balance')
 
+        v_min = -vs/10
+
     else: 
         if (custom == 'yes'):
             if ramp == 'yes':
