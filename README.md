@@ -29,21 +29,33 @@ cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
 .\setup_env.ps1
 ```
 ## Usage
-
-1. Activate python using:
+1. Activate your Python virtual environment with:
 ```
-.\.venv\Scripts\python.exe
-```
-
-2. Then, run:
-```
-from FuncGen_Selector_Function import func_gen_control_stateful as fg
+.\.venv\Scripts\Activate.ps1
 ```
 
-3. Now, we can make update the state of the function generator with commands like:
+2. Ensure you are using the correct Python version by running:
 ```
-fg(freq=30)
+$Python = ".\.venv\Scripts\python.exe"
 ```
+3. Start user interface with:
+```
+& $Python .\Application_Files\Controller.py
+```
+Notes:
+
+On some systems and UBC computers, there may be security features that prevent you from running scripts. If there are problems running the setup file or activating the python virtual environment in Powershell, run:
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+
+
+
+
+
+
+
 ### List of Parameters
 
     freq : float, default 60
