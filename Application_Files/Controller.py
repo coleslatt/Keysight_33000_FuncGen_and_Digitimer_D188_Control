@@ -195,14 +195,14 @@ class ControllerMain(QDialog):
             kwargs["v_min"] = v_min
             kwargs["v_max"] = v_max
 
-        # func_gen_control_stateful(**kwargs)
+        func_gen_control_stateful(**kwargs)
 
 
-        # 4) Call your existing hardware function
-        try:
-            func_gen_control_stateful(**kwargs)
-        except:
-            print("Error: Function Generator not connected")
+        # # 4) Call your existing hardware function
+        # try:
+        #     func_gen_control_stateful(**kwargs)
+        # except:
+        #     print("Error: Function Generator not connected")
 
         # Assigning System Status Display
         self.ui.frequency_display_3.setText(f"{freq_hz}")
