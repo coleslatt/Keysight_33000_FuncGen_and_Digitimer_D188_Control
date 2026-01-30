@@ -663,111 +663,171 @@ def func_gen_control(
             raise ValueError('D188 Channel Selection is invalid, must be between 1-8')
             
 
-     # --- Verbose human-readable summary of the configuration in effect ---
+ 
+        # --- Verbose human-readable summary of the configuration in effect ---
 
     def _yes_no(value, yes="Enabled", no="Disabled"):
-        return yes if bool(value) else no
+        return yes if value else no
 
-    def _on_off_state(state_val: int) -> str:
-        return "ON" if int(state_val) == 1 else "OFF"
+    def _on_off(value):
+        return "ON" if value else "OFF"
 
-    def _format_ms(ms_val) -> str:
-        if ms_val is None:
+    def _format_pw(seconds: float) -> str:
+        """Format a pulse width in seconds as ms or µs."""
+        if seconds is None:
             return "N/A"
-        try:
-            return f"{float(ms_val):g} ms"
-        except Exception:
-            return str(ms_val)
+        ms = seconds * 1e3
+        if ms >= 1:
+            return f"{ms:g} ms"
+        else:
+            us = seconds * 1e6
+            return f"{us:g} µs"
 
-    def _format_v(v) -> str:
-        try:
-            return f"{float(v):.3g} V"
-        except Exception:
-            return f"{v} V"
-
-    # Normalize "custom" and "ramp" flags (your code uses strings: 'yes'/'no')
-    custom_str = str(custom).strip().lower()
-    ramp_str   = str(ramp).strip().lower()
-
-    custom_enabled = custom_str in ("yes", "y", "true", "1", "on")
-    ramp_enabled   = ramp_str in ("yes", "y", "true", "1", "on")
-
-    # Pre-pulse height description (pph is used as h1 in custom_waveform_pp2 when ramp=='yes')
-    if isinstance(pph, (int, float)) and 0 <= pph <= 1:
+    # Pre-pulse height: treat 0–1 as a fraction of main amplitude
+    if 0 <= pph <= 1:
         pph_desc = f"{pph * 100:.1f} % of main amplitude"
     else:
-        pph_desc = f"{pph!r} (relative units)"
+        pph_desc = f"{pph:g} (relative units)"
 
-    # Pre-pulse width description (ppw is in ms for your ramped custom waveform path)
-    ppw_desc = _format_ms(ppw)
-
-    # Pulse width (pwms is the original ms value before you convert pw to seconds)
-    pw_desc = _format_ms(pwms)
-
-    # Determine what waveform path is actually in effect (based on your logic)
-    if charge_balance:
-        effective_mode = "Charge-balanced ARB (custom_waveform_balance)"
-    elif custom_enabled and ramp_enabled:
-        effective_mode = "Custom ARB (ramped: custom_waveform_pp2)"
-    elif custom_enabled and not ramp_enabled:
-        effective_mode = "Custom ARB (step: custom_waveform_pp)"
+    # Pre-pulse width: treat 0–1 as fraction of main width
+    if 0 <= ppw <= 1:
+        ppw_desc = f"{ppw * 100:.1f} % of main pulse width"
     else:
-        effective_mode = f"Standard waveform ({shape!r})" if shape not in ("arb", "arbitrary") else f"Built-in ARB ({arb_name!r})"
+        ppw_desc = _format_pw(ppw)
+
+    # Custom waveform mode: simple heuristic
+    custom_str = str(custom).lower()
+    if custom_str in ("no", "none", "false", "0"):
+        custom_desc = "Disabled"
+    else:
+        custom_desc = f"Enabled (mode='{custom}')"
+
+    custom_enabled = custom_str not in ("no", "none", "false", "0")
+
 
     summary_lines = [
-        "",
-        "=== Function Generator Configuration ===",
-        f"  Effective Mode:          {effective_mode}",
-        f"  Frequency:               {freq:g} Hz",
-        f"  Channel:                 CH{channel}",
-        f"  Output State:            {_on_off_state(state)}",
-        f"  Reverse Output:          {_yes_no(reverse)}",
-        "",
-        "  --- Waveform Selection ---",
-        f"  Requested Shape:         {shape!r}",
-        f"  Custom Waveform Flag:    {_yes_no(custom_enabled)} (custom={custom!r})",
-        f"  Ramp Mode:               {_yes_no(ramp_enabled)} (ramp={ramp!r})",
-        f"  Built-in ARB Name:       {arb_name!r}",
-        "",
-        "  --- Timing ---",
-        f"  Main Pulse Width (pw):   {pw_desc}",
-        f"  Pre-pulse Height (pph):  {pph_desc}",
-        f"  Pre-pulse Width (ppw):   {ppw_desc}",
-        "",
-        "  --- Ramping / k ---",
-        f"  auto_k:                  {_yes_no(auto_k)}",
-        f"  k:                       {k!r}",
-        "",
-        "  --- Output Levels ---",
-        f"  High Level:              {_format_v(v_max)}",
-        f"  Low  Level:              {_format_v(v_min)}",
-        f"  Vpp (requested):         {float(vpp):.3g} Vpp" if isinstance(vpp, (int, float)) else f"  Vpp (requested):         {vpp!r}",
-        "",
-        "  --- Triggering ---",
-        f"  External Trigger:        {_yes_no(trigger)}",
-    ]
+    "",
+    f"=== Function Generator Configuration: CH{channel} ===",
+    f"  Frequency:            {freq:g} Hz",
+    f"  Waveform Shape:       {shape!r}",
+    f"  High Level:           {v_max:.3g} Volts",
+    f"  Low  Level:           {v_min:.3g} Volts",
+    f"  Amplitude (Vpp):      {vpp:.3g} Volts peak-to-peak",
+    f"  Pulse Width:          {_format_pw(pw)}",
+    f"  Custom Waveform:      {custom_desc}",
+]
 
-    if trigger:
-        # You hard-code the trigger pulse width here:
-        # ch2.output_function.pulse.width = 1e-3
-        summary_lines.append(f"  Trigger Pulse Width:      1 ms")
-        summary_lines.append(f"  Trigger Output Channel:   CH2 (pulse 0–5 V)")
-
-    summary_lines.extend([
-        "",
-        "  --- D188 ---",
-        f"  D188 Control:            {_yes_no(d188)}",
-    ])
-
-    if d188:
+    # Only show pre-pulse parameters when custom waveform is enabled
+    if custom_enabled:
         summary_lines.extend([
-            f"  D188 Channel:            {d188_channel}",
-            f"  D188 Front-panel LED:    {'ON' if bool(d188_led) else 'OFF'}",
+            f"  Pre-pulse Height:     {pph_desc}",
+            f"  Pre-pulse Width:      {ppw_desc}",
         ])
 
     summary_lines.extend([
+        f"  Output State:         {_on_off(state)}",
+        f"  Arb Waveform Name:    {arb_name!r}",
+        f"  External Trigger:     {_yes_no(trigger)}",
+
+    ])
+
+    if trigger:
+        summary_lines.append(f"  Trigger Pulse Width:  {_format_pw(trigger_pw)}")
+    
+    summary_lines.extend([
+        f"  D188 Control:         {_yes_no(d188)}",
+    ])
+    
+    if d188:
+        summary_lines.extend([
+        f"  D188 Channel:         {d188_channel}",
+        f"  D188 Front-panel LED: {_on_off(d188_led)}",
         "========================================",
         "",
     ])
 
-    print("\n".join(summary_lines))
+
+    summary = "\n".join(summary_lines)
+    print(summary)
+    # If you ever want to use this string programmatically, you could also:
+    # return summary
+
+
+    driver.close()
+    return
+
+from dataclasses import dataclass, asdict, replace
+
+@dataclass
+class FuncGenDefaults:
+    freq: float = 60
+    shape: str = "sine"
+    v_min: float = -1
+    v_max: float = 1
+    vpp: float = 2
+    custom: str = "no"
+    pph: float = 0.0
+    ppw: float = 0.0
+    pw: float = 1e-3
+    channel: int = 1
+    state: int = 1
+    arb_name: Literal[
+        "CARDIAC",
+        "D_LORENTZ",
+        "GAUSSIAN",
+        "HAVERSINE",
+        "LORENTZ",
+        "NEG_RAMP",
+        "SINC",
+        "EXP_FALL",
+        "EXP_RISE",
+    ] = "EXP_FALL"
+    trigger: bool = False
+    d188: bool = False
+    d188_channel: int = 1
+    d188_led: bool = True
+    charge_balance: bool = False
+    reverse: bool = False
+
+
+# baseline and current “sticky” defaults
+_BASE_DEFAULTS = FuncGenDefaults()
+_current_defaults = FuncGenDefaults()
+
+
+def func_gen_control_stateful(
+    reset: bool = False,
+    **overrides,
+):
+    """
+    Stateful wrapper around func_gen_control.
+
+    - On the first call, uses the baseline defaults in FuncGenDefaults.
+    - On each call, only the parameters you pass in `overrides` are changed.
+      All other parameters keep their last-used values.
+    - If `reset=True`, the stored defaults are reset back to the baseline.
+
+    Parameters are the same as func_gen_control; pass them as keyword args.
+    Example:
+        func_gen_control_stateful(freq=100, shape="pulse")
+        func_gen_control_stateful(freq=200)      # shape stays "pulse"
+        func_gen_control_stateful(reset=True)    # back to clean defaults
+    """
+    global _current_defaults
+
+    # Basic guard: only allow known fields
+    valid_keys = set(FuncGenDefaults.__annotations__.keys())
+    unknown = set(overrides) - valid_keys
+    if unknown:
+        raise TypeError(f"Unknown parameter(s): {', '.join(sorted(unknown))}")
+
+    if reset:
+        _current_defaults = FuncGenDefaults()
+
+    # Update stored defaults with what the user passed
+    _current_defaults = replace(_current_defaults, **overrides)
+
+    # Call the real function with the full parameter set
+    return func_gen_control(**asdict(_current_defaults))
+
+    
