@@ -163,6 +163,8 @@ class ControllerMain(QDialog):
 
         # Reverse (Channel 1)
         reverse = 1 if self.ui.radioButton_16.isChecked() else 0  # "On" vs "Off" 
+
+        print(f' reverse = {reverse}')
     
         # Auto K (Channel 1)
         auto_k = 0 if self.ui.radioButton_13.isChecked() else 1  # "On" vs "Off" 

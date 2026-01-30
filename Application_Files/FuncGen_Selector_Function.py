@@ -551,7 +551,7 @@ def func_gen_control(
         
         print('Charge Balance')
 
-        v_min = -vs/10
+        v_min = -v_max/10
 
     else: 
         if (custom == 'yes'):
@@ -621,12 +621,17 @@ def func_gen_control(
 
     if not reverse:
         
+        ch.output.polarity = ks.OutputPolarity.NORMAL
         ch.output.voltage.high = v_max
         ch.output.voltage.low = v_min
 
     else:
-        ch.output.voltage.high = -v_min
-        ch.output.voltage.low = -v_max
+        if charge_balance:
+            ch.output.voltage.high = -v_min
+            ch.output.voltage.low = -v_max
+        else:
+            ch.output.polarity = ks.OutputPolarity.INVERTED
+
         
 
     # if not reverse:
@@ -735,6 +740,16 @@ def func_gen_control(
 
     if trigger:
         summary_lines.append(f"  Trigger Pulse Width:  {_format_pw(trigger_pw)}")
+
+    if reverse:
+        summary_lines.append(f"  Polarity:  Inverted")
+    else:
+        summary_lines.append(f"  Polarity:  Normal")
+
+    if charge_balance:
+        summary_lines.append(f"  Charge Balance:    On")
+    else:
+        summary_lines.append(f"  Charge Balance:    Off")
     
     summary_lines.extend([
         f"  D188 Control:         {_yes_no(d188)}",
