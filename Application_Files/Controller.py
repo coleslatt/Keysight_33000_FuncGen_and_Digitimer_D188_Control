@@ -55,6 +55,8 @@ class ControllerMain(QDialog):
         # Defaults
         self.ui.doubleSpinBox_5.setValue(1.0)
         self.ui.doubleSpinBox_11.setValue(1.0)
+        self.ui.spinBox_6.setValue(60)
+        self.ui.spinBox_8.setValue(60)
 
 
     # 3) Custom Waveform Visibility logic (CH1)
