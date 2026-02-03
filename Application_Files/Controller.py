@@ -52,6 +52,11 @@ class ControllerMain(QDialog):
         self.ui.pushButton.clicked.connect(self.apply_ch1)
         self.ui.pushButton.clicked.connect(self.apply_ch2)
 
+        # Defaults
+        self.ui.doubleSpinBox_5.setValue(1.0)
+        self.ui.doubleSpinBox_11.setValue(1.0)
+
+
     # 3) Custom Waveform Visibility logic (CH1)
     def _update_groupbox_visibility(self, text: str):
         self.ui.groupBox_16.setEnabled(text == "Custom")
