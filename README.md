@@ -14,6 +14,14 @@ A simple package for controlling a Keysight 33000 Series Function Generator and 
 
 ** Make sure you've installed the Keysight Library Suite here: https://www.keysight.com/find/iosuite
 
+Notes:
+
+On some systems and UBC computers, there may be security features that prevent you from running scripts. If there are problems running the setup file or activating the python virtual environment in Powershell, run:
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+
 1. Using Windows Powershell, clone the repo with:
 ```
 git clone https://github.com/coleslatt/Keysight_33000_FuncGen_and_Digitimer_D188_Control.git
@@ -29,25 +37,30 @@ cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
 .\setup_env.ps1
 ```
 ## Usage
-1. Activate your Python virtual environment with:
+
+1. In Powershell, navigate to your repo directory with (replace with your own path):
+```
+cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
+```
+2. Activate your Python virtual environment with:
 ```
 .\.venv\Scripts\Activate.ps1
 ```
 
-2. Ensure you are using the correct Python version by running:
+3. Ensure you are using the correct Python version by running:
 ```
 $Python = ".\.venv\Scripts\python.exe"
 ```
-3. Start user interface with:
+
+4. Start user interface with:
 ```
 & $Python .\Application_Files\Controller.py
 ```
-Notes:
 
-On some systems and UBC computers, there may be security features that prevent you from running scripts. If there are problems running the setup file or activating the python virtual environment in Powershell, run:
-```
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
+### Hardware Setup
+
+1. 
+
 
 
 
