@@ -38,6 +38,13 @@ cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
 ```
 ## Usage
 
+Notes (REMINDER!):
+
+On some systems and UBC computers, there may be security features that prevent you from running scripts. If there are problems running the setup file or activating the python virtual environment in Powershell, run:
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
 1. In Powershell, navigate to your repo directory with (replace with your own path):
 ```
 cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
