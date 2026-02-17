@@ -108,54 +108,88 @@ Run this for more details on burst mode function.
 help(burst_mode)
 ```
 
-4. Use this as the function caller, changing parameters as needed:
+4. Usage examples
 
-
+TTL-on-CH1 use
 ```
-burst_mode(num_stims = 50, 
-           interpulse_delay= 10,
-           interstim_delay = 0.1,
-           jitter = 0,
-           jitter_rate = 0.001,
-           ch1_ttl = 1,
-          )
-```
-
-Full caller (with custom defined waveform on channel 1)
-```
-burst_mode(num_stims = 50, 
-           interpulse_delay= 10,
-           interstim_delay = 0.1,
-           jitter = 0,
-           jitter_rate = 0.001,
-           ch1_ttl = 1,
-           ch1_shape = 'pulse',
-            DS5 = True,
-            DS5_input_volt = 5,
-            DS5_output_current = 50,
-            DS5_desired_current = 50,
-           v_min = -1,
-            v_max = 1,
-            vpp = 2,
-            custom = 'no',
-            ramp = 'yes',
-            auto_k = True,
-            k = 0.1,
-            pph=0, # between 0-1
-            ppw=0, # in ms
-            pw = 1, # in ms
-            channel = 1,
-            state = 1,
-            charge_balance = True,
-            reverse = False
-          )
+burst_mode(
+    num_stims=50,
+    interpulse_delay=10,   # CH2 10 ms after CH1
+    interstim_delay=0.1,
+    jitter=False,
+    jitter_rate=0.001,
+    ch1_ttl=True,
+)
 ```
 
+CH1 custom waveform (no DS5), with func_gen_control args in fg
+```
+burst_mode(
+    num_stims=50,
+    interpulse_delay=10,
+    interstim_delay=0.1,
+    ch1_ttl=False,
+    ch1_shape="pulse",
+    DS5=False,
+    fg=dict(
+        v_min=-1,
+        v_max=1,
+        vpp=2,
+        ramp="yes",
+        pw=1,               # ms (per your func_gen_control convention)
+        charge_balance=True,
+        reverse=False,
+    ),
+)
+
+```
+
+CH1 custom waveform + DS5 scaling (voltage bounds auto-overridden)
+```
+burst_mode(
+    num_stims=50,
+    interpulse_delay=10,
+    interstim_delay=0.1,
+    ch1_ttl=False,
+    ch1_shape="pulse",
+    DS5=True,
+    DS5_input_volt=5,
+    DS5_output_current=50,     # MUST match DS5 front-panel range
+    DS5_desired_current=50,    # mA target output
+    fg=dict(
+        vpp=2,                 # still forwarded
+        ramp="yes",
+        pw=1,
+        charge_balance=True,
+    ),
+)
+```
+
+Negative interpulse_delay (CH2 first, then CH1 after 5 ms)
+```
+burst_mode(
+    num_stims=20,
+    interpulse_delay=-5,   # CH2 at t=0, CH1 at t=+5 ms
+    interstim_delay=0.2,
+    ch1_ttl=True,
+)
+```
+
+Jittered timing
+```
+burst_mode(
+    num_stims=30,
+    interpulse_delay=1,
+    interstim_delay=0.15,
+    jitter=True,
+    jitter_rate=0.02,      # must be <= interstim_delay
+    ch1_ttl=True,
+)
+```
 
 
 
-
-### Hardware Setup
+### Hardware Setup (Function Generator + DS5)
 
 1. 
 
