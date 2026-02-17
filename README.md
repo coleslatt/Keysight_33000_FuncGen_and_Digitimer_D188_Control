@@ -103,8 +103,25 @@ Windows (Powershell):
 .\scripts\run.ps1 --burst
 ```
 
+Run this for more details on burst mode function.
+```
+help(burst_mode)
+```
+
 4. Use this as the function caller, changing parameters as needed:
 
+
+```
+burst_mode(num_stims = 50, 
+           interpulse_delay= 10,
+           interstim_delay = 0.1,
+           jitter = 0,
+           jitter_rate = 0.001,
+           ch1_ttl = 1,
+          )
+```
+
+Full caller (with custom defined waveform on channel 1)
 ```
 burst_mode(num_stims = 50, 
            interpulse_delay= 10,
@@ -133,6 +150,9 @@ burst_mode(num_stims = 50,
             reverse = False
           )
 ```
+
+
+
 
 
 ### Hardware Setup
