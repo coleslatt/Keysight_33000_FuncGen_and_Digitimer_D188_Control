@@ -168,45 +168,114 @@ def burst_mode(interpulse_delay = 0, #ms
                 charge_balance = False,
                 reverse = False   
               ):
-    '''
-    Configure and triggers burst mode on the Keysight 33512B for paired stimulation pulses.
 
-    Channel 1 produces the first pulse in each pair. Channel 2 produces the second pulse,
-    delayed by `interpulse_delay`.
+    """
+    Configure and trigger paired-pulse “burst mode” output on a Keysight 33512B.
 
-    Parameters
-    ----------
-    interpulse_delay : float, default 0 (ms)
-        Channel 2 trigger delay within each pair. Channel 2 will always come after channel 1,
-        therefore this value must be positive.
+    Conceptually, each stimulation event is a *pair* of pulses:
+      - Channel 1: first pulse in the pair (either TTL trigger OR a custom waveform)
+      - Channel 2: second pulse in the pair (ALWAYS TTL trigger)
 
-    interstim_delay : float, default 1 (seconds)
-        Controls the delay between each pair of pulses. Internally this is used to set the
-        output frequency to 1 / interstim_delay.
+    Both channels are configured for burst operation and are software-triggered over the
+    instrument bus. Timing between the two pulses in each pair is controlled by
+    `interpulse_delay` via per-channel trigger delays.
 
-    num_stims : int, default 10
-        Total number of pulse pairs to generate.
+    Timing: interpulse_delay sign convention
+    ---------------------------------------
+    `interpulse_delay` is interpreted in **milliseconds** and sets the relative timing
+    between Channel 1 and Channel 2 *within each pulse pair*:
 
-    jitter : bool, default False
-        If False, uses instrument burst mode to output `num_stims` cycles per trigger.
-        If True, outputs one pulse pair per trigger and software-triggers repeatedly with
-        a randomized delay between triggers.
+      - interpulse_delay > 0:
+          Channel 1 occurs first.
+          Channel 2 is delayed by `interpulse_delay` ms.
+          (ch1.trigger.delay = 0, ch2.trigger.delay = +interpulse_delay)
 
-    jitter_rate : float, default 0 (seconds)
-        Jitter range applied when `jitter=True`. The sleep time between triggers is sampled
-        uniformly from [interstim_delay - jitter_rate, interstim_delay + jitter_rate].
+      - interpulse_delay < 0:
+          Channel 2 occurs first.
+          Channel 1 is delayed by abs(`interpulse_delay`) ms.
+          (ch2.trigger.delay = 0, ch1.trigger.delay = abs(interpulse_delay))
 
-    ch1_ttl : bool, default True
-        If True, configures Channel 1 as a 0–5 V TTL pulse with 1 ms width.
+      - interpulse_delay == 0:
+          Both channels occur simultaneously (zero trigger delay on both).
 
-    ch2_ttl : bool, default True
-        If True, configures Channel 2 as a 0–5 V TTL pulse with 1 ms width.
+    Practical note: because only one software trigger is issued when `jitter=False`,
+    the function triggers the channel whose delay is zero:
+      - interpulse_delay >= 0  -> software trigger Channel 1
+      - interpulse_delay < 0   -> software trigger Channel 2
+
+    Burst scheduling: interstim_delay and num_stims
+    -----------------------------------------------
+    `interstim_delay` sets the repetition period between pulse pairs (seconds). Internally,
+    both channels are set to frequency = 1 / interstim_delay. When `jitter=False`, the
+    Keysight burst engine outputs `num_stims` pulse pairs per single software trigger
+    (i.e., number_of_cycles = num_stims). When `jitter=True`, the function instead triggers
+    one pair at a time from software and sleeps between triggers with optional randomness.
+
+    Channel roles and waveform types
+    --------------------------------
+    Channel 2 is always configured as a TTL pulse:
+      - 0–5 V, pulse width = 1 ms, burst-enabled, BUS trigger source
+
+    Channel 1 depends on `ch1_ttl`:
+      - ch1_ttl=True:
+          Channel 1 is also configured as a TTL pulse (0–5 V, 1 ms width).
+      - ch1_ttl=False:
+          Channel 1 is configured using `func_gen_control(...)` to generate a custom
+          waveform (e.g., sine or user-defined). In this mode, only Channel 1 can be
+          “custom”; Channel 2 remains TTL.
+
+    DS5 current scaling behavior
+    ----------------------------
+    If `DS5=True` and `ch1_ttl=False`, Channel 1’s output voltage is automatically set to
+    achieve a target DS5 output current using a linear scaling model:
+
+        v_max = (DS5_desired_current[mA] * DS5_input_volt[V]) / DS5_output_current[mA]
+        v_min = 0
+
+    This assumes you are driving the DS5 input with the function generator (Channel 1),
+    and the DS5 is set to a known input sensitivity and output current range.
+
+    IMPORTANT: DS5_input_volt and DS5_output_current MUST match the *physical DS5 front-panel*
+    settings you are actually using:
+      - DS5_input_volt: the DS5 input sensitivity setting (e.g., “5 V” input full-scale)
+      - DS5_output_current: the DS5 output current range setting (e.g., “50 mA” range)
+
+    If these do not match the DS5 hardware settings, the computed voltage scaling will be
+    wrong and the delivered current will not equal `DS5_desired_current`.
+
+    Clarifying func_gen_control-only parameters
+    ------------------------------------------
+    This function forwards a block of parameters directly to `func_gen_control(...)` when
+    `ch1_ttl=False`. To make it obvious which arguments are *only* relevant for that
+    sub-configuration, consider one of these patterns:
+
+      1) Group them under a single dict/namespace:
+           funcgen_kwargs: dict | None = None
+         and call:
+           func_gen_control(..., **funcgen_kwargs)
+
+      2) Prefix forwarded parameters consistently (e.g., fg_shape, fg_ramp, fg_pw, ...)
+
+      3) Split into a small dataclass (FuncGenConfig) and accept one object:
+           funcgen: FuncGenConfig | None
+
+    Any of these avoids a long mixed signature where DS5 / burst timing arguments are
+    interleaved with waveform-shaping arguments.
 
     Returns
     -------
     None
-        This function configures the instrument, triggers output, and then closes the connection.
-    '''
+        Configures both channels, triggers output (instrument burst or software loop),
+        then closes the instrument connection.
+
+    Notes / assumptions
+    -------------------
+    - Both channels are set to high impedance load ("infinite") via set_load_infinity().
+    - Channel 2 is always TTL; Channel 1 is TTL only when ch1_ttl=True.
+    - If `jitter=True`, the function triggers repeatedly in software; otherwise it relies
+      on Keysight burst cycles per trigger.
+    """
+
 
 
 
