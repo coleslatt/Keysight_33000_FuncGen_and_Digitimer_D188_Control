@@ -52,10 +52,65 @@ cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
 $Python = ".\.venv\Scripts\python.exe"
 ```
 
-4. Start user interface with:
+4. On Windows, ensure you are not referencing another Python installation by running:
+```
+Remove-Item Alias:python -ErrorAction SilentlyContinue
+$ExecutionContext.InvokeCommand.CommandNotFoundAction = $null
+```
+## User Interface Initiation
+
+1. Start user interface with:
 ```
 & $Python .\Application_Files\Controller.py
 ```
+
+### Burst Mode Function
+
+1. Follow the above steps to set up your environment.
+
+2. Navigate to Application_Files folder with:
+
+```
+cd Application_Files
+```
+
+3. Run this to start burst mode function:
+```
+python
+from burst_mode_function import burst_mode
+```
+
+4. Use this as the function caller, changing parameters as needed:
+
+```
+burst_mode(num_stims = 50, 
+           interpulse_delay= 10,
+           interstim_delay = 0.1,
+           jitter = 0,
+           jitter_rate = 0.001,
+           ch1_ttl = 1,
+           ch1_shape = 'pulse',
+            DS5 = True,
+            DS5_input_volt = 5,
+            DS5_output_current = 50,
+            DS5_desired_current = 50,
+           v_min = -1,
+            v_max = 1,
+            vpp = 2,
+            custom = 'no',
+            ramp = 'yes',
+            auto_k = True,
+            k = 0.1,
+            pph=0, # between 0-1
+            ppw=0, # in ms
+            pw = 1, # in ms
+            channel = 1,
+            state = 1,
+            charge_balance = True,
+            reverse = False
+          )
+```
+
 
 ### Hardware Setup
 
