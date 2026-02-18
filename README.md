@@ -32,9 +32,20 @@ git clone https://github.com/coleslatt/Keysight_33000_FuncGen_and_Digitimer_D188
 cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
 ```
 
-3. Run setup script with:
+3. Run setup script with :
+
+Windows (Powershell)
+-------
 ```
 .\setup_env.ps1
+```
+
+MAC (Terminal)
+---
+```
+chmod +x setup_env_mac.sh
+./setup_env_mac.sh
+
 ```
 ## Usage
 
@@ -121,6 +132,15 @@ burst_mode(
     ch1_ttl=True,
 )
 ```
+
+burst_mode(
+    num_stims=50,
+    interpulse_delay=-10,   # CH2 10 ms after CH1
+    interstim_delay=0.1,
+    jitter=True,
+    jitter_rate=0.01,
+    ch1_ttl=True,
+)
 
 CH1 custom waveform (no DS5), with func_gen_control args in fg
 ```
