@@ -148,6 +148,7 @@ def burst_mode(
     num_stims=10,
     jitter=False,
     jitter_rate=0,        # seconds
+    burst_cycles = 1,
     ch1_ttl=True,
     ch1_shape="sine",
     DS5=True,
@@ -331,8 +332,8 @@ def burst_mode(
             ch1.burst.number_of_cycles = num_stims
             ch2.burst.number_of_cycles = num_stims
         else:
-            ch1.burst.number_of_cycles = 1
-            ch2.burst.number_of_cycles = 1
+            ch1.burst.number_of_cycles = burst_cycles
+            ch2.burst.number_of_cycles = burst_cycles
 
         ch1.output.set_load_infinity()
         ch2.output.set_load_infinity()
@@ -352,9 +353,15 @@ def burst_mode(
         ch1.output.enabled = 1
         ch2.output.enabled = 1
 
+        pw = fg.get("pw", 1)
         # --- trigger ---
         if jitter:
             # One pair per trigger, randomized delay between triggers
+            if burst_cycles != 1:
+                ch1.output.frequency = 1 / ((interpulse_delay + pw)*1e-3)
+                ch2.output.frequency = 1 / ((interpulse_delay + pw)*1e-3)
+                
+
             count = 0
             while count <= num_stims:
                 if interpulse_delay >= 0:

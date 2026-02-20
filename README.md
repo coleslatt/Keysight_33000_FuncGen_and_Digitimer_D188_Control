@@ -198,13 +198,35 @@ burst_mode(
 Jittered timing
 ```
 burst_mode(
-    num_stims=30,
-    interpulse_delay=1,
-    interstim_delay=0.15,
+    num_stims=10,
+    interpulse_delay=0.8,
+    interstim_delay=1,
     jitter=True,
-    jitter_rate=0.02,      # must be <= interstim_delay
+    jitter_rate=0.1,      # must be <= interstim_delay
     ch1_ttl=True,
 )
+```
+
+```
+burst_mode(
+    num_stims=50,
+    interpulse_delay=0.8,   # CH2 10 ms after CH1
+    interstim_delay=1,
+    jitter=1,
+    jitter_rate=0,
+    burst_cycles = 10,
+    ch1_ttl=False,
+    ch1_shape = 'pulse',
+    DS5=0,
+    fg=dict(
+        v_min=0,
+        v_max=5,
+        pw=0.2,               # ms (per your func_gen_control convention)
+        charge_balance=0,
+        reverse=False,
+    ),
+)
+
 ```
 
 
