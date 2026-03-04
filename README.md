@@ -211,19 +211,19 @@ burst_mode(
 For Nader Burst mode function
 ```
 burst_mode(
-    num_stims=50, # Number of stims
+    num_stims=87, # Number of stims
     interpulse_delay=0.8,   # CH2 10 ms after CH1, or delay in between pulses in ms
-    interstim_delay=1, # Delay in between stims in seconds!
+    interstim_delay=3.44827586207, # Delay in between stims in seconds!
     jitter=1, # 1=ON, 0=0FF
-    jitter_rate=0, # +/- Jitter of interstim delay
-    burst_cycles = 10, # Number of pulses per stim
+    jitter_rate=0.2, # +/- Jitter of interstim delay
+    burst_cycles = 1, # Number of pulses per stim
     ch1_ttl=False, 
     ch1_shape = 'pulse',
     DS5=0,
     fg=dict(
         v_min=0,
         v_max=5,
-        pw=0.2,               # ms (per your func_gen_control convention)
+        pw=500,               # ms (per your func_gen_control convention)
         charge_balance=0,
         reverse=False,
     ),
