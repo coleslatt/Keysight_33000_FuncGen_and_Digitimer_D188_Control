@@ -368,6 +368,8 @@ def burst_mode(
                     ch1.trigger.software_trigger()
                 else:
                     ch2.trigger.software_trigger()
+                
+                print(f"Trigger: {count+1}")
 
                 rand = random.uniform(interstim_delay - jitter_rate, interstim_delay + jitter_rate)
                 time.sleep(rand)
