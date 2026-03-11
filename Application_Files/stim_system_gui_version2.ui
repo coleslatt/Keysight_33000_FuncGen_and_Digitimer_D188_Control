@@ -1,0 +1,2944 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Controller_Main</class>
+ <widget class="QDialog" name="Controller_Main">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1100</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1800</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Cambria</family>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Stimulation Control</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="Icons.qrc">
+    <normaloff>:/Icons/electrode_icon.png</normaloff>:/Icons/electrode_icon.png</iconset>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QTabWidget" name="modeSelektor">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="ContinuousMode">
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Continuous Mode&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <attribute name="title">
+       <string>Continuous Mode</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_54">
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>-178</y>
+            <width>1736</width>
+            <height>701</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>Channel Settings</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="1">
+               <widget class="QGroupBox" name="channel2_settings">
+                <property name="title">
+                 <string>Channel 2</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_22">
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_49">
+                   <property name="text">
+                    <string>Frequency</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="0" colspan="2">
+                  <widget class="QLabel" name="label_64">
+                   <property name="text">
+                    <string>Charge Balance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_62">
+                   <property name="text">
+                    <string>Waveform</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_48">
+                   <property name="text">
+                    <string>On/Off</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="2" colspan="3">
+                  <widget class="QWidget" name="state_widget_4" native="true">
+                   <layout class="QGridLayout" name="gridLayout_24">
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="ch1_off_4">
+                      <property name="text">
+                       <string>No</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="ch1_on_4">
+                      <property name="text">
+                       <string>Yes</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QComboBox" name="comboBox_7">
+                   <item>
+                    <property name="text">
+                     <string>Sine</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Square</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Pulse</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Custom</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="0" column="2" colspan="3">
+                  <widget class="QWidget" name="state_widget_2" native="true">
+                   <layout class="QGridLayout" name="gridLayout_23">
+                    <item row="0" column="0">
+                     <widget class="QRadioButton" name="ch1_on_3">
+                      <property name="text">
+                       <string>On</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="ch1_off_3">
+                      <property name="text">
+                       <string>Off</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" colspan="5">
+                  <widget class="QTabWidget" name="tabWidget_2">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
+                   <widget class="QWidget" name="tab_3">
+                    <attribute name="title">
+                     <string>DS5 Control</string>
+                    </attribute>
+                    <layout class="QGridLayout" name="gridLayout_14">
+                     <item row="0" column="0">
+                      <widget class="QGroupBox" name="groupBox_22">
+                       <property name="title">
+                        <string/>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_11">
+                        <item row="3" column="1">
+                         <widget class="QDoubleSpinBox" name="doubleSpinBox_11">
+                          <property name="minimum">
+                           <double>0.000000000000000</double>
+                          </property>
+                          <property name="maximum">
+                           <double>50.000000000000000</double>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_54">
+                          <property name="text">
+                           <string>DS5 Input Voltage</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="0">
+                         <widget class="QLabel" name="label_55">
+                          <property name="text">
+                           <string>Desired Current</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QLabel" name="label_58">
+                          <property name="text">
+                           <string>Volts</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_59">
+                          <property name="text">
+                           <string>DS5 Output Current</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="2">
+                         <widget class="QLabel" name="label_60">
+                          <property name="text">
+                           <string>mA</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="2">
+                         <widget class="QLabel" name="label_61">
+                          <property name="text">
+                           <string>mA</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QComboBox" name="comboBox_5">
+                          <item>
+                           <property name="text">
+                            <string>1</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>2.5</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>5</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>10</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                        <item row="2" column="1">
+                         <widget class="QComboBox" name="comboBox_6">
+                          <item>
+                           <property name="text">
+                            <string>10</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>25</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>50</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="tab_4">
+                    <attribute name="title">
+                     <string>FuncGen Control</string>
+                    </attribute>
+                    <layout class="QGridLayout" name="gridLayout_17">
+                     <item row="0" column="0">
+                      <widget class="QGroupBox" name="groupBox_9">
+                       <property name="title">
+                        <string/>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_18">
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_11">
+                          <property name="text">
+                           <string>Voltage High</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QDoubleSpinBox" name="doubleSpinBox_12"/>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_12">
+                          <property name="text">
+                           <string>Voltage Low</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QDoubleSpinBox" name="doubleSpinBox_13"/>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QLabel" name="label_13">
+                          <property name="text">
+                           <string>Volts</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="2">
+                         <widget class="QLabel" name="label_14">
+                          <property name="text">
+                           <string>Volts</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item row="4" column="3">
+                  <widget class="QLabel" name="label_70">
+                   <property name="text">
+                    <string>ms</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QDoubleSpinBox" name="doubleSpinBox_14"/>
+                 </item>
+                 <item row="1" column="3">
+                  <widget class="QLabel" name="label_52">
+                   <property name="text">
+                    <string>Hertz</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QLabel" name="label_69">
+                   <property name="text">
+                    <string>Polarity</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QSpinBox" name="spinBox_8">
+                   <property name="maximum">
+                    <number>100000</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="0" colspan="5">
+                  <widget class="QGroupBox" name="groupBox_23">
+                   <property name="title">
+                    <string>Custom Waveform</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_20">
+                    <item row="3" column="2">
+                     <widget class="QLabel" name="label_68">
+                      <property name="text">
+                       <string>ms</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_15"/>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QRadioButton" name="radioButton_18">
+                      <property name="text">
+                       <string>Yes</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="label_65">
+                      <property name="text">
+                       <string>Auto K</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="label_67">
+                      <property name="text">
+                       <string>K Value</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_16"/>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_66">
+                      <property name="text">
+                       <string>Prepulse Width</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="QRadioButton" name="radioButton_17">
+                      <property name="text">
+                       <string>No</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_63">
+                   <property name="text">
+                    <string>Pulse Width</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="9" column="2" colspan="3">
+                  <widget class="QWidget" name="widget_3" native="true">
+                   <layout class="QGridLayout" name="gridLayout_7">
+                    <item row="0" column="0">
+                     <widget class="QRadioButton" name="radioButton_19">
+                      <property name="text">
+                       <string>Normal</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radioButton_20">
+                      <property name="text">
+                       <string>Reversed</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QGroupBox" name="channel1_settings_3">
+                <property name="title">
+                 <string>Channel 1</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_21">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_40">
+                   <property name="text">
+                    <string>On/Off</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_30">
+                   <property name="text">
+                    <string>Frequency</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QSpinBox" name="spinBox_6">
+                   <property name="maximum">
+                    <number>100000</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="3">
+                  <widget class="QLabel" name="label_38">
+                   <property name="text">
+                    <string>Hertz</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0" colspan="5">
+                  <widget class="QTabWidget" name="tabWidget">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="currentIndex">
+                    <number>0</number>
+                   </property>
+                   <widget class="QWidget" name="tab">
+                    <attribute name="title">
+                     <string>DS5 Control</string>
+                    </attribute>
+                    <layout class="QGridLayout" name="gridLayout_12">
+                     <item row="0" column="0">
+                      <widget class="QGroupBox" name="groupBox_15">
+                       <property name="title">
+                        <string/>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_9">
+                        <item row="3" column="1">
+                         <widget class="QDoubleSpinBox" name="doubleSpinBox_5">
+                          <property name="minimum">
+                           <double>0.000000000000000</double>
+                          </property>
+                          <property name="maximum">
+                           <double>50.000000000000000</double>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_32">
+                          <property name="text">
+                           <string>DS5 Input Voltage</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="0">
+                         <widget class="QLabel" name="label_33">
+                          <property name="text">
+                           <string>Desired Current</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QLabel" name="label_34">
+                          <property name="text">
+                           <string>Volts</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_31">
+                          <property name="text">
+                           <string>DS5 Output Current</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="2">
+                         <widget class="QLabel" name="label_36">
+                          <property name="text">
+                           <string>mA</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="2">
+                         <widget class="QLabel" name="label_35">
+                          <property name="text">
+                           <string>mA</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QComboBox" name="comboBox_3">
+                          <item>
+                           <property name="text">
+                            <string>1</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>2.5</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>5</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>10</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                        <item row="2" column="1">
+                         <widget class="QComboBox" name="comboBox_4">
+                          <item>
+                           <property name="text">
+                            <string>10</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>25</string>
+                           </property>
+                          </item>
+                          <item>
+                           <property name="text">
+                            <string>50</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="tab_2">
+                    <attribute name="title">
+                     <string>FuncGen Control</string>
+                    </attribute>
+                    <layout class="QGridLayout" name="gridLayout_15">
+                     <item row="0" column="0">
+                      <widget class="QGroupBox" name="groupBox_5">
+                       <property name="title">
+                        <string/>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_16">
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_8">
+                          <property name="text">
+                           <string>Voltage High</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QDoubleSpinBox" name="doubleSpinBox_9"/>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_7">
+                          <property name="text">
+                           <string>Voltage Low</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QDoubleSpinBox" name="doubleSpinBox_10"/>
+                        </item>
+                        <item row="0" column="2">
+                         <widget class="QLabel" name="label_9">
+                          <property name="text">
+                           <string>Volts</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="2">
+                         <widget class="QLabel" name="label_10">
+                          <property name="text">
+                           <string>Volts</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_37">
+                   <property name="text">
+                    <string>Waveform</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="2">
+                  <widget class="QComboBox" name="comboBox_2">
+                   <item>
+                    <property name="text">
+                     <string>Sine</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Square</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Pulse</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Custom</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="label_42">
+                   <property name="text">
+                    <string>Pulse Width</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="2">
+                  <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+                 </item>
+                 <item row="6" column="0" colspan="2">
+                  <widget class="QLabel" name="label_44">
+                   <property name="text">
+                    <string>Charge Balance</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="8" column="0" colspan="5">
+                  <widget class="QGroupBox" name="groupBox_16">
+                   <property name="title">
+                    <string>Custom Waveform</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_10">
+                    <item row="3" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+                    </item>
+                    <item row="5" column="0">
+                     <widget class="QLabel" name="label_41">
+                      <property name="text">
+                       <string>Auto K</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_43">
+                      <property name="text">
+                       <string>Prepulse Width</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="2">
+                     <widget class="QRadioButton" name="radioButton_13">
+                      <property name="text">
+                       <string>No</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="5" column="1">
+                     <widget class="QRadioButton" name="radioButton_14">
+                      <property name="text">
+                       <string>Yes</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="0">
+                     <widget class="QLabel" name="label_45">
+                      <property name="text">
+                       <string>K Value</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="6" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_8"/>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="QLabel" name="label_47">
+                      <property name="text">
+                       <string>ms</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="9" column="0">
+                  <widget class="QLabel" name="label_39">
+                   <property name="text">
+                    <string>Polarity</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2" colspan="3">
+                  <widget class="QWidget" name="state_widget" native="true">
+                   <layout class="QGridLayout" name="gridLayout_8">
+                    <item row="0" column="0">
+                     <widget class="QRadioButton" name="ch1_on">
+                      <property name="text">
+                       <string>On</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="ch1_off">
+                      <property name="text">
+                       <string>Off</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="4" column="3">
+                  <widget class="QLabel" name="label_46">
+                   <property name="text">
+                    <string>ms</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="6" column="2" colspan="3">
+                  <widget class="QWidget" name="state_widget_3" native="true">
+                   <layout class="QGridLayout" name="gridLayout_19">
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="ch1_off_2">
+                      <property name="text">
+                       <string>No</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="ch1_on_2">
+                      <property name="text">
+                       <string>Yes</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="9" column="2" colspan="3">
+                  <widget class="QWidget" name="widget_2" native="true">
+                   <layout class="QGridLayout" name="gridLayout_6">
+                    <item row="0" column="0">
+                     <widget class="QRadioButton" name="radioButton_15">
+                      <property name="text">
+                       <string>Normal</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radioButton_16">
+                      <property name="text">
+                       <string>Reversed</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="groupBox">
+                <property name="layoutDirection">
+                 <enum>Qt::LayoutDirection::LeftToRight</enum>
+                </property>
+                <property name="title">
+                 <string/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QLabel" name="label_2">
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LayoutDirection::RightToLeft</enum>
+                   </property>
+                   <property name="text">
+                    <string>D188 Channel</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="spinBox_7">
+                   <property name="maximumSize">
+                    <size>
+                     <width>60</width>
+                     <height>50</height>
+                    </size>
+                   </property>
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>8</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget" native="true"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QWidget" name="widget_14" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>30</horstretch>
+           <verstretch>30</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>50</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_75">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>Apply</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="text">
+             <string>Reset</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="BurstMode">
+      <attribute name="title">
+       <string>Burst Mode</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_13">
+       <item row="1" column="0">
+        <widget class="QWidget" name="widget_15" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>50</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_76">
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="text">
+             <string>Reset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushButton_4">
+            <property name="text">
+             <string>Start</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QScrollArea" name="scrollArea_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>1</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>1047</width>
+            <height>1097</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_55">
+           <item row="0" column="0">
+            <widget class="QGroupBox" name="BurstModeSettings">
+             <property name="title">
+              <string/>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_39">
+              <item row="2" column="0">
+               <widget class="QGroupBox" name="groupBox_11">
+                <property name="title">
+                 <string>Channel 2 Delay Settings</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_44">
+                 <item row="0" column="0">
+                  <widget class="QWidget" name="widget_9" native="true">
+                   <layout class="QGridLayout" name="gridLayout_45">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_21">
+                      <property name="text">
+                       <string>Channel 2 State</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QRadioButton" name="radioButton_6">
+                      <property name="text">
+                       <string>Off</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QRadioButton" name="radioButton_5">
+                      <property name="text">
+                       <string>On</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QWidget" name="ch2_delay_widget" native="true">
+                   <layout class="QGridLayout" name="gridLayout_48">
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="label_95">
+                      <property name="text">
+                       <string>Milliseconds</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_88">
+                      <property name="text">
+                       <string>Channel 2 Delay</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QGroupBox" name="groupBox_3">
+                <property name="title">
+                 <string>Waveform Settings</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_61">
+                 <item row="0" column="0">
+                  <widget class="QGroupBox" name="channel1_settings_burst">
+                   <property name="title">
+                    <string>Channel 1</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_33">
+                    <item row="3" column="0" colspan="2">
+                     <widget class="QWidget" name="waveform_ch1_burst_2" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>550</height>
+                       </size>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_36">
+                       <item row="0" column="0">
+                        <widget class="QTabWidget" name="current_control_ch1burst">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="currentIndex">
+                          <number>0</number>
+                         </property>
+                         <widget class="QWidget" name="tab_13">
+                          <attribute name="title">
+                           <string>DS5 Control</string>
+                          </attribute>
+                          <layout class="QGridLayout" name="gridLayout_77">
+                           <item row="0" column="0">
+                            <widget class="QGroupBox" name="groupBox_25">
+                             <property name="title">
+                              <string/>
+                             </property>
+                             <layout class="QGridLayout" name="gridLayout_78">
+                              <item row="3" column="1">
+                               <widget class="QDoubleSpinBox" name="doubleSpinBox_36">
+                                <property name="minimum">
+                                 <double>0.000000000000000</double>
+                                </property>
+                                <property name="maximum">
+                                 <double>50.000000000000000</double>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_141">
+                                <property name="text">
+                                 <string>DS5 Input Voltage</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="3" column="0">
+                               <widget class="QLabel" name="label_142">
+                                <property name="text">
+                                 <string>Desired Current</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="2">
+                               <widget class="QLabel" name="label_143">
+                                <property name="text">
+                                 <string>Volts</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="0">
+                               <widget class="QLabel" name="label_144">
+                                <property name="text">
+                                 <string>DS5 Output Current</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="3" column="2">
+                               <widget class="QLabel" name="label_145">
+                                <property name="text">
+                                 <string>mA</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="2">
+                               <widget class="QLabel" name="label_146">
+                                <property name="text">
+                                 <string>mA</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="1">
+                               <widget class="QComboBox" name="comboBox_18">
+                                <item>
+                                 <property name="text">
+                                  <string>10</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>25</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>50</string>
+                                 </property>
+                                </item>
+                               </widget>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QComboBox" name="comboBox_17">
+                                <item>
+                                 <property name="text">
+                                  <string>1</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>2.5</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>5</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>10</string>
+                                 </property>
+                                </item>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                         <widget class="QWidget" name="tab_14">
+                          <attribute name="title">
+                           <string>FuncGen Control</string>
+                          </attribute>
+                          <layout class="QGridLayout" name="gridLayout_79">
+                           <item row="0" column="0">
+                            <widget class="QGroupBox" name="groupBox_13">
+                             <property name="title">
+                              <string/>
+                             </property>
+                             <layout class="QGridLayout" name="gridLayout_80">
+                              <item row="1" column="0">
+                               <widget class="QLabel" name="label_147">
+                                <property name="text">
+                                 <string>Voltage High</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QDoubleSpinBox" name="doubleSpinBox_37"/>
+                              </item>
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_148">
+                                <property name="text">
+                                 <string>Voltage Low</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="1">
+                               <widget class="QDoubleSpinBox" name="doubleSpinBox_38"/>
+                              </item>
+                              <item row="0" column="2">
+                               <widget class="QLabel" name="label_149">
+                                <property name="text">
+                                 <string>Volts</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="2">
+                               <widget class="QLabel" name="label_150">
+                                <property name="text">
+                                 <string>Volts</string>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </widget>
+                       </item>
+                       <item row="4" column="0">
+                        <widget class="QWidget" name="widget_10" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_34">
+                          <item row="0" column="0">
+                           <widget class="QGroupBox" name="groupBox_26">
+                            <property name="title">
+                             <string>Custom Waveform</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_82">
+                             <item row="3" column="1">
+                              <widget class="QDoubleSpinBox" name="doubleSpinBox_40"/>
+                             </item>
+                             <item row="5" column="0">
+                              <widget class="QLabel" name="label_155">
+                               <property name="text">
+                                <string>Auto K</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="3" column="0">
+                              <widget class="QLabel" name="label_156">
+                               <property name="text">
+                                <string>Prepulse Width</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="5" column="2">
+                              <widget class="QRadioButton" name="radioButton_33">
+                               <property name="text">
+                                <string>No</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="5" column="1">
+                              <widget class="QRadioButton" name="radioButton_34">
+                               <property name="text">
+                                <string>Yes</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="6" column="0">
+                              <widget class="QLabel" name="label_157">
+                               <property name="text">
+                                <string>K Value</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="6" column="1">
+                              <widget class="QDoubleSpinBox" name="doubleSpinBox_41"/>
+                             </item>
+                             <item row="3" column="2">
+                              <widget class="QLabel" name="label_158">
+                               <property name="text">
+                                <string>ms</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <widget class="QWidget" name="widget_5" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_31">
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_152">
+                            <property name="text">
+                             <string>Pulse Width</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QDoubleSpinBox" name="doubleSpinBox_39"/>
+                          </item>
+                          <item row="0" column="2">
+                           <widget class="QLabel" name="label_153">
+                            <property name="text">
+                             <string>ms</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QWidget" name="widget_16" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_27">
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_151">
+                            <property name="text">
+                             <string>Waveform</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QComboBox" name="comboBox_19">
+                            <item>
+                             <property name="text">
+                              <string>Sine</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Square</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Pulse</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Custom</string>
+                             </property>
+                            </item>
+                           </widget>
+                          </item>
+                          <item row="0" column="2">
+                           <widget class="QWidget" name="widget_19" native="true"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="3" column="0">
+                        <widget class="QWidget" name="widget_17" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_32">
+                          <item row="0" column="0">
+                           <widget class="QWidget" name="state_widget_11" native="true">
+                            <layout class="QGridLayout" name="gridLayout_81">
+                             <item row="0" column="2">
+                              <widget class="QRadioButton" name="ch1_off_11">
+                               <property name="text">
+                                <string>No</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="0" column="1">
+                              <widget class="QRadioButton" name="ch1_on_11">
+                               <property name="text">
+                                <string>Yes</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="0" column="0">
+                              <widget class="QLabel" name="label_154">
+                               <property name="text">
+                                <string>Charge Balance</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="5" column="0">
+                        <widget class="QWidget" name="widget_18" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_35">
+                          <item row="0" column="2">
+                           <widget class="QRadioButton" name="radioButton_36">
+                            <property name="text">
+                             <string>Reversed</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_159">
+                            <property name="text">
+                             <string>Polarity</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QRadioButton" name="radioButton_35">
+                            <property name="text">
+                             <string>Normal</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" rowspan="2" colspan="2">
+                     <widget class="QWidget" name="ttl_ch1_1" native="true">
+                      <layout class="QGridLayout" name="gridLayout_62">
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_96">
+                         <property name="text">
+                          <string>TTL</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QRadioButton" name="ch1_on_7">
+                         <property name="text">
+                          <string>On</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QRadioButton" name="ch1_off_7">
+                         <property name="text">
+                          <string>Off</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QGroupBox" name="channel2_settings_burst_2">
+                   <property name="title">
+                    <string>Channel 2</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_37">
+                    <item row="3" column="0" colspan="2">
+                     <widget class="QWidget" name="waveform_ch2_burst" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>550</height>
+                       </size>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_38">
+                       <item row="0" column="0">
+                        <widget class="QTabWidget" name="current_control_ch2burst">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <property name="currentIndex">
+                          <number>1</number>
+                         </property>
+                         <widget class="QWidget" name="tab_15">
+                          <attribute name="title">
+                           <string>DS5 Control</string>
+                          </attribute>
+                          <layout class="QGridLayout" name="gridLayout_83">
+                           <item row="0" column="0">
+                            <widget class="QGroupBox" name="groupBox_27">
+                             <property name="title">
+                              <string/>
+                             </property>
+                             <layout class="QGridLayout" name="gridLayout_84">
+                              <item row="2" column="0">
+                               <widget class="QLabel" name="label_163">
+                                <property name="text">
+                                 <string>DS5 Output Current</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="3" column="1">
+                               <widget class="QDoubleSpinBox" name="doubleSpinBox_42">
+                                <property name="minimum">
+                                 <double>0.000000000000000</double>
+                                </property>
+                                <property name="maximum">
+                                 <double>50.000000000000000</double>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="3" column="0">
+                               <widget class="QLabel" name="label_161">
+                                <property name="text">
+                                 <string>Desired Current</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="2">
+                               <widget class="QLabel" name="label_165">
+                                <property name="text">
+                                 <string>mA</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_160">
+                                <property name="text">
+                                 <string>DS5 Input Voltage</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="2" column="1">
+                               <widget class="QComboBox" name="comboBox_21">
+                                <item>
+                                 <property name="text">
+                                  <string>10</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>25</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>50</string>
+                                 </property>
+                                </item>
+                               </widget>
+                              </item>
+                              <item row="3" column="2">
+                               <widget class="QLabel" name="label_164">
+                                <property name="text">
+                                 <string>mA</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QComboBox" name="comboBox_20">
+                                <item>
+                                 <property name="text">
+                                  <string>1</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>2.5</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>5</string>
+                                 </property>
+                                </item>
+                                <item>
+                                 <property name="text">
+                                  <string>10</string>
+                                 </property>
+                                </item>
+                               </widget>
+                              </item>
+                              <item row="0" column="2">
+                               <widget class="QLabel" name="label_162">
+                                <property name="text">
+                                 <string>Volts</string>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                         <widget class="QWidget" name="tab_16">
+                          <attribute name="title">
+                           <string>FuncGen Control</string>
+                          </attribute>
+                          <layout class="QGridLayout" name="gridLayout_85">
+                           <item row="0" column="0">
+                            <widget class="QGroupBox" name="groupBox_14">
+                             <property name="title">
+                              <string/>
+                             </property>
+                             <layout class="QGridLayout" name="gridLayout_86">
+                              <item row="1" column="0">
+                               <widget class="QLabel" name="label_166">
+                                <property name="text">
+                                 <string>Voltage High</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="0" column="1">
+                               <widget class="QDoubleSpinBox" name="doubleSpinBox_43"/>
+                              </item>
+                              <item row="0" column="0">
+                               <widget class="QLabel" name="label_167">
+                                <property name="text">
+                                 <string>Voltage Low</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="1">
+                               <widget class="QDoubleSpinBox" name="doubleSpinBox_44"/>
+                              </item>
+                              <item row="0" column="2">
+                               <widget class="QLabel" name="label_168">
+                                <property name="text">
+                                 <string>Volts</string>
+                                </property>
+                               </widget>
+                              </item>
+                              <item row="1" column="2">
+                               <widget class="QLabel" name="label_169">
+                                <property name="text">
+                                 <string>Volts</string>
+                                </property>
+                               </widget>
+                              </item>
+                             </layout>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </widget>
+                       </item>
+                       <item row="4" column="0">
+                        <widget class="QWidget" name="widget_13" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_56">
+                          <item row="0" column="0">
+                           <widget class="QGroupBox" name="groupBox_28">
+                            <property name="title">
+                             <string>Custom Waveform</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_87">
+                             <item row="3" column="1">
+                              <widget class="QDoubleSpinBox" name="doubleSpinBox_45"/>
+                             </item>
+                             <item row="5" column="0">
+                              <widget class="QLabel" name="label_170">
+                               <property name="text">
+                                <string>Auto K</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="3" column="0">
+                              <widget class="QLabel" name="label_171">
+                               <property name="text">
+                                <string>Prepulse Width</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="5" column="2">
+                              <widget class="QRadioButton" name="radioButton_37">
+                               <property name="text">
+                                <string>No</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="5" column="1">
+                              <widget class="QRadioButton" name="radioButton_38">
+                               <property name="text">
+                                <string>Yes</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="6" column="0">
+                              <widget class="QLabel" name="label_172">
+                               <property name="text">
+                                <string>K Value</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="6" column="1">
+                              <widget class="QDoubleSpinBox" name="doubleSpinBox_46"/>
+                             </item>
+                             <item row="3" column="2">
+                              <widget class="QLabel" name="label_173">
+                               <property name="text">
+                                <string>ms</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="2" column="0">
+                        <widget class="QWidget" name="widget_20" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_57">
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_174">
+                            <property name="text">
+                             <string>Pulse Width</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QDoubleSpinBox" name="doubleSpinBox_47"/>
+                          </item>
+                          <item row="0" column="2">
+                           <widget class="QLabel" name="label_175">
+                            <property name="text">
+                             <string>ms</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="1" column="0">
+                        <widget class="QWidget" name="widget_21" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_58">
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_176">
+                            <property name="text">
+                             <string>Waveform</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QComboBox" name="comboBox_22">
+                            <item>
+                             <property name="text">
+                              <string>Sine</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Square</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Pulse</string>
+                             </property>
+                            </item>
+                            <item>
+                             <property name="text">
+                              <string>Custom</string>
+                             </property>
+                            </item>
+                           </widget>
+                          </item>
+                          <item row="0" column="2">
+                           <widget class="QWidget" name="widget_22" native="true"/>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="3" column="0">
+                        <widget class="QWidget" name="widget_23" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_59">
+                          <item row="0" column="0">
+                           <widget class="QWidget" name="state_widget_12" native="true">
+                            <layout class="QGridLayout" name="gridLayout_88">
+                             <item row="0" column="2">
+                              <widget class="QRadioButton" name="ch2_chargebalance">
+                               <property name="text">
+                                <string>No</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="0" column="1">
+                              <widget class="QRadioButton" name="ch1_on_12">
+                               <property name="text">
+                                <string>Yes</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item row="0" column="0">
+                              <widget class="QLabel" name="label_177">
+                               <property name="text">
+                                <string>Charge Balance</string>
+                               </property>
+                              </widget>
+                             </item>
+                            </layout>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="5" column="0">
+                        <widget class="QWidget" name="widget_24" native="true">
+                         <property name="minimumSize">
+                          <size>
+                           <width>0</width>
+                           <height>0</height>
+                          </size>
+                         </property>
+                         <layout class="QGridLayout" name="gridLayout_60">
+                          <item row="0" column="2">
+                           <widget class="QRadioButton" name="radioButton_39">
+                            <property name="text">
+                             <string>Reversed</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_178">
+                            <property name="text">
+                             <string>Polarity</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QRadioButton" name="radioButton_40">
+                            <property name="text">
+                             <string>Normal</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="0" column="0" rowspan="2" colspan="2">
+                     <widget class="QWidget" name="ttl_ch2" native="true">
+                      <layout class="QGridLayout" name="gridLayout_63">
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="label_101">
+                         <property name="text">
+                          <string>TTL</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="1">
+                        <widget class="QRadioButton" name="ch2_on_8">
+                         <property name="text">
+                          <string>On</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item row="0" column="2">
+                        <widget class="QRadioButton" name="ch2_off_8">
+                         <property name="text">
+                          <string>Off</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="PulseSettings">
+                <property name="title">
+                 <string>Pulse Settings</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_40">
+                 <item row="0" column="3">
+                  <widget class="QWidget" name="widget_7" native="true">
+                   <layout class="QGridLayout" name="gridLayout_41">
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_89">
+                      <property name="text">
+                       <string>Frequency/Period</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QRadioButton" name="radioButton_2">
+                      <property name="text">
+                       <string>Period</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QRadioButton" name="radioButton">
+                      <property name="text">
+                       <string>Frequency</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="spinBox"/>
+                 </item>
+                 <item row="0" column="6">
+                  <widget class="QWidget" name="interpulsedelay_widget" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>350</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_49">
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="label_90">
+                      <property name="text">
+                       <string>Milliseconds</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QDoubleSpinBox" name="doubleSpinBox">
+                      <property name="alignment">
+                       <set>Qt::AlignmentFlag::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_29">
+                      <property name="text">
+                       <string>Interpulse Delay</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <spacer name="horizontalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Policy::MinimumExpanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>90</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="0" column="4">
+                  <spacer name="horizontalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_3">
+                   <property name="text">
+                    <string>Pulses per Stim</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QGroupBox" name="StimSettings">
+                <property name="title">
+                 <string>Stim Settings</string>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_42">
+                 <item row="0" column="6">
+                  <widget class="QWidget" name="widget_26" native="true">
+                   <property name="minimumSize">
+                    <size>
+                     <width>250</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="layoutDirection">
+                    <enum>Qt::LayoutDirection::LeftToRight</enum>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_47">
+                    <item row="1" column="2">
+                     <widget class="QWidget" name="widget_28" native="true">
+                      <property name="minimumSize">
+                       <size>
+                        <width>70</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <widget class="QLabel" name="label_92">
+                       <property name="geometry">
+                        <rect>
+                         <x>10</x>
+                         <y>0</y>
+                         <width>56</width>
+                         <height>37</height>
+                        </rect>
+                       </property>
+                       <property name="text">
+                        <string>Seconds</string>
+                       </property>
+                      </widget>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QWidget" name="widget_27" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>120</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="layoutDirection">
+                       <enum>Qt::LayoutDirection::RightToLeft</enum>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_50">
+                       <item row="0" column="0">
+                        <widget class="QLabel" name="interstim_delay_2">
+                         <property name="text">
+                          <string>Interstim Delay</string>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QDoubleSpinBox" name="interstim_delay"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="4">
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Policy::MinimumExpanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>10</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="num_stims"/>
+                 </item>
+                 <item row="2" column="0" colspan="6">
+                  <widget class="QWidget" name="widget_11" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_46">
+                    <item row="0" column="0">
+                     <widget class="QWidget" name="jitter_widget_3" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>0</width>
+                        <height>60</height>
+                       </size>
+                      </property>
+                      <layout class="QGridLayout" name="gridLayout_64">
+                       <item row="1" column="3" rowspan="2">
+                        <widget class="QWidget" name="widget_25" native="true">
+                         <layout class="QGridLayout" name="gridLayout_65">
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="label_102">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>0</width>
+                              <height>15</height>
+                             </size>
+                            </property>
+                            <property name="layoutDirection">
+                             <enum>Qt::LayoutDirection::RightToLeft</enum>
+                            </property>
+                            <property name="text">
+                             <string>Jitter Rate (+/-)</string>
+                            </property>
+                            <property name="alignment">
+                             <set>Qt::AlignmentFlag::AlignCenter</set>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="1">
+                           <widget class="QDoubleSpinBox" name="doubleSpinBox_24"/>
+                          </item>
+                          <item row="0" column="3">
+                           <spacer name="horizontalSpacer_6">
+                            <property name="orientation">
+                             <enum>Qt::Orientation::Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                             <enum>QSizePolicy::Policy::MinimumExpanding</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>90</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                          <item row="0" column="2">
+                           <widget class="QLabel" name="label_103">
+                            <property name="text">
+                             <string>Seconds</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                       <item row="1" column="1" rowspan="2">
+                        <widget class="QWidget" name="Jitter_4" native="true">
+                         <layout class="QGridLayout" name="gridLayout_66">
+                          <item row="0" column="1">
+                           <widget class="QRadioButton" name="jitter_on_3">
+                            <property name="text">
+                             <string>On</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="3">
+                           <spacer name="horizontalSpacer_11">
+                            <property name="orientation">
+                             <enum>Qt::Orientation::Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                             <enum>QSizePolicy::Policy::Preferred</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                             <size>
+                              <width>20</width>
+                              <height>20</height>
+                             </size>
+                            </property>
+                           </spacer>
+                          </item>
+                          <item row="0" column="0">
+                           <widget class="QLabel" name="jitter_label_3">
+                            <property name="sizePolicy">
+                             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                              <horstretch>0</horstretch>
+                              <verstretch>0</verstretch>
+                             </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                             <size>
+                              <width>0</width>
+                              <height>15</height>
+                             </size>
+                            </property>
+                            <property name="text">
+                             <string>Jitter</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item row="0" column="2">
+                           <widget class="QRadioButton" name="jitter_off_3">
+                            <property name="text">
+                             <string>Off</string>
+                            </property>
+                           </widget>
+                          </item>
+                         </layout>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="num_stims_label">
+                   <property name="text">
+                    <string>Number of Stims</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeType">
+                    <enum>QSizePolicy::Policy::MinimumExpanding</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>10</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="1" column="0" colspan="7">
+                  <widget class="Line" name="line">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="QWidget" name="widget_8" native="true">
+                   <layout class="QGridLayout" name="gridLayout_43">
+                    <item row="1" column="2">
+                     <widget class="QRadioButton" name="radioButton_4">
+                      <property name="text">
+                       <string>Period</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_91">
+                      <property name="text">
+                       <string>Frequency/Period</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="3">
+                     <widget class="QRadioButton" name="freq_select_stim">
+                      <property name="text">
+                       <string>Frequency</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="system_status">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>400</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>2000</width>
+       <height>400</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>System Status</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_29">
+      <item row="0" column="0" colspan="2">
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="title">
+         <string>Channel 1</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QGroupBox" name="channel1_settings">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>180</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>220</height>
+            </size>
+           </property>
+           <property name="title">
+            <string/>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <item row="0" column="0">
+             <widget class="QWidget" name="widget_4" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_26">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_50">
+                 <property name="text">
+                  <string>Frequency</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="3">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>ms</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <widget class="QTextBrowser" name="textBrowser">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="5" colspan="2">
+                <widget class="QTextBrowser" name="OutputMode_display_6">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QTextBrowser" name="OutputMode_display_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QTextBrowser" name="frequency_display_3">
+                 <property name="minimumSize">
+                  <size>
+                   <width>70</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="autoFormatting">
+                  <set>QTextEdit::AutoFormattingFlag::AutoBulletList</set>
+                 </property>
+                 <property name="cursorWidth">
+                  <number>1</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Hz</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" rowspan="2" colspan="2">
+                <widget class="QLabel" name="label_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Pulse Width</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="4">
+                <widget class="QLabel" name="label_53">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>DS5 Current</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::TextFormat::MarkdownText</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QLabel" name="label">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>90</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>90</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>VMin/VMax</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="output_mode_display_3">
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>On/Off</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QTextBrowser" name="textBrowser_5"/>
+               </item>
+               <item row="0" column="6">
+                <widget class="QTextBrowser" name="textBrowser_2"/>
+               </item>
+               <item row="0" column="7">
+                <widget class="QLabel" name="label_15">
+                 <property name="text">
+                  <string>V</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="7">
+                <widget class="QLabel" name="label_16">
+                 <property name="text">
+                  <string>mA</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QGraphicsView" name="graphicsView"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="title">
+         <string>Channel 1</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="1">
+          <widget class="QGroupBox" name="channel1_settings_2">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>180</width>
+             <height>100</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>220</height>
+            </size>
+           </property>
+           <property name="title">
+            <string/>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
+           </property>
+           <property name="checkable">
+            <bool>false</bool>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_25">
+            <item row="0" column="0">
+             <widget class="QWidget" name="widget_6" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_28">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_57">
+                 <property name="text">
+                  <string>Frequency</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="3">
+                <widget class="QLabel" name="label_22">
+                 <property name="text">
+                  <string>ms</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <widget class="QTextBrowser" name="textBrowser_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="5" colspan="2">
+                <widget class="QTextBrowser" name="OutputMode_display_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QTextBrowser" name="OutputMode_display_5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QTextBrowser" name="frequency_display_5">
+                 <property name="minimumSize">
+                  <size>
+                   <width>70</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="autoFormatting">
+                  <set>QTextEdit::AutoFormattingFlag::AutoBulletList</set>
+                 </property>
+                 <property name="cursorWidth">
+                  <number>1</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLabel" name="label_23">
+                 <property name="text">
+                  <string>Hz</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" rowspan="2" colspan="2">
+                <widget class="QLabel" name="label_24">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Pulse Width</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="4">
+                <widget class="QLabel" name="label_71">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>DS5 Current</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::TextFormat::MarkdownText</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QLabel" name="label_25">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>90</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="baseSize">
+                  <size>
+                   <width>90</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>VMin/VMax</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="output_mode_display_5">
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>On/Off</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QTextBrowser" name="textBrowser_8"/>
+               </item>
+               <item row="0" column="6">
+                <widget class="QTextBrowser" name="textBrowser_9"/>
+               </item>
+               <item row="0" column="7">
+                <widget class="QLabel" name="label_26">
+                 <property name="text">
+                  <string>V</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="7">
+                <widget class="QLabel" name="label_27">
+                 <property name="text">
+                  <string>mA</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QGraphicsView" name="graphicsView_2"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QGroupBox" name="d188_ch">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_30">
+         <item row="0" column="1">
+          <widget class="QTextBrowser" name="textBrowser_10">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>50</width>
+             <height>40</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>D188 Channel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="Icons.qrc"/>
+ </resources>
+ <connections/>
+</ui>

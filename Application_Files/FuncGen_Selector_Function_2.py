@@ -392,7 +392,7 @@ def func_gen_control(
     ppw=0, # in ms
     pw = 1, # in ms
     channel = 1,
-    state = 1,
+    state = 0,
     arb_name: Literal["CARDIAC", "D_LORENTZ", "GAUSSIAN", "HAVERSINE", "LORENTZ", "NEG_RAMP", "SINC", "EXP_FALL", "EXP_RISE"] = "EXP_FALL",
     trigger = False,
     d188 = False,
@@ -471,6 +471,8 @@ def func_gen_control(
     This function configures the instrument via side effects on the global
     `driver` and does not return a value.
     """
+
+    print ("\n\nFull Parameter Change\n------------------------\n")
     
     resource_name = "33512B"
     id_query = True
@@ -513,7 +515,8 @@ def func_gen_control(
         raise ValueError('Channel selection is invalid, must be 1 or 2')  
 
     ch.output.enabled = 0
-
+    ch.burst.enabled = False
+    
     if not trigger:
         ch2 = driver.output_channels[1]
         ch2.output.enabled = 0
@@ -738,8 +741,8 @@ def func_gen_control(
 
     ])
 
-    if trigger:
-        summary_lines.append(f"  Trigger Pulse Width:  {_format_pw(trigger_pw)}")
+    # if trigger:
+    #     summary_lines.append(f"  Trigger Pulse Width:  {_format_pw(trigger_pw)}")
 
     if reverse:
         summary_lines.append(f"  Polarity:  Inverted")
@@ -773,9 +776,275 @@ def func_gen_control(
     driver.close()
     return
 
+# def adjust_current(
+#     *,
+#     channel: int,
+#     v_min: float,
+#     v_max: float,
+#     vpp: float = 2,
+#     reverse: bool = False,
+#     charge_balance: bool = False,
+# ):
+#     """
+#     Update output levels (v_min/v_max) without toggling output enable.
+
+#     Used as a fast-path when ONLY voltage bounds change.
+#     """
+
+#     print("\n\nVoltage-Only Change (Fast Path)\n------------------------\n")
+    
+#     resource_name = "33512B"
+#     id_query = True
+#     reset = False
+#     options = ""
+#     driver = ks.Kt33000(resource_name, id_query, reset, options)
+
+#     try:
+#         if channel == 1:
+#             ch = driver.output_channels[0]
+#         elif channel == 2:
+#             ch = driver.output_channels[1]
+#         else:
+#             raise ValueError("Channel selection is invalid, must be 1 or 2")
+
+#         ch.output.set_load_infinity()
+
+#         # Mirror your func_gen_control behavior for charge_balance
+#         if charge_balance:
+#             v_min = -v_max / 10  # matches func_gen_control :contentReference[oaicite:4]{index=4}
+
+#         # Mirror your vpp convention if caller leaves v_min/v_max at defaults
+#         if (vpp != 2) and (v_min == -1) and (v_max == 1):
+#             v_min = -(vpp / 2)
+#             v_max = +(vpp / 2)  # matches func_gen_control :contentReference[oaicite:5]{index=5}
+
+#         # Apply polarity + levels WITHOUT disabling output
+#         if not reverse:
+#             ch.output.polarity = ks.OutputPolarity.NORMAL
+#             ch.output.voltage.high = v_max
+#             ch.output.voltage.low = v_min
+#         else:
+#             if charge_balance:
+#                 ch.output.voltage.high = -v_min
+#                 ch.output.voltage.low = -v_max
+#             else:
+#                 ch.output.polarity = ks.OutputPolarity.INVERTED
+#                 # still set levels deterministically
+#                 ch.output.voltage.high = v_max
+#                 ch.output.voltage.low = v_min
+
+#     finally:
+#         driver.close()
+
+
+import time
+import math
+
+def adjust_current(
+    *,
+    channel: int,
+    prev_v_min: float,
+    new_v_min: float,
+    prev_v_max: float,
+    new_v_max: float,
+    vpp: float = 2,
+    reverse: bool = False,
+    charge_balance: bool = False,
+    ramp: bool = False,
+    ramp_rate: float = 1.0,
+    step_size: float = 0.01,
+    debug: bool = True,
+):
+    """
+    Update output levels (v_min/v_max) without toggling output enable.
+
+    Fast path used when only voltage-related values change.
+
+    Parameters
+    ----------
+    channel : int
+        Output channel (1 or 2).
+
+    prev_v_min : float
+        Previously applied low level from stored state.
+
+    new_v_min : float
+        New requested low level.
+
+    prev_v_max : float
+        Previously applied high level from stored state.
+
+    new_v_max : float
+        New requested high level.
+
+    vpp : float, default 2
+        Peak-to-peak voltage convention, matching func_gen_control.
+
+    reverse : bool, default False
+        Whether the output should be reversed / inverted.
+
+    charge_balance : bool, default False
+        Whether to apply the charge-balance voltage convention.
+
+    ramp : bool, default False
+        If True, ramp from previous values to new values.
+
+    ramp_rate : float, default 1.0
+        Total ramp duration in seconds.
+
+    step_size : float, default 0.01
+        Voltage increment per step in volts.
+
+    debug : bool, default True
+        Print debug information.
+    """
+
+    def _resolve_requested_levels(v_min: float, v_max: float, vpp: float, charge_balance: bool):
+        """
+        Resolve requested UI values into effective logical voltage bounds,
+        mirroring func_gen_control behavior.
+        """
+        if (vpp != 2) and (v_min == -1) and (v_max == 1):
+            v_min = -(vpp / 2)
+            v_max = +(vpp / 2)
+
+        if charge_balance:
+            v_min = -v_max / 10
+
+        return float(v_min), float(v_max)
+
+    def _instrument_levels(v_min: float, v_max: float, reverse: bool, charge_balance: bool):
+        """
+        Convert logical levels into the actual high/low values written to the instrument.
+        """
+        if not reverse:
+            polarity = ks.OutputPolarity.NORMAL
+            high = float(v_max)
+            low = float(v_min)
+        else:
+            if charge_balance:
+                # mirrors your func_gen_control behavior
+                polarity = ks.OutputPolarity.NORMAL
+                high = float(-v_min)
+                low = float(-v_max)
+            else:
+                polarity = ks.OutputPolarity.INVERTED
+                high = float(v_max)
+                low = float(v_min)
+
+        return polarity, high, low
+
+    def _linspace_steps(start: float, stop: float, n_steps: int) -> list[float]:
+        if n_steps <= 1:
+            return [float(stop)]
+        return np.linspace(start, stop, n_steps).tolist()
+
+    if debug:
+        print("\n\nVoltage-Only Change (Fast Path)\n------------------------\n")
+
+    resource_name = "33512B"
+    id_query = True
+    reset = False
+    options = ""
+    driver = ks.Kt33000(resource_name, id_query, reset, options)
+
+    try:
+        if channel == 1:
+            ch = driver.output_channels[0]
+        elif channel == 2:
+            ch = driver.output_channels[1]
+        else:
+            raise ValueError("Channel selection is invalid, must be 1 or 2")
+
+        ch.output.set_load_infinity()
+
+        # Resolve previous and new logical requested levels
+        prev_v_min_resolved, prev_v_max_resolved = _resolve_requested_levels(
+            prev_v_min, prev_v_max, vpp, charge_balance
+        )
+        new_v_min_resolved, new_v_max_resolved = _resolve_requested_levels(
+            new_v_min, new_v_max, vpp, charge_balance
+        )
+
+        # Convert to actual instrument-written levels
+        polarity, prev_high, prev_low = _instrument_levels(
+            prev_v_min_resolved, prev_v_max_resolved, reverse, charge_balance
+        )
+        _, new_high, new_low = _instrument_levels(
+            new_v_min_resolved, new_v_max_resolved, reverse, charge_balance
+        )
+
+        # Apply polarity once at the start
+        ch.output.polarity = polarity
+
+        if debug:
+            print(f"Channel: {channel}")
+            print(f"Previous logical levels: v_min={prev_v_min_resolved:.3f}, v_max={prev_v_max_resolved:.3f}")
+            print(f"New logical levels:      v_min={new_v_min_resolved:.3f}, v_max={new_v_max_resolved:.3f}")
+            print(f"Previous applied:        low={prev_low:.3f}, high={prev_high:.3f}")
+            print(f"New target applied:      low={new_low:.3f}, high={new_high:.3f}")
+            print(f"Reverse={reverse}, ChargeBalance={charge_balance}, Ramp={ramp}, RampRate={ramp_rate}s")
+
+        # Non-ramped behavior: same idea as your original function
+        if not ramp:
+            ch.output.voltage.high = new_high
+            ch.output.voltage.low = new_low
+            return
+
+        # Ramp behavior
+        delta_high = abs(new_high - prev_high)
+        delta_low = abs(new_low - prev_low)
+        max_delta = max(delta_high, delta_low)
+
+        if max_delta == 0:
+            if debug:
+                print("No voltage delta detected; nothing to ramp.")
+            return
+
+        if step_size <= 0:
+            raise ValueError("step_size must be positive")
+
+        if ramp_rate < 0:
+            raise ValueError("ramp_rate must be non-negative")
+
+        n_steps = max(1, int(math.ceil(max_delta / step_size)))
+        high_values = _linspace_steps(prev_high, new_high, n_steps + 1)
+        low_values = _linspace_steps(prev_low, new_low, n_steps + 1)
+
+        sleep_per_step = 0.0 if n_steps == 0 else (ramp_rate / n_steps)
+
+        if debug:
+            print(f"Ramp steps: {n_steps}")
+            print(f"Step size target: {step_size:.3f} V")
+            print(f"Sleep per step: {sleep_per_step:.6f} s")
+
+        # Skip index 0 because that is the already-applied previous value
+        for i in range(1, n_steps + 1):
+            ch.output.voltage.high = high_values[i]
+            ch.output.voltage.low = low_values[i]
+
+            if debug:
+                print(
+                    f"Step {i:>4}/{n_steps}: "
+                    f"low={low_values[i]:.3f}, high={high_values[i]:.3f}"
+                )
+
+            if sleep_per_step > 0:
+                time.sleep(sleep_per_step)
+
+        # Final explicit set for certainty
+        ch.output.voltage.high = new_high
+        ch.output.voltage.low = new_low
+
+        if debug:
+            print("Ramp complete.")
+
+    finally:
+        driver.close()
 
 
 from dataclasses import dataclass, asdict, replace
+from typing import Literal
 
 @dataclass
 class FuncGenDefaults:
@@ -785,9 +1054,12 @@ class FuncGenDefaults:
     v_max: float = 1
     vpp: float = 2
     custom: str = "no"
+    ramp: str = "yes"
+    auto_k: bool = True
+    k: float = 0.1
     pph: float = 0.0
     ppw: float = 0.0
-    pw: float = 1e-3
+    pw: float = 1          # ms, to match func_gen_control
     channel: int = 1
     state: int = 1
     arb_name: Literal[
@@ -809,44 +1081,326 @@ class FuncGenDefaults:
     reverse: bool = False
 
 
-# baseline and current “sticky” defaults
-_BASE_DEFAULTS = FuncGenDefaults()
-_current_defaults = FuncGenDefaults()
+# Separate sticky defaults for each channel
+_BASE_DEFAULTS_BY_CHANNEL = {
+    1: FuncGenDefaults(channel=1),
+    2: FuncGenDefaults(channel=2),
+}
+
+_current_defaults_by_channel = {
+    1: FuncGenDefaults(channel=1),
+    2: FuncGenDefaults(channel=2),
+}
+
+def turn_channels_off(*channels: int, disable_burst: bool = True):
+    """
+    Safely disable one or more output channels without reconfiguring waveform,
+    voltage, polarity, or ARB content.
+    """
+    print("\n\nSafe Output-Off\n------------------------\n")
+
+    resource_name = "33512B"
+    id_query = True
+    reset = False
+    options = ""
+    driver = ks.Kt33000(resource_name, id_query, reset, options)
+
+    try:
+        for channel in channels:
+            if channel == 1:
+                ch = driver.output_channels[0]
+            elif channel == 2:
+                ch = driver.output_channels[1]
+            else:
+                raise ValueError("Channel selection is invalid, must be 1 or 2")
+
+            ch.output.enabled = 0
+
+            if disable_burst:
+                ch.burst.enabled = False
+
+            print(f"CH{channel}: output OFF, burst {'OFF' if disable_burst else 'unchanged'}")
+
+    finally:
+        driver.close()
 
 
 def func_gen_control_stateful(
     reset: bool = False,
-    **overrides,
+    debug: bool = True,
+    **ui_values,
 ):
     """
-    Stateful wrapper around func_gen_control.
+    Stateful wrapper around func_gen_control, but with independent state per channel.
 
-    - On the first call, uses the baseline defaults in FuncGenDefaults.
-    - On each call, only the parameters you pass in `overrides` are changed.
-      All other parameters keep their last-used values.
-    - If `reset=True`, the stored defaults are reset back to the baseline.
-
-    Parameters are the same as func_gen_control; pass them as keyword args.
-    Example:
-        func_gen_control_stateful(freq=100, shape="pulse")
-        func_gen_control_stateful(freq=200)      # shape stays "pulse"
-        func_gen_control_stateful(reset=True)    # back to clean defaults
+    Behavior
+    --------
+    - Stores last-applied values separately for CH1 and CH2.
+    - If ONLY voltage-related values changed for that channel, uses adjust_current().
+    - Otherwise uses func_gen_control().
+    - Prevents CH1 calls from being compared against CH2 state, and vice versa.
     """
-    global _current_defaults
+    global _current_defaults_by_channel
 
-    # Basic guard: only allow known fields
     valid_keys = set(FuncGenDefaults.__annotations__.keys())
-    unknown = set(overrides) - valid_keys
+    unknown = set(ui_values) - valid_keys
     if unknown:
         raise TypeError(f"Unknown parameter(s): {', '.join(sorted(unknown))}")
 
+    def _normalize_value(key, value):
+        if isinstance(value, str):
+            value = value.strip()
+
+        if key in {"trigger", "d188", "d188_led", "charge_balance", "reverse", "auto_k"}:
+            if isinstance(value, int):
+                value = bool(value)
+
+        if key in {"channel", "state", "d188_channel"}:
+            if isinstance(value, float) and value.is_integer():
+                value = int(value)
+
+        return value
+
+    def _differs(a, b, *, atol=1e-9, rtol=1e-9) -> bool:
+        if a is None or b is None:
+            return a is not b
+
+        if isinstance(a, (int, float, bool)) and isinstance(b, (int, float, bool)):
+            return abs(float(a) - float(b)) > (atol + rtol * max(abs(float(a)), abs(float(b))))
+
+        return a != b
+
+    # Normalize inputs first
+    normalized_ui_values = {
+        k: _normalize_value(k, v)
+        for k, v in ui_values.items()
+    }
+
+    # Figure out which channel this call is for
+    requested_channel = normalized_ui_values.get("channel", 1)
+    if requested_channel not in (1, 2):
+        raise ValueError("Channel selection is invalid, must be 1 or 2")
+
     if reset:
-        _current_defaults = FuncGenDefaults()
+        _current_defaults_by_channel = {
+            1: FuncGenDefaults(channel=1, state=0),
+            2: FuncGenDefaults(channel=2, state=0),
+        }
 
-    # Update stored defaults with what the user passed
-    _current_defaults = replace(_current_defaults, **overrides)
+        if debug:
+            print("\n[STATE RESET]")
+            print("Reset stored defaults for both channels and turning outputs OFF.\n")
+            for ch_num in (1, 2):
+                print(f"Channel {ch_num} defaults:")
+                for k, v in asdict(_current_defaults_by_channel[ch_num]).items():
+                    print(f"  {k}: {v!r}")
+                print()
 
-    # Call the real function with the full parameter set
-    return func_gen_control(**asdict(_current_defaults))
+        turn_channels_off(1, 2, disable_burst=True)
+        return None
 
-    
+    current_state = _current_defaults_by_channel[requested_channel]
+
+    actually_changed = set()
+
+    if debug:
+        print(f"\n[STATEFUL COMPARE: CH{requested_channel}]")
+        print("Stored state vs incoming UI values:\n")
+
+    for k, new_val in normalized_ui_values.items():
+        old_val = getattr(current_state, k)
+        changed = _differs(old_val, new_val)
+
+        if changed:
+            actually_changed.add(k)
+
+        if debug:
+            print(
+                f"{k:>14}: old={old_val!r:<12} "
+                f"new={new_val!r:<12} "
+                f"changed={changed}"
+            )
+
+    if debug:
+        print(f"\nactually_changed (CH{requested_channel}) = {sorted(actually_changed)}")
+
+    if not actually_changed:
+        if debug:
+            print(f"\nNo actual change detected for CH{requested_channel}. Doing nothing.\n")
+        return None
+
+    next_state = replace(current_state, **normalized_ui_values)
+
+    # Treat these as voltage-only changes
+    voltage_keys = {"v_min", "v_max", "vpp"}
+
+    voltage_only = actually_changed.issubset(voltage_keys)
+
+    if debug:
+        print("voltage_keys =", sorted(voltage_keys))
+        print("voltage_only =", voltage_only)
+
+    # Persist only this channel's state
+    _current_defaults_by_channel[requested_channel] = next_state
+
+    if voltage_only:
+        if debug:
+            print(f"\n--> FAST PATH: adjust_current() for CH{requested_channel}\n")
+        # return adjust_current(
+        #     channel=next_state.channel,
+        #     v_min=next_state.v_min,
+        #     v_max=next_state.v_max,
+        #     vpp=next_state.vpp,
+        #     reverse=next_state.reverse,
+        #     charge_balance=next_state.charge_balance,
+        # )
+
+        return adjust_current(
+            channel=next_state.channel,
+            prev_v_min=current_state.v_min,
+            new_v_min=next_state.v_min,
+            prev_v_max=current_state.v_max,
+            new_v_max=next_state.v_max,
+            vpp=next_state.vpp,
+            reverse=next_state.reverse,
+            charge_balance=next_state.charge_balance,
+            ramp=True,          # backend-controlled
+            ramp_rate=1,      # backend-controlled
+            step_size=0.01,
+            debug=debug,
+        )
+
+    if debug:
+        print(f"\n--> FULL PATH: func_gen_control() for CH{requested_channel}\n")
+
+    return func_gen_control(**asdict(next_state))
+
+
+# from dataclasses import dataclass, asdict, replace
+
+# @dataclass
+# class FuncGenDefaults:
+#     freq: float = 60
+#     shape: str = "sine"
+#     v_min: float = -1
+#     v_max: float = 1
+#     vpp: float = 2
+#     custom: str = "no"
+#     pph: float = 0.0
+#     ppw: float = 0.0
+#     pw: float = 1e-3
+#     channel: int = 1
+#     state: int = 1
+#     arb_name: Literal[
+#         "CARDIAC",
+#         "D_LORENTZ",
+#         "GAUSSIAN",
+#         "HAVERSINE",
+#         "LORENTZ",
+#         "NEG_RAMP",
+#         "SINC",
+#         "EXP_FALL",
+#         "EXP_RISE",
+#     ] = "EXP_FALL"
+#     trigger: bool = False
+#     d188: bool = False
+#     d188_channel: int = 1
+#     d188_led: bool = True
+#     charge_balance: bool = False
+#     reverse: bool = False
+
+
+# # baseline and current “sticky” defaults
+# _BASE_DEFAULTS = FuncGenDefaults()
+# _current_defaults = FuncGenDefaults()
+
+# def func_gen_control_stateful(
+#     reset: bool = False,
+#     **ui_values,
+# ):
+#     """
+#     Stateful wrapper around func_gen_control, but detects ACTUAL value changes.
+
+#     - Stores last-applied values in _current_defaults.
+#     - If ONLY v_min/v_max changed, uses adjust_current() (no output toggle).
+#     - Otherwise uses func_gen_control() (safety: toggles outputs off/on internally).
+#     """
+#     global _current_defaults
+
+#     # Basic guard: only allow known fields
+#     valid_keys = set(FuncGenDefaults.__annotations__.keys())
+#     unknown = set(ui_values) - valid_keys
+#     if unknown:
+#         raise TypeError(f"Unknown parameter(s): {', '.join(sorted(unknown))}")
+
+#     if reset:
+#         _current_defaults = FuncGenDefaults()
+#         # Optional: apply baseline to hardware immediately
+#         return func_gen_control(**asdict(_current_defaults))
+
+#     def _differs(a, b, *, atol=1e-9, rtol=1e-9) -> bool:
+#         """Float-tolerant comparison; exact for non-numerics."""
+#         # handle None safely
+#         if a is None or b is None:
+#             return a is not b
+
+#         # numeric tolerant compare
+#         if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+#             return abs(a - b) > (atol + rtol * max(abs(a), abs(b)))
+
+#         return a != b
+
+#     # Determine which fields ACTUALLY changed vs stored state
+#     actually_changed = set()
+#     for k, new_val in ui_values.items():
+#         old_val = getattr(_current_defaults, k)
+#         if _differs(old_val, new_val):
+#             actually_changed.add(k)
+
+#     # If nothing actually changed, do nothing
+#     if not actually_changed:
+#         return None
+
+#     # Compute the next state (store it regardless of which path we take)
+#     next_defaults = replace(_current_defaults, **ui_values)
+
+#     # Voltage-only change set
+#     voltage_keys = {"v_min", "v_max"}  # <-- keep this strict as you requested
+#     voltage_only = actually_changed.issubset(voltage_keys)
+
+#     # Persist the state first (so stored state always matches last request)
+#     _current_defaults = next_defaults
+
+#     if voltage_only:
+#         # Fast path: update voltage without toggling output enable
+#         return adjust_current(
+#             channel=_current_defaults.channel,
+#             v_min=_current_defaults.v_min,
+#             v_max=_current_defaults.v_max,
+#             vpp=_current_defaults.vpp,
+#             reverse=_current_defaults.reverse,
+#             charge_balance=_current_defaults.charge_balance,
+#         )
+
+#     # Otherwise: safety path (func_gen_control disables outputs at start) :contentReference[oaicite:7]{index=7}
+#     return func_gen_control(**asdict(_current_defaults))
+
+'''
+Sample Callers:
+
+from FuncGen_Selector_Function_2 import func_gen_control_stateful
+
+# 0) Clean slate: reset state + apply defaults to instrument
+func_gen_control_stateful(reset=True)
+
+func_gen_control_stateful(
+    channel=1,
+    shape = 'pulse',
+    charge_balance=False,
+    v_min = 0.0,
+    v_max= 5.0,
+    freq=80,          # example; use your real param names
+    pw=1,  # example; use your real param names
+)
+
+'''

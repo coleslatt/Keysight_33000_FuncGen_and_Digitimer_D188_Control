@@ -100,12 +100,6 @@ from burst_mode_function import burst_mode
 
 OR run this to get set up automatically:
 
-Mac:
-
-```
-./scripts/run.sh --ui
-./scripts/run.sh --burst
-```
 
 Windows (Powershell):
 
