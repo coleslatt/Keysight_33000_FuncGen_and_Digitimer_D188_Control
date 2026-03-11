@@ -56,64 +56,28 @@ On some systems and UBC computers, there may be security features that prevent y
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
+On other systems, you may have conflicting python versions. To make sure this doesn;t cause issues, run this:
+
+```
+Remove-Item Alias:python -ErrorAction SilentlyContinue
+$ExecutionContext.InvokeCommand.CommandNotFoundAction = $null
+
+```
+
 1. In Powershell, navigate to your repo directory with (replace with your own path):
 ```
 cd "C:\your\path\to\Keysight_33000_FuncGen_and_Digitimer_D188_Control"
 ```
-2. Activate your Python virtual environment with:
-```
-.\.venv\Scripts\Activate.ps1
-```
-
-3. Ensure you are using the correct Python version by running:
-```
-$Python = ".\.venv\Scripts\python.exe"
-```
-
-4. On Windows, ensure you are not referencing another Python installation by running:
-```
-Remove-Item Alias:python -ErrorAction SilentlyContinue
-$ExecutionContext.InvokeCommand.CommandNotFoundAction = $null
-```
-## User Interface Initiation
-
-1. Start user interface with:
-```
-& $Python .\Application_Files\Controller.py
-```
-
-### Burst Mode Function
-
-1. Follow the above steps to set up your environment.
-
-2. Navigate to Application_Files folder with:
-
-```
-cd Application_Files
-```
-
-3. Run this to start burst mode function:
-```
-python
-from burst_mode_function import burst_mode
-```
-
-OR run this to get set up automatically:
-
+2. Run this command to open user interface:
 
 Windows (Powershell):
 
 ```
 .\scripts\run.ps1 --ui
-.\scripts\run.ps1 --burst
 ```
 
-Run this for more details on burst mode function.
-```
-help(burst_mode)
-```
 
-4. Usage examples
+## Usage examples
 
 TTL-on-CH1 use
 ```
