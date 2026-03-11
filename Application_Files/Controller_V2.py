@@ -95,8 +95,8 @@ class ControllerMain(QDialog):
         # Defaults
         self.ui.doubleSpinBox_5.setValue(1.0) # Set default current to 1 mA for CH1
         self.ui.doubleSpinBox_11.setValue(1.0) # Set default current to 1 mA for CH2
-        self.ui.spinBox_6.setValue(60) # Set default frequency to 60 Hz for CH1
-        self.ui.spinBox_8.setValue(60) # Set default frequency to 60 Hz for CH2
+        self.ui.doubleSpinBox_2.setValue(60) # Set default frequency to 60 Hz for CH1
+        self.ui.doubleSpinBox_4.setValue(60) # Set default frequency to 60 Hz for CH2
 
         #endregion
 
@@ -461,7 +461,7 @@ class ControllerMain(QDialog):
         
         #region Read UI and Call func_gen_control for CH1
         # 1) Read values from UI
-        freq_hz = self.ui.spinBox_6.value()  # Frequency (Hz)
+        freq_hz = self.ui.doubleSpinBox_2.value()  # Frequency (Hz)
         # current = self.ui.doubleSpinBox_5.value()  # Current (mA)
         d188_channel = self.ui.spinBox_7.value()  # D188 Channel Number
 
@@ -577,7 +577,7 @@ class ControllerMain(QDialog):
     def apply_ch2(self):
         
         # 1) Read values from UI
-        freq_hz = self.ui.spinBox_8.value()  # Frequency (Hz)
+        freq_hz = self.ui.doubleSpinBox_4.value()  # Frequency (Hz)
         # current = self.ui.doubleSpinBox.value()  # Current (mA)
         ch_balance2 = True if self.ui.ch1_on_4.isChecked() else False  #  Charge Balance
 

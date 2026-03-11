@@ -57,7 +57,7 @@ class Ui_Controller_Main(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, -178, 1736, 701))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, -49, 1036, 701))
         self.verticalLayout = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.groupBox_2 = QGroupBox(self.scrollAreaWidgetContents)
@@ -265,12 +265,6 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_22.addWidget(self.label_69, 9, 0, 1, 1)
 
-        self.spinBox_8 = QSpinBox(self.channel2_settings)
-        self.spinBox_8.setObjectName(u"spinBox_8")
-        self.spinBox_8.setMaximum(100000)
-
-        self.gridLayout_22.addWidget(self.spinBox_8, 1, 2, 1, 1)
-
         self.groupBox_23 = QGroupBox(self.channel2_settings)
         self.groupBox_23.setObjectName(u"groupBox_23")
         self.gridLayout_20 = QGridLayout(self.groupBox_23)
@@ -340,6 +334,11 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_22.addWidget(self.widget_3, 9, 2, 1, 3)
 
+        self.doubleSpinBox_4 = QDoubleSpinBox(self.channel2_settings)
+        self.doubleSpinBox_4.setObjectName(u"doubleSpinBox_4")
+
+        self.gridLayout_22.addWidget(self.doubleSpinBox_4, 1, 2, 1, 1)
+
 
         self.gridLayout_2.addWidget(self.channel2_settings, 0, 1, 1, 1)
 
@@ -356,12 +355,6 @@ class Ui_Controller_Main(object):
         self.label_30.setObjectName(u"label_30")
 
         self.gridLayout_21.addWidget(self.label_30, 1, 0, 1, 1)
-
-        self.spinBox_6 = QSpinBox(self.channel1_settings_3)
-        self.spinBox_6.setObjectName(u"spinBox_6")
-        self.spinBox_6.setMaximum(100000)
-
-        self.gridLayout_21.addWidget(self.spinBox_6, 1, 2, 1, 1)
 
         self.label_38 = QLabel(self.channel1_settings_3)
         self.label_38.setObjectName(u"label_38")
@@ -619,6 +612,11 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_21.addWidget(self.widget_2, 9, 2, 1, 3)
 
+        self.doubleSpinBox_2 = QDoubleSpinBox(self.channel1_settings_3)
+        self.doubleSpinBox_2.setObjectName(u"doubleSpinBox_2")
+
+        self.gridLayout_21.addWidget(self.doubleSpinBox_2, 1, 2, 1, 1)
+
 
         self.gridLayout_2.addWidget(self.channel1_settings_3, 0, 0, 1, 1)
 
@@ -722,7 +720,7 @@ class Ui_Controller_Main(object):
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1047, 1097))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, -610, 1047, 1097))
         self.gridLayout_55 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_55.setObjectName(u"gridLayout_55")
         self.BurstModeSettings = QGroupBox(self.scrollAreaWidgetContents_2)
@@ -1528,6 +1526,7 @@ class Ui_Controller_Main(object):
 
         self.num_stims = QSpinBox(self.StimSettings)
         self.num_stims.setObjectName(u"num_stims")
+        self.num_stims.setMinimum(1)
 
         self.gridLayout_42.addWidget(self.num_stims, 0, 1, 1, 1)
 
@@ -1993,11 +1992,11 @@ class Ui_Controller_Main(object):
 
         self.retranslateUi(Controller_Main)
 
-        self.modeSelektor.setCurrentIndex(1)
+        self.modeSelektor.setCurrentIndex(0)
         self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         self.current_control_ch1burst.setCurrentIndex(0)
-        self.current_control_ch2burst.setCurrentIndex(1)
+        self.current_control_ch2burst.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Controller_Main)
