@@ -159,83 +159,207 @@ def k_calc(ppw,
     return k
 
 
-def build_pulse_shape(pulse_points, h1, w, k, pwms):
-    """
-    Build one full pulse shape over x in [0, 3] using the four segments.
-    Returns a NumPy array of length pulse_points with values in [0, 1].
-    """
-    # x runs from 0 to 3 across pulse_points samples
-    x = np.linspace(0, 2+w+pwms, pulse_points, endpoint=False)
-    y = np.empty_like(x, dtype=float)
+# def build_pulse_shape(pulse_points, h1, w, k, pwms):
+#     """
+#     Build one full pulse shape over x in [0, 3] using the four segments.
+#     Returns a NumPy array of length pulse_points with values in [0, 1].
+#     """
+#     # x runs from 0 to 3 across pulse_points samples
+#     x = np.linspace(0, 2+w+pwms, pulse_points, endpoint=False)
+#     y = np.empty_like(x, dtype=float)
 
-    # masks for each region
-    m1 = (x >= 0)   & (x < 1)
-    m2 = (x >= 1)   & (x < 1 + w)
-    m3 = (x >= 1+w) & (x < 1+w+pwms)
-    m4 = (x >= 1+w+pwms)   & (x <= 2+w+pwms)
+#     # masks for each region
+#     m1 = (x >= 0)   & (x < 1)
+#     m2 = (x >= 1)   & (x < 1 + w)
+#     m3 = (x >= 1+w) & (x < 1+w+pwms)
+#     m4 = (x >= 1+w+pwms)   & (x <= 2+w+pwms)
+
+#     y[m1] = prepulseramp(x[m1], h1, k)
+#     y[m2] = mainpulseramp(x[m2], h1, k, w)
+#     y[m3] = mainpulse(x[m3])
+#     y[m4] = pulsedecay(x[m4], k, trans = 2+w+pwms)
+
+#     return y
+
+
+# def custom_waveform_pp2(ch=1,
+#                         freq = 60,
+#                         pw   = 1,  # total duration of the complex pulse
+#                         h1   = 0.4,
+#                         w    = 0.8,
+#                         ch_level = 1.0,
+#                         auto_k = False,
+#                         k = 0.5,
+#                        output=False):
+#     """
+#     Build and download a custom waveform with:
+#     - pre-pulse ramp 0 -> h1 on [0, 1] (normalized x)
+#     - ramp h1 -> 1 on [1, 1+w]
+#     - plateau at 1 on [1+w, 2]
+#     - decay 1 -> 0 on [2, 3]
+
+#     All of this is compressed into time [0, pw] within one period of the waveform.
+#     """
+
+#     period = 1.0 / freq
+#     num_points = 100000
+#     time_per_point = period / num_points
+
+#     w1 = w*1e-3
+#     pwms = pw
+
+#     # number of points occupied by the complex pulse
+#     pulse_points = int((pw + w + 2)*1e-3 / time_per_point)
+#     if pulse_points <= 0 or pulse_points > num_points:
+#         raise ValueError("pw must be between 0 and one period (exclusive).")
+
+#     # compute k from your formula
+#     if auto_k:
+#         k = k_calc(ppw = w, pph = h1)
+#         print(k)
+        
+#     # 1) Build normalized pulse shape [0..1] using the piecewise functions
+#     pulse_shape = build_pulse_shape(pulse_points, h1, w, k, pwms)
+
+#     # optional: scale by ch_level if desired
+#     pulse_shape = ch_level * pulse_shape
+
+#     # 2) Create full-period array for the arb
+#     square_samples = np.zeros(num_points, dtype=">f4")
+#     square_samples[:pulse_points] = pulse_shape.astype(">f4")
+
+#     # 3) View the same buffer as bytes (uint8)
+#     square_bytes = square_samples.view(np.uint8)
+
+#     # 4) Download to channel arb memory
+#     func_name = "custom"
+
+#     if output:
+  
+#         ch.output_function.arbitrary_waveform.clear()
+#         ch.output_function.arbitrary_waveform.load_arb_waveform(
+#             name=func_name,
+#             data=square_bytes,
+#         )
+#         ch.output_function.arbitrary_waveform.select_arb_waveform(func_name)
+#         ch.output_function.arbitrary_waveform.frequency = freq
+
+#     return square_samples
+
+
+def build_pulse_shape(h1, w, k, pwms, charge_balance, neg_level=-0.1):
+    """
+    Build one full pulse shape.
+
+    Returns
+    -------
+    y : np.ndarray
+        Waveform samples in normalized amplitude units.
+    total_x : float
+        Total x-duration in ms-like units used for scaling.
+    """
+    # First build only the positive part on a fine grid
+    pos_total_x = 2 + w + pwms
+    pos_points = 5000
+    x_pos = np.linspace(0, pos_total_x, pos_points, endpoint=False)
+    y_pos = np.zeros_like(x_pos, dtype=float)
+
+    m1 = (x_pos >= 0) & (x_pos < 1)
+    m2 = (x_pos >= 1) & (x_pos < 1 + w)
+    m3 = (x_pos >= 1 + w) & (x_pos < 1 + w + pwms)
+    m4 = (x_pos >= 1 + w + pwms) & (x_pos < 2 + w + pwms)
+
+    y_pos[m1] = prepulseramp(x_pos[m1], h1, k)
+    y_pos[m2] = mainpulseramp(x_pos[m2], h1, k, w)
+    y_pos[m3] = mainpulse(x_pos[m3])
+    y_pos[m4] = pulsedecay(x_pos[m4], k, trans=2 + w + pwms)
+
+    if not charge_balance:
+        return y_pos, pos_total_x
+
+    # Compute positive area numerically
+    dx = pos_total_x / pos_points
+    pos_area = np.sum(y_pos) * dx
+
+    # Duration needed for constant negative lobe at neg_level
+    neg_duration = pos_area / abs(neg_level)
+
+    total_x = pos_total_x + neg_duration
+    total_points = int(np.ceil(pos_points * total_x / pos_total_x))
+
+    x = np.linspace(0, total_x, total_points, endpoint=False)
+    y = np.zeros_like(x, dtype=float)
+
+    m1 = (x >= 0) & (x < 1)
+    m2 = (x >= 1) & (x < 1 + w)
+    m3 = (x >= 1 + w) & (x < 1 + w + pwms)
+    m4 = (x >= 1 + w + pwms) & (x < 2 + w + pwms)
+    m5 = (x >= 2 + w + pwms) & (x < total_x)
 
     y[m1] = prepulseramp(x[m1], h1, k)
     y[m2] = mainpulseramp(x[m2], h1, k, w)
     y[m3] = mainpulse(x[m3])
-    y[m4] = pulsedecay(x[m4], k, trans = 2+w+pwms)
+    y[m4] = pulsedecay(x[m4], k, trans=2 + w + pwms)
+    y[m5] = neg_level
 
-    return y
+    print(f"charge balanced | pos_area={pos_area:.6f} | neg_duration={neg_duration:.6f}")
 
+    return y, total_x
 
 def custom_waveform_pp2(ch=1,
-                        freq = 60,
-                        pw   = 1,  # total duration of the complex pulse
-                        h1   = 0.4,
-                        w    = 0.8,
-                        ch_level = 1.0,
-                        auto_k = False,
-                        k = 0.5,
-                       output=False):
+                        freq=60,
+                        pw=1,   # in ms-like units used by your current code
+                        h1=0.4,
+                        w=0.8,
+                        ch_level=1.0,
+                        auto_k=False,
+                        k=0.5,
+                        output=False,
+                        charge_balance=False):
     """
-    Build and download a custom waveform with:
-    - pre-pulse ramp 0 -> h1 on [0, 1] (normalized x)
-    - ramp h1 -> 1 on [1, 1+w]
-    - plateau at 1 on [1+w, 2]
-    - decay 1 -> 0 on [2, 3]
-
-    All of this is compressed into time [0, pw] within one period of the waveform.
+    Build and download a custom waveform.
     """
 
     period = 1.0 / freq
     num_points = 100000
     time_per_point = period / num_points
 
-    w1 = w*1e-3
     pwms = pw
 
-    # number of points occupied by the complex pulse
-    pulse_points = int((pw + w + 2)*1e-3 / time_per_point)
-    if pulse_points <= 0 or pulse_points > num_points:
-        raise ValueError("pw must be between 0 and one period (exclusive).")
-
-    # compute k from your formula
     if auto_k:
-        k = k_calc(ppw = w, pph = h1)
+        k = k_calc(ppw=w, pph=h1)
         print(k)
-        
-    # 1) Build normalized pulse shape [0..1] using the piecewise functions
-    pulse_shape = build_pulse_shape(pulse_points, h1, w, k, pwms)
 
-    # optional: scale by ch_level if desired
+    # Build pulse shape first, including correctly sized negative lobe if needed
+    pulse_shape, total_x = build_pulse_shape(
+        h1=h1,
+        w=w,
+        k=k,
+        pwms=pwms,
+        charge_balance=charge_balance,
+        neg_level=-0.1,
+    )
+
     pulse_shape = ch_level * pulse_shape
 
-    # 2) Create full-period array for the arb
-    square_samples = np.zeros(num_points, dtype=">f4")
-    square_samples[:pulse_points] = pulse_shape.astype(">f4")
+    # Convert total_x (ms-like units) into actual point count
+    pulse_points = int(total_x * 1e-3 / time_per_point)
 
-    # 3) View the same buffer as bytes (uint8)
+    if pulse_points <= 0 or pulse_points > num_points:
+        raise ValueError("Waveform duration exceeds one period.")
+
+    # Resample pulse_shape to exactly pulse_points
+    src_idx = np.linspace(0, len(pulse_shape), pulse_points, endpoint=False)
+    pulse_shape_resampled = np.interp(src_idx, np.arange(len(pulse_shape)), pulse_shape)
+
+    square_samples = np.zeros(num_points, dtype=">f4")
+    square_samples[:pulse_points] = pulse_shape_resampled.astype(">f4")
+
     square_bytes = square_samples.view(np.uint8)
 
-    # 4) Download to channel arb memory
     func_name = "custom"
 
     if output:
-  
         ch.output_function.arbitrary_waveform.clear()
         ch.output_function.arbitrary_waveform.load_arb_waveform(
             name=func_name,
@@ -245,6 +369,7 @@ def custom_waveform_pp2(ch=1,
         ch.output_function.arbitrary_waveform.frequency = freq
 
     return square_samples
+
 
 
 def custom_waveform_balance(ch=1,
@@ -536,7 +661,7 @@ def func_gen_control(
     #                       pph=pph,
     #                       ppw=ppw)
 
-    if (charge_balance):
+    if (charge_balance and custom == 'no'):
 
         ch.output_function.function = ks.FunctionShape.ARBITRARY
         driver.display.arb_rate_unit = ks.DisplayARBRateUnits.FREQUENCY
@@ -570,9 +695,14 @@ def func_gen_control(
                                     ch_level = 1.0,
                                     auto_k = auto_k,
                                     k = k,
-                                    output=True)
+                                    output=True,
+                                    charge_balance = charge_balance)
     
     
+                if (charge_balance):
+                    v_min = -v_max/10
+
+
                 '''
                 def custom_waveform_pp2(ch=1,
                             freq = 60,
@@ -775,66 +905,6 @@ def func_gen_control(
 
     driver.close()
     return
-
-# def adjust_current(
-#     *,
-#     channel: int,
-#     v_min: float,
-#     v_max: float,
-#     vpp: float = 2,
-#     reverse: bool = False,
-#     charge_balance: bool = False,
-# ):
-#     """
-#     Update output levels (v_min/v_max) without toggling output enable.
-
-#     Used as a fast-path when ONLY voltage bounds change.
-#     """
-
-#     print("\n\nVoltage-Only Change (Fast Path)\n------------------------\n")
-    
-#     resource_name = "33512B"
-#     id_query = True
-#     reset = False
-#     options = ""
-#     driver = ks.Kt33000(resource_name, id_query, reset, options)
-
-#     try:
-#         if channel == 1:
-#             ch = driver.output_channels[0]
-#         elif channel == 2:
-#             ch = driver.output_channels[1]
-#         else:
-#             raise ValueError("Channel selection is invalid, must be 1 or 2")
-
-#         ch.output.set_load_infinity()
-
-#         # Mirror your func_gen_control behavior for charge_balance
-#         if charge_balance:
-#             v_min = -v_max / 10  # matches func_gen_control :contentReference[oaicite:4]{index=4}
-
-#         # Mirror your vpp convention if caller leaves v_min/v_max at defaults
-#         if (vpp != 2) and (v_min == -1) and (v_max == 1):
-#             v_min = -(vpp / 2)
-#             v_max = +(vpp / 2)  # matches func_gen_control :contentReference[oaicite:5]{index=5}
-
-#         # Apply polarity + levels WITHOUT disabling output
-#         if not reverse:
-#             ch.output.polarity = ks.OutputPolarity.NORMAL
-#             ch.output.voltage.high = v_max
-#             ch.output.voltage.low = v_min
-#         else:
-#             if charge_balance:
-#                 ch.output.voltage.high = -v_min
-#                 ch.output.voltage.low = -v_max
-#             else:
-#                 ch.output.polarity = ks.OutputPolarity.INVERTED
-#                 # still set levels deterministically
-#                 ch.output.voltage.high = v_max
-#                 ch.output.voltage.low = v_min
-
-#     finally:
-#         driver.close()
 
 
 import time
@@ -1246,14 +1316,6 @@ def func_gen_control_stateful(
     if voltage_only:
         if debug:
             print(f"\n--> FAST PATH: adjust_current() for CH{requested_channel}\n")
-        # return adjust_current(
-        #     channel=next_state.channel,
-        #     v_min=next_state.v_min,
-        #     v_max=next_state.v_max,
-        #     vpp=next_state.vpp,
-        #     reverse=next_state.reverse,
-        #     charge_balance=next_state.charge_balance,
-        # )
 
         return adjust_current(
             channel=next_state.channel,
@@ -1401,6 +1463,21 @@ func_gen_control_stateful(
     v_max= 5.0,
     freq=80,          # example; use your real param names
     pw=1,  # example; use your real param names
+)
+
+
+func_gen_control_stateful(
+    channel=1,
+    shape = 'pulse',
+    charge_balance=False,
+    v_min = 0.0,
+    v_max= 5.0,
+    freq=30,          # example; use your real param names
+    pw=0.2,  # example; use your real param names
+    pph=0.4,
+    ppw=0.8,
+    custom='yes',
+    ramp = 'yes',
 )
 
 '''

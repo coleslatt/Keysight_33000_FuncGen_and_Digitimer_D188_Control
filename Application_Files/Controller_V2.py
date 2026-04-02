@@ -33,7 +33,6 @@ def enable_name_tooltips(root: QtWidgets.QWidget):
 class ControllerMain(QDialog):
     def __init__(self):
 
-    #region  Continuous Mode Defaults and Settings
         super().__init__()
         self.ui = Ui_Controller_Main()
         self.ui.setupUi(self)
@@ -48,8 +47,9 @@ class ControllerMain(QDialog):
 
         enable_name_tooltips(self)
 
-        # Logic for custom waveform option visibility
-        # 1) Start hidden
+    # Burst Mode Defaults and Settings
+        
+        #region Continuous mode default settings
         self.ui.groupBox_16.setEnabled(False)
         self.ui.groupBox_23.setEnabled(False)
         self.ui.doubleSpinBox_8.setEnabled(False)
@@ -62,6 +62,14 @@ class ControllerMain(QDialog):
         self.ui.doubleSpinBox_7.setMinimum(0.001) # Pulse Width Ch1 minimum
         self.ui.doubleSpinBox_14.setMinimum(0.001) # Pulse Width Ch2 minimum
 
+        self.ui.doubleSpinBox_5.setValue(1.0) # Set default current to 1 mA for CH1
+        self.ui.doubleSpinBox_11.setValue(1.0) # Set default current to 1 mA for CH2
+        self.ui.doubleSpinBox_2.setValue(60) # Set default frequency to 60 Hz for CH1
+        self.ui.doubleSpinBox_4.setValue(60) # Set default frequency to 60 Hz for CH2
+
+        #endregion
+
+        #region Continuous mode dynamic UI logic
         # 2) React to combo box changes (CH1)
         self.ui.comboBox_2.currentTextChanged.connect(
             self._update_groupbox_visibility
@@ -77,6 +85,9 @@ class ControllerMain(QDialog):
         self.ui.radioButton_13.toggled.connect(self.on_radioButton_13_toggled)
         self.ui.radioButton_17.toggled.connect(self.on_radioButton_17_toggled)
 
+        #endregion
+
+        #region Limits for Continuous Mode
         # Set limits for spin boxes
         for sb in self.findChildren(QSpinBox):
             sb.setMaximum(10000000)
@@ -88,17 +99,18 @@ class ControllerMain(QDialog):
             sb.setMinimum(-10000000)
             sb.setDecimals(3)
 
+        self.ui.doubleSpinBox_7.setMinimum(0.01) # Pulse Width minimum for CH1
+        self.ui.doubleSpinBox_14.setMinimum(0.01) # Pulse Width minimum for CH2
+
+        #endregion
+
         # Existing button logic
         self.ui.pushButton.clicked.connect(self.apply_ch1) 
         self.ui.pushButton.clicked.connect(self.apply_ch2)
 
-        # Defaults
-        self.ui.doubleSpinBox_5.setValue(1.0) # Set default current to 1 mA for CH1
-        self.ui.doubleSpinBox_11.setValue(1.0) # Set default current to 1 mA for CH2
-        self.ui.doubleSpinBox_2.setValue(60) # Set default frequency to 60 Hz for CH1
-        self.ui.doubleSpinBox_4.setValue(60) # Set default frequency to 60 Hz for CH2
+        
 
-        #endregion
+        
 
     # Burst Mode Defaults and Settings
 
