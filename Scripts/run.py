@@ -12,7 +12,7 @@ from pathlib import Path
 # -----------------------------------------------------------------------------
 REPO_ROOT = Path(__file__).resolve().parents[1]
 APP_DIR = REPO_ROOT / "Application_Files"
-UI_ENTRY = APP_DIR / "Controller_V2.py"
+UI_ENTRY = APP_DIR / "Controller_V3.py"
 
 # Windows venv activation + interpreter (repo-local)
 WIN_ACTIVATE_PS1 = REPO_ROOT / ".venv" / "Scripts" / "Activate.ps1"
@@ -113,13 +113,13 @@ def cmd_info() -> int:
 
 
 def cmd_ui() -> int:
-    """Launch the UI (Controller_V2.py)."""
+    """Launch the UI (Controller_V3.py)."""
     if not UI_ENTRY.exists():
         print(f"ERROR: UI entry not found: {UI_ENTRY}", file=sys.stderr)
         return 2
 
     if is_windows():
-        return run_windows_via_activation(extra_lines=[r"& $Python .\Application_Files\Controller_V2.py"])
+        return run_windows_via_activation(extra_lines=[r"& $Python .\Application_Files\Controller_V3.py"])
 
     py = posix_python()
     return run([py, str(UI_ENTRY)], cwd=REPO_ROOT)
