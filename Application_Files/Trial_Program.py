@@ -2665,6 +2665,7 @@ def save_experiment_log_json(
     - Saves:
         experiment_log_{participant_id}.json
         experiment_summary_{participant_id}.csv
+    - If participant_id is blank, the participant_id segment is omitted.
     - If filename is provided, its stem is used as {custom_name}
     """
     try:
@@ -2705,16 +2706,15 @@ def save_experiment_log_json(
 
         participant_id = str(getattr(experiment_log, "patient_id", "") or "").strip()
         safe_participant_id = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in participant_id)
-        if not safe_participant_id:
-            safe_participant_id = "no_participant_id"
+        participant_id_segment = f"_{safe_participant_id}" if safe_participant_id else ""
 
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        experiment_dir = out_dir / f"{timestamp}_experiment_log_{safe_participant_id}_{safe_custom_name}"
+        experiment_dir = out_dir / f"{timestamp}_experiment_log{participant_id_segment}_{safe_custom_name}"
         experiment_dir.mkdir(parents=True, exist_ok=True)
 
         print(f"[save_experiment_log_json] experiment_dir created at {experiment_dir}")
 
-        json_path = experiment_dir / f"experiment_log_{safe_participant_id}.json"
+        json_path = experiment_dir / f"experiment_log{participant_id_segment}.json"
 
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False, default=json_converter)
@@ -2724,7 +2724,7 @@ def save_experiment_log_json(
         export_experiment_summary_csv(
             experiment_log=experiment_log,
             experiment_dir=experiment_dir,
-            filename=f"experiment_summary_{safe_participant_id}.csv",
+            filename=f"experiment_summary{participant_id_segment}.csv",
             image_path=image_path,
         )
 
