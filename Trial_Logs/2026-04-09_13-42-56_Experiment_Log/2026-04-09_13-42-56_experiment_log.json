@@ -1,0 +1,98 @@
+{
+    "start_time": "2026-04-09T13:35:53.779803",
+    "trial_logs": [
+        {
+            "current_time": "2026-04-09T13:35:53.795852",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Reversed"
+            },
+            "displayed_status": "Active",
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 32.5,
+                    "patient_log": {
+                        "annotations": [
+                            {
+                                "x": 108.0,
+                                "y": 282.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 2,
+                                "motor_quality": "Brief contraction",
+                                "motor_temporal_quality": "Intermittent",
+                                "additional_notes": "",
+                                "created_at": "2026-04-09T13:37:51.205807"
+                            }
+                        ],
+                        "created_at": "2026-04-09T13:38:06.728714"
+                    },
+                    "current_time": "2026-04-09T13:38:06.728714"
+                },
+                {
+                    "current_intensity_ma": 35.0,
+                    "patient_log": {
+                        "annotations": [
+                            {
+                                "x": 109.0,
+                                "y": 277.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 3,
+                                "motor_quality": "Rhythmic movement",
+                                "motor_temporal_quality": "Continuous",
+                                "additional_notes": "",
+                                "created_at": "2026-04-09T13:40:11.502768"
+                            },
+                            {
+                                "x": 125.93890837423604,
+                                "y": 282.70465402216564,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 1,
+                                "motor_quality": "Rhythmic movement",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-09T13:40:23.449244"
+                            }
+                        ],
+                        "created_at": "2026-04-09T13:40:24.571778"
+                    },
+                    "current_time": "2026-04-09T13:40:24.571778"
+                },
+                {
+                    "current_intensity_ma": 32.5,
+                    "patient_log": {
+                        "annotations": [
+                            {
+                                "x": 87.0,
+                                "y": 273.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 2,
+                                "motor_quality": "Brief contraction",
+                                "motor_temporal_quality": "Intermittent",
+                                "additional_notes": "",
+                                "created_at": "2026-04-09T13:41:43.870743"
+                            }
+                        ],
+                        "created_at": "2026-04-09T13:41:46.627123"
+                    },
+                    "current_time": "2026-04-09T13:41:46.627123"
+                }
+            ],
+            "order_number": 1,
+            "total_trial_time_seconds": 411
+        }
+    ],
+    "total_experiment_time_seconds": 411
+}

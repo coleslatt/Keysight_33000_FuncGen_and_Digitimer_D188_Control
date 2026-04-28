@@ -1,0 +1,20 @@
+Field,Value
+Start Time,2026-04-27T15:36:57.501697
+Image Path,
+Total Experiment Time (s),73
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries,Total Trial Time (s)
+1,DV-I,Sham,Normal,Active,0,73
+
+Intensity Change Time,Trial Index,Order Number,Electrode Config,Waveform,Previous Intensity (mA),New Intensity (mA),Increment (mA),Direction
+2026-04-27T15:37:00.214177,0,1,DV-I,Sham,5.0,10.0,5.0,increase
+2026-04-27T15:37:00.375455,0,1,DV-I,Sham,10.0,15.0,5.0,increase
+2026-04-27T15:37:00.543071,0,1,DV-I,Sham,15.0,20.0,5.0,increase
+2026-04-27T15:37:00.695777,0,1,DV-I,Sham,20.0,25.0,5.0,increase
+2026-04-27T15:37:00.843244,0,1,DV-I,Sham,25.0,30.0,5.0,increase
+2026-04-27T15:37:00.996284,0,1,DV-I,Sham,30.0,35.0,5.0,increase
+2026-04-27T15:37:01.222651,0,1,DV-I,Sham,35.0,40.0,5.0,increase
+2026-04-27T15:37:06.661419,-1,0,DV-I,Sham,40.0,35.0,5.0,decrease
+2026-04-27T15:37:07.350955,-1,0,DV-I,Sham,35.0,30.0,5.0,decrease
+2026-04-27T15:38:24.965042,0,1,DV-I,Sham,5.0,10.0,5.0,increase
+2026-04-27T15:38:25.589706,0,1,DV-I,Sham,10.0,15.0,5.0,increase

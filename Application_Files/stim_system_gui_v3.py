@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QDoubleSpinBox,
     QSpacerItem, QSpinBox, QStackedWidget, QTabWidget,
     QTableWidget, QTableWidgetItem, QTextBrowser, QTextEdit,
     QVBoxLayout, QWidget)
-import icons
+import Icons_rc
 
 class Ui_Controller_Main(object):
     def setupUi(self, Controller_Main):
@@ -374,23 +374,124 @@ class Ui_Controller_Main(object):
         self.groupBox_6.setObjectName(u"groupBox_6")
         self.gridLayout_95 = QGridLayout(self.groupBox_6)
         self.gridLayout_95.setObjectName(u"gridLayout_95")
-        self.trial_number = QLabel(self.groupBox_6)
-        self.trial_number.setObjectName(u"trial_number")
+        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_95.addItem(self.horizontalSpacer_10, 9, 1, 1, 1)
+
+        self.condition_label = QLabel(self.groupBox_6)
+        self.condition_label.setObjectName(u"condition_label")
         font1 = QFont()
         font1.setFamilies([u"Cambria"])
-        font1.setPointSize(24)
-        self.trial_number.setFont(font1)
+        font1.setPointSize(36)
+        self.condition_label.setFont(font1)
+        self.condition_label.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignHCenter)
+
+        self.gridLayout_95.addWidget(self.condition_label, 3, 0, 1, 4)
+
+        self.widget_31 = QWidget(self.groupBox_6)
+        self.widget_31.setObjectName(u"widget_31")
+        self.gridLayout_96 = QGridLayout(self.widget_31)
+        self.gridLayout_96.setObjectName(u"gridLayout_96")
+        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_96.addItem(self.horizontalSpacer_12, 0, 0, 1, 1)
+
+        self.abprt_button = QPushButton(self.widget_31)
+        self.abprt_button.setObjectName(u"abprt_button")
+
+        self.gridLayout_96.addWidget(self.abprt_button, 0, 1, 1, 1)
+
+        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_96.addItem(self.horizontalSpacer_13, 0, 2, 1, 1)
+
+
+        self.gridLayout_95.addWidget(self.widget_31, 0, 1, 1, 1)
+
+        self.trial_number = QLabel(self.groupBox_6)
+        self.trial_number.setObjectName(u"trial_number")
+        font2 = QFont()
+        font2.setFamilies([u"Cambria"])
+        font2.setPointSize(24)
+        self.trial_number.setFont(font2)
         self.trial_number.setAlignment(Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_95.addWidget(self.trial_number, 5, 0, 1, 4)
 
-        self.widget_35 = QWidget(self.groupBox_6)
-        self.widget_35.setObjectName(u"widget_35")
-        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        self.increase_intensity = QPushButton(self.groupBox_6)
+        self.increase_intensity.setObjectName(u"increase_intensity")
+
+        self.gridLayout_95.addWidget(self.increase_intensity, 9, 3, 1, 1)
+
+        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.gridLayout_95.addItem(self.verticalSpacer_3, 1, 0, 1, 4)
+
+        self.decrease_intensity = QPushButton(self.groupBox_6)
+        self.decrease_intensity.setObjectName(u"decrease_intensity")
+
+        self.gridLayout_95.addWidget(self.decrease_intensity, 9, 0, 1, 1)
+
+        self.previous_config = QPushButton(self.groupBox_6)
+        self.previous_config.setObjectName(u"previous_config")
+
+        self.gridLayout_95.addWidget(self.previous_config, 0, 0, 1, 1)
+
+        self.widget_37 = QWidget(self.groupBox_6)
+        self.widget_37.setObjectName(u"widget_37")
+        sizePolicy8 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy8.setHorizontalStretch(0)
         sizePolicy8.setVerticalStretch(0)
-        sizePolicy8.setHeightForWidth(self.widget_35.sizePolicy().hasHeightForWidth())
-        self.widget_35.setSizePolicy(sizePolicy8)
+        sizePolicy8.setHeightForWidth(self.widget_37.sizePolicy().hasHeightForWidth())
+        self.widget_37.setSizePolicy(sizePolicy8)
+        self.widget_37.setMinimumSize(QSize(0, 0))
+        self.gridLayout_103 = QGridLayout(self.widget_37)
+        self.gridLayout_103.setObjectName(u"gridLayout_103")
+        self.widget_38 = QWidget(self.widget_37)
+        self.widget_38.setObjectName(u"widget_38")
+        self.gridLayout_104 = QGridLayout(self.widget_38)
+        self.gridLayout_104.setObjectName(u"gridLayout_104")
+        self.trial_timer_label = QLabel(self.widget_38)
+        self.trial_timer_label.setObjectName(u"trial_timer_label")
+
+        self.gridLayout_104.addWidget(self.trial_timer_label, 0, 0, 1, 1)
+
+        self.totaltime_label = QLabel(self.widget_38)
+        self.totaltime_label.setObjectName(u"totaltime_label")
+
+        self.gridLayout_104.addWidget(self.totaltime_label, 1, 0, 1, 1)
+
+        self.trial_timer = QLabel(self.widget_38)
+        self.trial_timer.setObjectName(u"trial_timer")
+
+        self.gridLayout_104.addWidget(self.trial_timer, 0, 1, 1, 1)
+
+        self.totaltime_2 = QLabel(self.widget_38)
+        self.totaltime_2.setObjectName(u"totaltime_2")
+
+        self.gridLayout_104.addWidget(self.totaltime_2, 1, 1, 1, 1)
+
+
+        self.gridLayout_103.addWidget(self.widget_38, 0, 1, 1, 1)
+
+        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_103.addItem(self.horizontalSpacer_18, 0, 0, 1, 1)
+
+        self.horizontalSpacer_19 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_103.addItem(self.horizontalSpacer_19, 0, 2, 1, 1)
+
+
+        self.gridLayout_95.addWidget(self.widget_37, 6, 0, 1, 4)
+
+        self.widget_35 = QWidget(self.groupBox_6)
+        self.widget_35.setObjectName(u"widget_35")
+        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy9.setHorizontalStretch(0)
+        sizePolicy9.setVerticalStretch(0)
+        sizePolicy9.setHeightForWidth(self.widget_35.sizePolicy().hasHeightForWidth())
+        self.widget_35.setSizePolicy(sizePolicy9)
         self.widget_35.setMinimumSize(QSize(0, 30))
         self.gridLayout_101 = QGridLayout(self.widget_35)
         self.gridLayout_101.setObjectName(u"gridLayout_101")
@@ -400,6 +501,11 @@ class Ui_Controller_Main(object):
 
         self.widget_36 = QWidget(self.widget_35)
         self.widget_36.setObjectName(u"widget_36")
+        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+        sizePolicy10.setHorizontalStretch(0)
+        sizePolicy10.setVerticalStretch(0)
+        sizePolicy10.setHeightForWidth(self.widget_36.sizePolicy().hasHeightForWidth())
+        self.widget_36.setSizePolicy(sizePolicy10)
         self.gridLayout_102 = QGridLayout(self.widget_36)
         self.gridLayout_102.setObjectName(u"gridLayout_102")
         self.radioButton_8 = QRadioButton(self.widget_36)
@@ -427,9 +533,10 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_95.addWidget(self.widget_35, 2, 0, 1, 4)
 
-        self.horizontalSpacer_10 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.next_config = QPushButton(self.groupBox_6)
+        self.next_config.setObjectName(u"next_config")
 
-        self.gridLayout_95.addItem(self.horizontalSpacer_10, 8, 1, 1, 1)
+        self.gridLayout_95.addWidget(self.next_config, 0, 3, 1, 1)
 
         self.widget_32 = QWidget(self.groupBox_6)
         self.widget_32.setObjectName(u"widget_32")
@@ -447,6 +554,17 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_97.addItem(self.horizontalSpacer_15, 1, 2, 1, 1)
 
+        self.log_button = QPushButton(self.widget_32)
+        self.log_button.setObjectName(u"log_button")
+        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        sizePolicy11.setHorizontalStretch(0)
+        sizePolicy11.setVerticalStretch(0)
+        sizePolicy11.setHeightForWidth(self.log_button.sizePolicy().hasHeightForWidth())
+        self.log_button.setSizePolicy(sizePolicy11)
+        self.log_button.setMinimumSize(QSize(50, 50))
+
+        self.gridLayout_97.addWidget(self.log_button, 3, 1, 1, 1)
+
         self.widget_33 = QWidget(self.widget_32)
         self.widget_33.setObjectName(u"widget_33")
         self.gridLayout_98 = QGridLayout(self.widget_33)
@@ -456,6 +574,11 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_98.addWidget(self.label_82, 0, 2, 1, 1)
 
+        self.int_label = QLabel(self.widget_33)
+        self.int_label.setObjectName(u"int_label")
+
+        self.gridLayout_98.addWidget(self.int_label, 0, 0, 1, 1)
+
         self.current_output = QTextBrowser(self.widget_33)
         self.current_output.setObjectName(u"current_output")
         sizePolicy3.setHeightForWidth(self.current_output.sizePolicy().hasHeightForWidth())
@@ -464,127 +587,37 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_98.addWidget(self.current_output, 0, 1, 1, 1)
 
-        self.int_label = QLabel(self.widget_33)
-        self.int_label.setObjectName(u"int_label")
+        self.widget_34 = QWidget(self.widget_33)
+        self.widget_34.setObjectName(u"widget_34")
+        sizePolicy10.setHeightForWidth(self.widget_34.sizePolicy().hasHeightForWidth())
+        self.widget_34.setSizePolicy(sizePolicy10)
+        self.widget_34.setMinimumSize(QSize(0, 50))
+        self.gridLayout_106 = QGridLayout(self.widget_34)
+        self.gridLayout_106.setObjectName(u"gridLayout_106")
+        self.inc_up = QPushButton(self.widget_34)
+        self.inc_up.setObjectName(u"inc_up")
+        sizePolicy3.setHeightForWidth(self.inc_up.sizePolicy().hasHeightForWidth())
+        self.inc_up.setSizePolicy(sizePolicy3)
+        self.inc_up.setMaximumSize(QSize(40, 40))
 
-        self.gridLayout_98.addWidget(self.int_label, 0, 0, 1, 1)
+        self.gridLayout_106.addWidget(self.inc_up, 0, 1, 1, 1)
 
-        self.log_button = QPushButton(self.widget_33)
-        self.log_button.setObjectName(u"log_button")
+        self.inc_down = QPushButton(self.widget_34)
+        self.inc_down.setObjectName(u"inc_down")
+        sizePolicy3.setHeightForWidth(self.inc_down.sizePolicy().hasHeightForWidth())
+        self.inc_down.setSizePolicy(sizePolicy3)
+        self.inc_down.setMaximumSize(QSize(40, 40))
 
-        self.gridLayout_98.addWidget(self.log_button, 1, 0, 1, 3)
+        self.gridLayout_106.addWidget(self.inc_down, 0, 0, 1, 1)
+
+
+        self.gridLayout_98.addWidget(self.widget_34, 1, 1, 1, 1)
 
 
         self.gridLayout_97.addWidget(self.widget_33, 1, 1, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_97.addItem(self.verticalSpacer_2, 2, 1, 1, 1)
-
 
         self.gridLayout_95.addWidget(self.widget_32, 7, 0, 1, 4)
-
-        self.increase_intensity = QPushButton(self.groupBox_6)
-        self.increase_intensity.setObjectName(u"increase_intensity")
-
-        self.gridLayout_95.addWidget(self.increase_intensity, 8, 3, 1, 1)
-
-        self.widget_31 = QWidget(self.groupBox_6)
-        self.widget_31.setObjectName(u"widget_31")
-        self.gridLayout_96 = QGridLayout(self.widget_31)
-        self.gridLayout_96.setObjectName(u"gridLayout_96")
-        self.horizontalSpacer_12 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_96.addItem(self.horizontalSpacer_12, 0, 0, 1, 1)
-
-        self.abprt_button = QPushButton(self.widget_31)
-        self.abprt_button.setObjectName(u"abprt_button")
-
-        self.gridLayout_96.addWidget(self.abprt_button, 0, 1, 1, 1)
-
-        self.horizontalSpacer_13 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_96.addItem(self.horizontalSpacer_13, 0, 2, 1, 1)
-
-
-        self.gridLayout_95.addWidget(self.widget_31, 0, 1, 1, 1)
-
-        self.next_config = QPushButton(self.groupBox_6)
-        self.next_config.setObjectName(u"next_config")
-
-        self.gridLayout_95.addWidget(self.next_config, 0, 3, 1, 1)
-
-        self.decrease_intensity = QPushButton(self.groupBox_6)
-        self.decrease_intensity.setObjectName(u"decrease_intensity")
-
-        self.gridLayout_95.addWidget(self.decrease_intensity, 8, 0, 1, 1)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.gridLayout_95.addItem(self.verticalSpacer_3, 1, 0, 1, 4)
-
-        self.previous_config = QPushButton(self.groupBox_6)
-        self.previous_config.setObjectName(u"previous_config")
-
-        self.gridLayout_95.addWidget(self.previous_config, 0, 0, 1, 1)
-
-        self.condition_label = QLabel(self.groupBox_6)
-        self.condition_label.setObjectName(u"condition_label")
-        font2 = QFont()
-        font2.setFamilies([u"Cambria"])
-        font2.setPointSize(36)
-        self.condition_label.setFont(font2)
-        self.condition_label.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignHCenter)
-
-        self.gridLayout_95.addWidget(self.condition_label, 3, 0, 1, 4)
-
-        self.widget_37 = QWidget(self.groupBox_6)
-        self.widget_37.setObjectName(u"widget_37")
-        sizePolicy9 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
-        sizePolicy9.setHorizontalStretch(0)
-        sizePolicy9.setVerticalStretch(0)
-        sizePolicy9.setHeightForWidth(self.widget_37.sizePolicy().hasHeightForWidth())
-        self.widget_37.setSizePolicy(sizePolicy9)
-        self.widget_37.setMinimumSize(QSize(0, 30))
-        self.gridLayout_103 = QGridLayout(self.widget_37)
-        self.gridLayout_103.setObjectName(u"gridLayout_103")
-        self.widget_38 = QWidget(self.widget_37)
-        self.widget_38.setObjectName(u"widget_38")
-        self.gridLayout_104 = QGridLayout(self.widget_38)
-        self.gridLayout_104.setObjectName(u"gridLayout_104")
-        self.trial_timer = QLabel(self.widget_38)
-        self.trial_timer.setObjectName(u"trial_timer")
-
-        self.gridLayout_104.addWidget(self.trial_timer, 0, 1, 1, 1)
-
-        self.trial_timer_label = QLabel(self.widget_38)
-        self.trial_timer_label.setObjectName(u"trial_timer_label")
-
-        self.gridLayout_104.addWidget(self.trial_timer_label, 0, 0, 1, 1)
-
-        self.totaltime_label = QLabel(self.widget_38)
-        self.totaltime_label.setObjectName(u"totaltime_label")
-
-        self.gridLayout_104.addWidget(self.totaltime_label, 1, 0, 1, 1)
-
-        self.totaltime_2 = QLabel(self.widget_38)
-        self.totaltime_2.setObjectName(u"totaltime_2")
-
-        self.gridLayout_104.addWidget(self.totaltime_2, 1, 1, 1, 1)
-
-
-        self.gridLayout_103.addWidget(self.widget_38, 0, 1, 1, 1)
-
-        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_103.addItem(self.horizontalSpacer_18, 0, 0, 1, 1)
-
-        self.horizontalSpacer_19 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_103.addItem(self.horizontalSpacer_19, 0, 2, 1, 1)
-
-
-        self.gridLayout_95.addWidget(self.widget_37, 6, 0, 1, 4)
 
 
         self.gridLayout_94.addWidget(self.groupBox_6, 0, 0, 1, 1)
@@ -1208,11 +1241,11 @@ class Ui_Controller_Main(object):
 
         self.widget_14 = QWidget(self.ContinuousMode)
         self.widget_14.setObjectName(u"widget_14")
-        sizePolicy10 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy10.setHorizontalStretch(30)
-        sizePolicy10.setVerticalStretch(30)
-        sizePolicy10.setHeightForWidth(self.widget_14.sizePolicy().hasHeightForWidth())
-        self.widget_14.setSizePolicy(sizePolicy10)
+        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy12.setHorizontalStretch(30)
+        sizePolicy12.setVerticalStretch(30)
+        sizePolicy12.setHeightForWidth(self.widget_14.sizePolicy().hasHeightForWidth())
+        self.widget_14.setSizePolicy(sizePolicy12)
         self.widget_14.setMinimumSize(QSize(100, 50))
         self.gridLayout_75 = QGridLayout(self.widget_14)
         self.gridLayout_75.setObjectName(u"gridLayout_75")
@@ -1236,11 +1269,11 @@ class Ui_Controller_Main(object):
         self.gridLayout_13.setObjectName(u"gridLayout_13")
         self.widget_15 = QWidget(self.BurstMode)
         self.widget_15.setObjectName(u"widget_15")
-        sizePolicy11 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy11.setHorizontalStretch(0)
-        sizePolicy11.setVerticalStretch(50)
-        sizePolicy11.setHeightForWidth(self.widget_15.sizePolicy().hasHeightForWidth())
-        self.widget_15.setSizePolicy(sizePolicy11)
+        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy13.setHorizontalStretch(0)
+        sizePolicy13.setVerticalStretch(50)
+        sizePolicy13.setHeightForWidth(self.widget_15.sizePolicy().hasHeightForWidth())
+        self.widget_15.setSizePolicy(sizePolicy13)
         self.widget_15.setMinimumSize(QSize(0, 50))
         self.gridLayout_76 = QGridLayout(self.widget_15)
         self.gridLayout_76.setObjectName(u"gridLayout_76")
@@ -1264,17 +1297,17 @@ class Ui_Controller_Main(object):
 
         self.scrollArea_2 = QScrollArea(self.BurstMode)
         self.scrollArea_2.setObjectName(u"scrollArea_2")
-        sizePolicy12 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
-        sizePolicy12.setHorizontalStretch(0)
-        sizePolicy12.setVerticalStretch(0)
-        sizePolicy12.setHeightForWidth(self.scrollArea_2.sizePolicy().hasHeightForWidth())
-        self.scrollArea_2.setSizePolicy(sizePolicy12)
+        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Expanding)
+        sizePolicy14.setHorizontalStretch(0)
+        sizePolicy14.setVerticalStretch(0)
+        sizePolicy14.setHeightForWidth(self.scrollArea_2.sizePolicy().hasHeightForWidth())
+        self.scrollArea_2.setSizePolicy(sizePolicy14)
         self.scrollArea_2.setMinimumSize(QSize(1, 0))
         self.scrollArea_2.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scrollArea_2.setWidgetResizable(True)
         self.scrollAreaWidgetContents_2 = QWidget()
         self.scrollAreaWidgetContents_2.setObjectName(u"scrollAreaWidgetContents_2")
-        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1018, 1108))
+        self.scrollAreaWidgetContents_2.setGeometry(QRect(0, 0, 1018, 1185))
         self.gridLayout_55 = QGridLayout(self.scrollAreaWidgetContents_2)
         self.gridLayout_55.setObjectName(u"gridLayout_55")
         self.BurstModeSettings = QGroupBox(self.scrollAreaWidgetContents_2)
@@ -2050,6 +2083,93 @@ class Ui_Controller_Main(object):
         self.StimSettings.setObjectName(u"StimSettings")
         self.gridLayout_42 = QGridLayout(self.StimSettings)
         self.gridLayout_42.setObjectName(u"gridLayout_42")
+        self.horizontalSpacer_2 = QSpacerItem(10, 20, QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_42.addItem(self.horizontalSpacer_2, 0, 2, 1, 1)
+
+        self.widget_11 = QWidget(self.StimSettings)
+        self.widget_11.setObjectName(u"widget_11")
+        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy15.setHorizontalStretch(0)
+        sizePolicy15.setVerticalStretch(0)
+        sizePolicy15.setHeightForWidth(self.widget_11.sizePolicy().hasHeightForWidth())
+        self.widget_11.setSizePolicy(sizePolicy15)
+        self.widget_11.setMinimumSize(QSize(0, 0))
+        self.gridLayout_46 = QGridLayout(self.widget_11)
+        self.gridLayout_46.setObjectName(u"gridLayout_46")
+        self.jitter_widget_3 = QWidget(self.widget_11)
+        self.jitter_widget_3.setObjectName(u"jitter_widget_3")
+        sizePolicy10.setHeightForWidth(self.jitter_widget_3.sizePolicy().hasHeightForWidth())
+        self.jitter_widget_3.setSizePolicy(sizePolicy10)
+        self.jitter_widget_3.setMinimumSize(QSize(0, 60))
+        self.gridLayout_64 = QGridLayout(self.jitter_widget_3)
+        self.gridLayout_64.setObjectName(u"gridLayout_64")
+        self.widget_25 = QWidget(self.jitter_widget_3)
+        self.widget_25.setObjectName(u"widget_25")
+        self.gridLayout_65 = QGridLayout(self.widget_25)
+        self.gridLayout_65.setObjectName(u"gridLayout_65")
+        self.label_102 = QLabel(self.widget_25)
+        self.label_102.setObjectName(u"label_102")
+        sizePolicy10.setHeightForWidth(self.label_102.sizePolicy().hasHeightForWidth())
+        self.label_102.setSizePolicy(sizePolicy10)
+        self.label_102.setMinimumSize(QSize(0, 15))
+        self.label_102.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.label_102.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.gridLayout_65.addWidget(self.label_102, 0, 0, 1, 1)
+
+        self.doubleSpinBox_24 = QDoubleSpinBox(self.widget_25)
+        self.doubleSpinBox_24.setObjectName(u"doubleSpinBox_24")
+
+        self.gridLayout_65.addWidget(self.doubleSpinBox_24, 0, 1, 1, 1)
+
+        self.horizontalSpacer_6 = QSpacerItem(30, 20, QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_65.addItem(self.horizontalSpacer_6, 0, 3, 1, 1)
+
+        self.label_103 = QLabel(self.widget_25)
+        self.label_103.setObjectName(u"label_103")
+
+        self.gridLayout_65.addWidget(self.label_103, 0, 2, 1, 1)
+
+
+        self.gridLayout_64.addWidget(self.widget_25, 1, 3, 2, 1)
+
+        self.Jitter_4 = QWidget(self.jitter_widget_3)
+        self.Jitter_4.setObjectName(u"Jitter_4")
+        self.gridLayout_66 = QGridLayout(self.Jitter_4)
+        self.gridLayout_66.setObjectName(u"gridLayout_66")
+        self.jitter_on_3 = QRadioButton(self.Jitter_4)
+        self.jitter_on_3.setObjectName(u"jitter_on_3")
+
+        self.gridLayout_66.addWidget(self.jitter_on_3, 0, 1, 1, 1)
+
+        self.horizontalSpacer_11 = QSpacerItem(20, 20, QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_66.addItem(self.horizontalSpacer_11, 0, 3, 1, 1)
+
+        self.jitter_label_3 = QLabel(self.Jitter_4)
+        self.jitter_label_3.setObjectName(u"jitter_label_3")
+        sizePolicy10.setHeightForWidth(self.jitter_label_3.sizePolicy().hasHeightForWidth())
+        self.jitter_label_3.setSizePolicy(sizePolicy10)
+        self.jitter_label_3.setMinimumSize(QSize(0, 15))
+
+        self.gridLayout_66.addWidget(self.jitter_label_3, 0, 0, 1, 1)
+
+        self.jitter_off_3 = QRadioButton(self.Jitter_4)
+        self.jitter_off_3.setObjectName(u"jitter_off_3")
+
+        self.gridLayout_66.addWidget(self.jitter_off_3, 0, 2, 1, 1)
+
+
+        self.gridLayout_64.addWidget(self.Jitter_4, 1, 1, 2, 1)
+
+
+        self.gridLayout_46.addWidget(self.jitter_widget_3, 0, 0, 1, 1)
+
+
+        self.gridLayout_42.addWidget(self.widget_11, 2, 0, 1, 7)
+
         self.widget_26 = QWidget(self.StimSettings)
         self.widget_26.setObjectName(u"widget_26")
         self.widget_26.setMinimumSize(QSize(250, 0))
@@ -2094,122 +2214,11 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_42.addWidget(self.widget_26, 0, 6, 1, 1)
 
-        self.horizontalSpacer_3 = QSpacerItem(10, 20, QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_42.addItem(self.horizontalSpacer_3, 0, 4, 1, 1)
-
         self.num_stims = QSpinBox(self.StimSettings)
         self.num_stims.setObjectName(u"num_stims")
         self.num_stims.setMinimum(1)
 
         self.gridLayout_42.addWidget(self.num_stims, 0, 1, 1, 1)
-
-        self.widget_11 = QWidget(self.StimSettings)
-        self.widget_11.setObjectName(u"widget_11")
-        sizePolicy13 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy13.setHorizontalStretch(0)
-        sizePolicy13.setVerticalStretch(0)
-        sizePolicy13.setHeightForWidth(self.widget_11.sizePolicy().hasHeightForWidth())
-        self.widget_11.setSizePolicy(sizePolicy13)
-        self.widget_11.setMinimumSize(QSize(0, 0))
-        self.gridLayout_46 = QGridLayout(self.widget_11)
-        self.gridLayout_46.setObjectName(u"gridLayout_46")
-        self.jitter_widget_3 = QWidget(self.widget_11)
-        self.jitter_widget_3.setObjectName(u"jitter_widget_3")
-        sizePolicy14 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-        sizePolicy14.setHorizontalStretch(0)
-        sizePolicy14.setVerticalStretch(0)
-        sizePolicy14.setHeightForWidth(self.jitter_widget_3.sizePolicy().hasHeightForWidth())
-        self.jitter_widget_3.setSizePolicy(sizePolicy14)
-        self.jitter_widget_3.setMinimumSize(QSize(0, 60))
-        self.gridLayout_64 = QGridLayout(self.jitter_widget_3)
-        self.gridLayout_64.setObjectName(u"gridLayout_64")
-        self.widget_25 = QWidget(self.jitter_widget_3)
-        self.widget_25.setObjectName(u"widget_25")
-        self.gridLayout_65 = QGridLayout(self.widget_25)
-        self.gridLayout_65.setObjectName(u"gridLayout_65")
-        self.label_102 = QLabel(self.widget_25)
-        self.label_102.setObjectName(u"label_102")
-        sizePolicy14.setHeightForWidth(self.label_102.sizePolicy().hasHeightForWidth())
-        self.label_102.setSizePolicy(sizePolicy14)
-        self.label_102.setMinimumSize(QSize(0, 15))
-        self.label_102.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.label_102.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.gridLayout_65.addWidget(self.label_102, 0, 0, 1, 1)
-
-        self.doubleSpinBox_24 = QDoubleSpinBox(self.widget_25)
-        self.doubleSpinBox_24.setObjectName(u"doubleSpinBox_24")
-
-        self.gridLayout_65.addWidget(self.doubleSpinBox_24, 0, 1, 1, 1)
-
-        self.horizontalSpacer_6 = QSpacerItem(90, 20, QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_65.addItem(self.horizontalSpacer_6, 0, 3, 1, 1)
-
-        self.label_103 = QLabel(self.widget_25)
-        self.label_103.setObjectName(u"label_103")
-
-        self.gridLayout_65.addWidget(self.label_103, 0, 2, 1, 1)
-
-
-        self.gridLayout_64.addWidget(self.widget_25, 1, 3, 2, 1)
-
-        self.Jitter_4 = QWidget(self.jitter_widget_3)
-        self.Jitter_4.setObjectName(u"Jitter_4")
-        self.gridLayout_66 = QGridLayout(self.Jitter_4)
-        self.gridLayout_66.setObjectName(u"gridLayout_66")
-        self.jitter_on_3 = QRadioButton(self.Jitter_4)
-        self.jitter_on_3.setObjectName(u"jitter_on_3")
-
-        self.gridLayout_66.addWidget(self.jitter_on_3, 0, 1, 1, 1)
-
-        self.horizontalSpacer_11 = QSpacerItem(20, 20, QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_66.addItem(self.horizontalSpacer_11, 0, 3, 1, 1)
-
-        self.jitter_label_3 = QLabel(self.Jitter_4)
-        self.jitter_label_3.setObjectName(u"jitter_label_3")
-        sizePolicy14.setHeightForWidth(self.jitter_label_3.sizePolicy().hasHeightForWidth())
-        self.jitter_label_3.setSizePolicy(sizePolicy14)
-        self.jitter_label_3.setMinimumSize(QSize(0, 15))
-
-        self.gridLayout_66.addWidget(self.jitter_label_3, 0, 0, 1, 1)
-
-        self.jitter_off_3 = QRadioButton(self.Jitter_4)
-        self.jitter_off_3.setObjectName(u"jitter_off_3")
-
-        self.gridLayout_66.addWidget(self.jitter_off_3, 0, 2, 1, 1)
-
-
-        self.gridLayout_64.addWidget(self.Jitter_4, 1, 1, 2, 1)
-
-
-        self.gridLayout_46.addWidget(self.jitter_widget_3, 0, 0, 1, 1)
-
-
-        self.gridLayout_42.addWidget(self.widget_11, 2, 0, 1, 6)
-
-        self.num_stims_label = QLabel(self.StimSettings)
-        self.num_stims_label.setObjectName(u"num_stims_label")
-
-        self.gridLayout_42.addWidget(self.num_stims_label, 0, 0, 1, 1)
-
-        self.horizontalSpacer_2 = QSpacerItem(10, 20, QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_42.addItem(self.horizontalSpacer_2, 0, 2, 1, 1)
-
-        self.line = QFrame(self.StimSettings)
-        self.line.setObjectName(u"line")
-        sizePolicy15 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy15.setHorizontalStretch(0)
-        sizePolicy15.setVerticalStretch(0)
-        sizePolicy15.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
-        self.line.setSizePolicy(sizePolicy15)
-        self.line.setFrameShape(QFrame.Shape.HLine)
-        self.line.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.gridLayout_42.addWidget(self.line, 1, 0, 1, 7)
 
         self.widget_8 = QWidget(self.StimSettings)
         self.widget_8.setObjectName(u"widget_8")
@@ -2233,6 +2242,110 @@ class Ui_Controller_Main(object):
 
         self.gridLayout_42.addWidget(self.widget_8, 0, 3, 1, 1)
 
+        self.line = QFrame(self.StimSettings)
+        self.line.setObjectName(u"line")
+        sizePolicy16 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy16.setHorizontalStretch(0)
+        sizePolicy16.setVerticalStretch(0)
+        sizePolicy16.setHeightForWidth(self.line.sizePolicy().hasHeightForWidth())
+        self.line.setSizePolicy(sizePolicy16)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_42.addWidget(self.line, 1, 0, 1, 7)
+
+        self.horizontalSpacer_3 = QSpacerItem(10, 20, QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_42.addItem(self.horizontalSpacer_3, 0, 4, 1, 1)
+
+        self.num_stims_label = QLabel(self.StimSettings)
+        self.num_stims_label.setObjectName(u"num_stims_label")
+
+        self.gridLayout_42.addWidget(self.num_stims_label, 0, 0, 1, 1)
+
+        self.random_freq_widget = QWidget(self.StimSettings)
+        self.random_freq_widget.setObjectName(u"random_freq_widget")
+        self.random_freq_widget.setMinimumSize(QSize(200, 0))
+        self.gridLayout_111 = QGridLayout(self.random_freq_widget)
+        self.gridLayout_111.setObjectName(u"gridLayout_111")
+        self.rand_freq_onoff = QWidget(self.random_freq_widget)
+        self.rand_freq_onoff.setObjectName(u"rand_freq_onoff")
+        self.gridLayout_110 = QGridLayout(self.rand_freq_onoff)
+        self.gridLayout_110.setObjectName(u"gridLayout_110")
+        self.rf_on = QRadioButton(self.rand_freq_onoff)
+        self.rf_on.setObjectName(u"rf_on")
+        sizePolicy9.setHeightForWidth(self.rf_on.sizePolicy().hasHeightForWidth())
+        self.rf_on.setSizePolicy(sizePolicy9)
+
+        self.gridLayout_110.addWidget(self.rf_on, 0, 1, 1, 1)
+
+        self.horizontalSpacer_22 = QSpacerItem(20, 20, QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_110.addItem(self.horizontalSpacer_22, 0, 3, 1, 1)
+
+        self.jitter_label_5 = QLabel(self.rand_freq_onoff)
+        self.jitter_label_5.setObjectName(u"jitter_label_5")
+        sizePolicy10.setHeightForWidth(self.jitter_label_5.sizePolicy().hasHeightForWidth())
+        self.jitter_label_5.setSizePolicy(sizePolicy10)
+        self.jitter_label_5.setMinimumSize(QSize(100, 15))
+
+        self.gridLayout_110.addWidget(self.jitter_label_5, 0, 0, 1, 1)
+
+        self.rf_off = QRadioButton(self.rand_freq_onoff)
+        self.rf_off.setObjectName(u"rf_off")
+        sizePolicy9.setHeightForWidth(self.rf_off.sizePolicy().hasHeightForWidth())
+        self.rf_off.setSizePolicy(sizePolicy9)
+
+        self.gridLayout_110.addWidget(self.rf_off, 0, 2, 1, 1)
+
+
+        self.gridLayout_111.addWidget(self.rand_freq_onoff, 1, 0, 1, 1)
+
+        self.rf_settings = QWidget(self.random_freq_widget)
+        self.rf_settings.setObjectName(u"rf_settings")
+        self.rf_settings.setMinimumSize(QSize(100, 0))
+        self.gridLayout_112 = QGridLayout(self.rf_settings)
+        self.gridLayout_112.setObjectName(u"gridLayout_112")
+        self.label_84 = QLabel(self.rf_settings)
+        self.label_84.setObjectName(u"label_84")
+
+        self.gridLayout_112.addWidget(self.label_84, 0, 3, 1, 1)
+
+        self.rf_lower = QDoubleSpinBox(self.rf_settings)
+        self.rf_lower.setObjectName(u"rf_lower")
+        sizePolicy3.setHeightForWidth(self.rf_lower.sizePolicy().hasHeightForWidth())
+        self.rf_lower.setSizePolicy(sizePolicy3)
+        self.rf_lower.setMaximumSize(QSize(90, 16777215))
+
+        self.gridLayout_112.addWidget(self.rf_lower, 0, 1, 1, 1)
+
+        self.rf_upper = QDoubleSpinBox(self.rf_settings)
+        self.rf_upper.setObjectName(u"rf_upper")
+        sizePolicy3.setHeightForWidth(self.rf_upper.sizePolicy().hasHeightForWidth())
+        self.rf_upper.setSizePolicy(sizePolicy3)
+        self.rf_upper.setMaximumSize(QSize(90, 16777215))
+
+        self.gridLayout_112.addWidget(self.rf_upper, 0, 2, 1, 1)
+
+        self.label_83 = QLabel(self.rf_settings)
+        self.label_83.setObjectName(u"label_83")
+        self.label_83.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_112.addWidget(self.label_83, 0, 0, 1, 1)
+
+
+        self.gridLayout_111.addWidget(self.rf_settings, 1, 5, 1, 1)
+
+        self.line_2 = QFrame(self.random_freq_widget)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_111.addWidget(self.line_2, 0, 0, 1, 6)
+
+
+        self.gridLayout_42.addWidget(self.random_freq_widget, 3, 0, 1, 6)
+
 
         self.gridLayout_39.addWidget(self.StimSettings, 0, 0, 1, 1)
 
@@ -2253,7 +2366,7 @@ class Ui_Controller_Main(object):
         self.scrollArea_3.setWidgetResizable(True)
         self.scrollAreaWidgetContents_3 = QWidget()
         self.scrollAreaWidgetContents_3.setObjectName(u"scrollAreaWidgetContents_3")
-        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, -338, 1018, 840))
+        self.scrollAreaWidgetContents_3.setGeometry(QRect(0, 0, 1018, 839))
         self.gridLayout_92 = QGridLayout(self.scrollAreaWidgetContents_3)
         self.gridLayout_92.setObjectName(u"gridLayout_92")
         self.trial_window = QGroupBox(self.scrollAreaWidgetContents_3)
@@ -2605,7 +2718,7 @@ class Ui_Controller_Main(object):
         self.retranslateUi(Controller_Main)
 
         self.stackedWidget.setCurrentIndex(1)
-        self.modeSelektor.setCurrentIndex(2)
+        self.modeSelektor.setCurrentIndex(1)
         self.tabWidget_2.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(1)
         self.current_control_ch1burst.setCurrentIndex(0)
@@ -2643,23 +2756,25 @@ class Ui_Controller_Main(object):
         self.d188_ch.setTitle("")
         self.label_28.setText(QCoreApplication.translate("Controller_Main", u"D188 Channel", None))
         self.groupBox_6.setTitle("")
+        self.condition_label.setText(QCoreApplication.translate("Controller_Main", u"Active", None))
+        self.abprt_button.setText(QCoreApplication.translate("Controller_Main", u"Abort", None))
         self.trial_number.setText(QCoreApplication.translate("Controller_Main", u"Trial 1/5", None))
+        self.increase_intensity.setText(QCoreApplication.translate("Controller_Main", u"Increase Intensity", None))
+        self.decrease_intensity.setText(QCoreApplication.translate("Controller_Main", u"Decrease Intensity", None))
+        self.previous_config.setText(QCoreApplication.translate("Controller_Main", u"Previous Config", None))
+        self.trial_timer_label.setText(QCoreApplication.translate("Controller_Main", u"Trial Time:", None))
+        self.totaltime_label.setText(QCoreApplication.translate("Controller_Main", u"Total Time: ", None))
+        self.trial_timer.setText(QCoreApplication.translate("Controller_Main", u"trial_placeholder", None))
+        self.totaltime_2.setText(QCoreApplication.translate("Controller_Main", u"total_placeholder", None))
         self.radioButton_8.setText(QCoreApplication.translate("Controller_Main", u"On", None))
         self.radioButton_9.setText(QCoreApplication.translate("Controller_Main", u"Off", None))
         self.label_79.setText(QCoreApplication.translate("Controller_Main", u"Stimulation", None))
+        self.next_config.setText(QCoreApplication.translate("Controller_Main", u"Next Config", None))
+        self.log_button.setText(QCoreApplication.translate("Controller_Main", u"Log", None))
         self.label_82.setText(QCoreApplication.translate("Controller_Main", u"mA", None))
         self.int_label.setText(QCoreApplication.translate("Controller_Main", u"Intensity:", None))
-        self.log_button.setText(QCoreApplication.translate("Controller_Main", u"Log", None))
-        self.increase_intensity.setText(QCoreApplication.translate("Controller_Main", u"Increase Intensity", None))
-        self.abprt_button.setText(QCoreApplication.translate("Controller_Main", u"Abort", None))
-        self.next_config.setText(QCoreApplication.translate("Controller_Main", u"Next Config", None))
-        self.decrease_intensity.setText(QCoreApplication.translate("Controller_Main", u"Decrease Intensity", None))
-        self.previous_config.setText(QCoreApplication.translate("Controller_Main", u"Previous Config", None))
-        self.condition_label.setText(QCoreApplication.translate("Controller_Main", u"Active", None))
-        self.trial_timer.setText(QCoreApplication.translate("Controller_Main", u"trial_placeholder", None))
-        self.trial_timer_label.setText(QCoreApplication.translate("Controller_Main", u"Trial Time:", None))
-        self.totaltime_label.setText(QCoreApplication.translate("Controller_Main", u"Total Time: ", None))
-        self.totaltime_2.setText(QCoreApplication.translate("Controller_Main", u"total_placeholder", None))
+        self.inc_up.setText(QCoreApplication.translate("Controller_Main", u"+", None))
+        self.inc_down.setText(QCoreApplication.translate("Controller_Main", u"-", None))
 #if QT_CONFIG(tooltip)
         self.ContinuousMode.setToolTip(QCoreApplication.translate("Controller_Main", u"<html><head/><body><p>Continuous Mode</p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
@@ -2884,17 +2999,22 @@ class Ui_Controller_Main(object):
         self.label_29.setText(QCoreApplication.translate("Controller_Main", u"Interpulse Delay", None))
         self.label_3.setText(QCoreApplication.translate("Controller_Main", u"Pulses per Stim", None))
         self.StimSettings.setTitle(QCoreApplication.translate("Controller_Main", u"Stim Settings", None))
-        self.label_92.setText(QCoreApplication.translate("Controller_Main", u"Seconds", None))
-        self.interstim_delay_2.setText(QCoreApplication.translate("Controller_Main", u"Interstim Delay", None))
         self.label_102.setText(QCoreApplication.translate("Controller_Main", u"Jitter Rate (+/-)", None))
         self.label_103.setText(QCoreApplication.translate("Controller_Main", u"Seconds", None))
         self.jitter_on_3.setText(QCoreApplication.translate("Controller_Main", u"On", None))
         self.jitter_label_3.setText(QCoreApplication.translate("Controller_Main", u"Jitter", None))
         self.jitter_off_3.setText(QCoreApplication.translate("Controller_Main", u"Off", None))
-        self.num_stims_label.setText(QCoreApplication.translate("Controller_Main", u"Number of Stims", None))
+        self.label_92.setText(QCoreApplication.translate("Controller_Main", u"Seconds", None))
+        self.interstim_delay_2.setText(QCoreApplication.translate("Controller_Main", u"Interstim Delay", None))
         self.radioButton_4.setText(QCoreApplication.translate("Controller_Main", u"Period", None))
         self.label_91.setText(QCoreApplication.translate("Controller_Main", u"Frequency/Period", None))
         self.freq_select_stim.setText(QCoreApplication.translate("Controller_Main", u"Frequency", None))
+        self.num_stims_label.setText(QCoreApplication.translate("Controller_Main", u"Number of Stims", None))
+        self.rf_on.setText(QCoreApplication.translate("Controller_Main", u"On", None))
+        self.jitter_label_5.setText(QCoreApplication.translate("Controller_Main", u"Random Freq", None))
+        self.rf_off.setText(QCoreApplication.translate("Controller_Main", u"Off", None))
+        self.label_84.setText(QCoreApplication.translate("Controller_Main", u"Hz", None))
+        self.label_83.setText(QCoreApplication.translate("Controller_Main", u"Upper/Lower", None))
         self.modeSelektor.setTabText(self.modeSelektor.indexOf(self.BurstMode), QCoreApplication.translate("Controller_Main", u"Burst Mode", None))
         self.trial_window.setTitle("")
         self.load_save_groupBox.setTitle(QCoreApplication.translate("Controller_Main", u"Save/Load Profile", None))

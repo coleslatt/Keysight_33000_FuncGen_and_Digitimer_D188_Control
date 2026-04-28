@@ -1,0 +1,89 @@
+{
+    "start_time": "2026-04-28T14:47:12.678433",
+    "patient_first_name": "",
+    "patient_last_name": "",
+    "patient_id": "4321",
+    "total_experiment_time_seconds": 19,
+    "intensity_change_events": [
+        {
+            "current_time": "2026-04-28T14:47:16.979185",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DV-I",
+            "waveform": "Sham",
+            "previous_intensity_ma": 5.0,
+            "new_intensity_ma": 10.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T14:47:17.120030",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DV-I",
+            "waveform": "Sham",
+            "previous_intensity_ma": 10.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T14:47:17.341485",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DV-I",
+            "waveform": "Sham",
+            "previous_intensity_ma": 15.0,
+            "new_intensity_ma": 20.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T14:47:29.757837",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DV-I",
+            "waveform": "Sham",
+            "previous_intensity_ma": 20.0,
+            "new_intensity_ma": 25.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T14:47:29.973155",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DV-I",
+            "waveform": "Sham",
+            "previous_intensity_ma": 25.0,
+            "new_intensity_ma": 30.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T14:47:30.487566",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DV-I",
+            "waveform": "Sham",
+            "previous_intensity_ma": 30.0,
+            "new_intensity_ma": 35.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        }
+    ],
+    "trial_logs": [
+        {
+            "current_time": "2026-04-28T14:47:12.711723",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 1,
+            "total_trial_time_seconds": 19,
+            "patient_reports": []
+        }
+    ]
+}

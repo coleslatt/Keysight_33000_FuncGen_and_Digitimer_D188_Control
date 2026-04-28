@@ -1,0 +1,11 @@
+Field,Value
+Start Time,2026-04-15T14:43:02.234101
+Image Path,C:\Users\pc\Dropbox\School\UBC\Co-op\ICORD\Keysight_33000_FuncGen_and_Digitimer_D188_Control\Application_Files\Body-chart-1.png
+Total Experiment Time (s),19
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries,Total Trial Time (s)
+1,DO-C,Active,Normal,Sham,0,7
+2,DO-I,Active,Normal,Active,0,2
+3,DO-C,Sham,Normal,Active,1,8
+4,DV-I,Active,Normal,Sham,1,7
+5,DV-I,Sham,Normal,Sham,3,19

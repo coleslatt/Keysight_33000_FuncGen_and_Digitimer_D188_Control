@@ -1,0 +1,311 @@
+{
+    "start_time": "2026-04-27T15:14:43.887761",
+    "total_experiment_time_seconds": 321,
+    "intensity_change_events": [
+        {
+            "current_time": "2026-04-27T15:14:46.106324",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 5.0,
+            "new_intensity_ma": 10.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:14:46.732634",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 10.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:14:47.341779",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 15.0,
+            "new_intensity_ma": 20.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:14:47.950758",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 20.0,
+            "new_intensity_ma": 25.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:14:49.275590",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 25.0,
+            "new_intensity_ma": 20.0,
+            "increment_ma": 5.0,
+            "direction": "decrease"
+        },
+        {
+            "current_time": "2026-04-27T15:14:49.867171",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 20.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "decrease"
+        },
+        {
+            "current_time": "2026-04-27T15:15:42.611174",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 15.0,
+            "new_intensity_ma": 20.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:15:43.396854",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 20.0,
+            "new_intensity_ma": 25.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:15:44.152744",
+            "trial_index": 0,
+            "order_number": 1,
+            "previous_intensity_ma": 25.0,
+            "new_intensity_ma": 30.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:19.998649",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 5.0,
+            "new_intensity_ma": 10.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:20.666160",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 10.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:21.322012",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 15.0,
+            "new_intensity_ma": 20.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:22.488828",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 20.0,
+            "new_intensity_ma": 25.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:25.081536",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 25.0,
+            "new_intensity_ma": 24.5,
+            "increment_ma": 0.5,
+            "direction": "decrease"
+        },
+        {
+            "current_time": "2026-04-27T15:19:25.815376",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 24.5,
+            "new_intensity_ma": 24.0,
+            "increment_ma": 0.5,
+            "direction": "decrease"
+        },
+        {
+            "current_time": "2026-04-27T15:19:27.019602",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 24.0,
+            "new_intensity_ma": 24.5,
+            "increment_ma": 0.5,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:27.665452",
+            "trial_index": 1,
+            "order_number": 2,
+            "previous_intensity_ma": 24.5,
+            "new_intensity_ma": 25.0,
+            "increment_ma": 0.5,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:55.485656",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 5.0,
+            "new_intensity_ma": 10.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:56.102236",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 10.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:56.823696",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 15.0,
+            "new_intensity_ma": 20.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:57.541979",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 20.0,
+            "new_intensity_ma": 25.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:58.242612",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 25.0,
+            "new_intensity_ma": 30.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:58.903569",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 30.0,
+            "new_intensity_ma": 35.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:19:59.485583",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 35.0,
+            "new_intensity_ma": 40.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:20:00.758960",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 40.0,
+            "new_intensity_ma": 35.0,
+            "increment_ma": 5.0,
+            "direction": "decrease"
+        },
+        {
+            "current_time": "2026-04-27T15:20:02.180086",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 35.0,
+            "new_intensity_ma": 40.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-27T15:20:02.606793",
+            "trial_index": 4,
+            "order_number": 5,
+            "previous_intensity_ma": 40.0,
+            "new_intensity_ma": 45.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        }
+    ],
+    "trial_logs": [
+        {
+            "current_time": "2026-04-27T15:14:43.893321",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 1,
+            "total_trial_time_seconds": 245,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-27T15:18:49.195371",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 2,
+            "total_trial_time_seconds": 55,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-27T15:19:44.775043",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 3,
+            "total_trial_time_seconds": 1,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-27T15:19:46.541467",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 4,
+            "total_trial_time_seconds": 6,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-27T15:19:53.455462",
+            "condition": {
+                "electrode_config": "DO-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 5,
+            "total_trial_time_seconds": 11,
+            "patient_reports": []
+        }
+    ]
+}

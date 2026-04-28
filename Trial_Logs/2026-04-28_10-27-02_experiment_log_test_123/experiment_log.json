@@ -1,0 +1,116 @@
+{
+    "start_time": "2026-04-28T10:26:35.406269",
+    "patient_first_name": "Cole",
+    "patient_last_name": "Slatt",
+    "patient_id": "33456",
+    "total_experiment_time_seconds": 20,
+    "intensity_change_events": [
+        {
+            "current_time": "2026-04-28T10:26:50.622084",
+            "trial_index": 2,
+            "order_number": 3,
+            "electrode_config": "DO-C",
+            "waveform": "Active",
+            "previous_intensity_ma": 5.0,
+            "new_intensity_ma": 10.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T10:26:51.685955",
+            "trial_index": 2,
+            "order_number": 3,
+            "electrode_config": "DO-C",
+            "waveform": "Active",
+            "previous_intensity_ma": 10.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        }
+    ],
+    "trial_logs": [
+        {
+            "current_time": "2026-04-28T10:26:35.424493",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 1,
+            "total_trial_time_seconds": 3,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-28T10:26:39.081483",
+            "condition": {
+                "electrode_config": "DO-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 2,
+            "total_trial_time_seconds": 0,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-28T10:26:39.588357",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 3,
+            "total_trial_time_seconds": 13,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-28T10:26:48.481115",
+                    "patient_log": {
+                        "created_at": "2026-04-28T10:26:48.481115",
+                        "annotations": [
+                            {
+                                "x": 117.0,
+                                "y": 170.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "FUUUCK",
+                                "created_at": "2026-04-28T10:26:47.338679"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "current_time": "2026-04-28T10:26:53.473244",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 4,
+            "total_trial_time_seconds": 0,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-28T10:26:53.876403",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 5,
+            "total_trial_time_seconds": 2,
+            "patient_reports": []
+        }
+    ]
+}

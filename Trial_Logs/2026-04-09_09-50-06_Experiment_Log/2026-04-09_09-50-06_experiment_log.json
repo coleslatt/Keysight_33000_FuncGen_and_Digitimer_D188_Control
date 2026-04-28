@@ -1,0 +1,30 @@
+{
+    "start_time": "2026-04-09T09:49:53.499083",
+    "trial_logs": [
+        {
+            "current_time": "2026-04-09T09:49:53.512753",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [],
+            "order_number": 1,
+            "total_trial_time_seconds": 5
+        },
+        {
+            "current_time": "2026-04-09T09:49:58.805360",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [],
+            "order_number": 2,
+            "total_trial_time_seconds": 2
+        }
+    ],
+    "total_experiment_time_seconds": 7
+}

@@ -524,7 +524,9 @@ def func_gen_control(
     d188_channel = 1,
     d188_led = True,
     charge_balance = False,
-    reverse = False
+    reverse = False,
+    burst_mode = False,
+    driver = None
     ):
 
     """
@@ -599,19 +601,24 @@ def func_gen_control(
 
     print ("\n\nFull Parameter Change\n------------------------\n")
     
-    resource_name = "33512B"
-    id_query = True
-    reset = False
-    options = ""
-    driver = ks.Kt33000(resource_name, id_query, reset, options)
-    print('  identifier: ', driver.identity.identifier)
-    print('  revision:   ', driver.identity.revision)
-    print('  vendor:     ', driver.identity.vendor)
-    print('  description:', driver.identity.description)
-    print('  model:      ', driver.identity.instrument_model)
-    print('  resource:   ', driver.driver_operation.io_resource_descriptor)
-    print('  options:    ', driver.driver_operation.driver_setup)
-    
+
+    if not burst_mode:
+        resource_name = "33512B"
+        id_query = True
+        reset = False
+        options = ""
+        driver = ks.Kt33000(resource_name, id_query, reset, options)
+        print('  identifier: ', driver.identity.identifier)
+        print('  revision:   ', driver.identity.revision)
+        print('  vendor:     ', driver.identity.vendor)
+        print('  description:', driver.identity.description)
+        print('  model:      ', driver.identity.instrument_model)
+        print('  resource:   ', driver.driver_operation.io_resource_descriptor)
+        print('  options:    ', driver.driver_operation.driver_setup)
+    else:
+        print("[func_gen_control] In burst mode, reusing driver")
+        driver = driver
+        
     # ch1 = driver.output_channels[0]  
 
     if shape == 'sine':
@@ -903,7 +910,8 @@ def func_gen_control(
     # return summary
 
 
-    driver.close()
+    if not burst_mode:
+        driver.close()
     return
 
 

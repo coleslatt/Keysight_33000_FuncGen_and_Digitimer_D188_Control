@@ -1,0 +1,179 @@
+{
+    "start_time": "2026-04-15T14:43:02.234101",
+    "total_experiment_time_seconds": 19,
+    "trial_logs": [
+        {
+            "current_time": "2026-04-15T14:43:02.250098",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 1,
+            "total_trial_time_seconds": 7,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-15T15:00:51.066443",
+            "condition": {
+                "electrode_config": "DO-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 2,
+            "total_trial_time_seconds": 2,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-15T15:00:57.943415",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 3,
+            "total_trial_time_seconds": 8,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-15T15:01:13.326479",
+                    "patient_log": {
+                        "created_at": "2026-04-15T15:01:13.326479",
+                        "annotations": [
+                            {
+                                "x": 99.0,
+                                "y": 156.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 3,
+                                "motor_quality": "Jerking",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Another attempt",
+                                "created_at": "2026-04-15T15:01:12.326275"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "current_time": "2026-04-15T15:01:33.145390",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 4,
+            "total_trial_time_seconds": 7,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-15T15:01:49.128648",
+                    "patient_log": {
+                        "created_at": "2026-04-15T15:01:49.128648",
+                        "annotations": [
+                            {
+                                "x": 319.0,
+                                "y": 219.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 10,
+                                "motor_quality": "Visible activation",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "fuuuckkk",
+                                "created_at": "2026-04-15T15:01:48.304829"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "current_time": "2026-04-15T15:02:04.460327",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 5,
+            "total_trial_time_seconds": 19,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-15T15:02:20.044426",
+                    "patient_log": {
+                        "created_at": "2026-04-15T15:02:20.044426",
+                        "annotations": [
+                            {
+                                "x": 325.0,
+                                "y": 157.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 4,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "try this then",
+                                "created_at": "2026-04-15T15:02:19.183734"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-15T15:02:41.280188",
+                    "patient_log": {
+                        "created_at": "2026-04-15T15:02:41.280188",
+                        "annotations": [
+                            {
+                                "x": 323.0,
+                                "y": 225.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "shiiiiiitt",
+                                "created_at": "2026-04-15T15:02:40.102016"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 35.0,
+                    "current_time": "2026-04-15T15:03:07.449660",
+                    "patient_log": {
+                        "created_at": "2026-04-15T15:03:07.449660",
+                        "annotations": [
+                            {
+                                "x": 322.0,
+                                "y": 222.0,
+                                "intensity": 10,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 10,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "last one",
+                                "created_at": "2026-04-15T15:03:06.557922"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

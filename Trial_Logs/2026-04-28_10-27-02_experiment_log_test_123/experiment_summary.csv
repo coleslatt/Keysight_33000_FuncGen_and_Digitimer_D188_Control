@@ -1,0 +1,18 @@
+Field,Value
+Start Time,2026-04-28T10:26:35.406269
+Image Path,C:\Users\pc\Dropbox\School\UBC\Co-op\ICORD\Keysight_33000_FuncGen_and_Digitimer_D188_Control\Application_Files\Body-chart-1.png
+Patient First Name,Cole
+Patient Last Name,Slatt
+Patient ID,33456
+Total Experiment Time (s),20
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries,Total Trial Time (s)
+1,DV-I,Sham,Normal,Active,0,3
+2,DO-I,Active,Normal,Sham,0,0
+3,DO-C,Active,Normal,Active,1,13
+4,DO-C,Sham,Normal,Sham,0,0
+5,DV-I,Active,Normal,Active,0,2
+
+Intensity Change Time,Trial Index,Order Number,Electrode Config,Waveform,Previous Intensity (mA),New Intensity (mA),Increment (mA),Direction
+2026-04-28T10:26:50.622084,2,3,DO-C,Active,5.0,10.0,5.0,increase
+2026-04-28T10:26:51.685955,2,3,DO-C,Active,10.0,15.0,5.0,increase

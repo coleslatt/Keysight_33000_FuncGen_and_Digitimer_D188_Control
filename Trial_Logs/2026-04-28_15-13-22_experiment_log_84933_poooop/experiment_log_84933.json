@@ -1,0 +1,69 @@
+{
+    "start_time": "2026-04-28T15:12:45.358174",
+    "patient_first_name": "",
+    "patient_last_name": "",
+    "patient_id": "84933",
+    "total_experiment_time_seconds": 19,
+    "intensity_change_events": [
+        {
+            "current_time": "2026-04-28T15:13:02.005975",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DO-I",
+            "waveform": "Active",
+            "previous_intensity_ma": 5.0,
+            "new_intensity_ma": 10.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        },
+        {
+            "current_time": "2026-04-28T15:13:02.635064",
+            "trial_index": 0,
+            "order_number": 1,
+            "electrode_config": "DO-I",
+            "waveform": "Active",
+            "previous_intensity_ma": 10.0,
+            "new_intensity_ma": 15.0,
+            "increment_ma": 5.0,
+            "direction": "increase"
+        }
+    ],
+    "trial_logs": [
+        {
+            "current_time": "2026-04-28T15:12:45.369985",
+            "condition": {
+                "electrode_config": "DO-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 1,
+            "total_trial_time_seconds": 19,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-28T15:12:58.892449",
+                    "patient_log": {
+                        "created_at": "2026-04-28T15:12:58.891683",
+                        "annotations": [
+                            {
+                                "x": 311.0,
+                                "y": 221.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "bilateral": true,
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-28T15:12:56.654415"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

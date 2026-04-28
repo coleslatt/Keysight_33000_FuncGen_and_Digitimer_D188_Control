@@ -1,0 +1,205 @@
+{
+    "start_time": "2026-04-16T11:17:25.693388",
+    "total_experiment_time_seconds": 56,
+    "trial_logs": [
+        {
+            "current_time": "2026-04-16T11:17:25.707978",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 1,
+            "total_trial_time_seconds": 154,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 10.0,
+                    "current_time": "2026-04-16T11:19:42.205207",
+                    "patient_log": {
+                        "created_at": "2026-04-16T11:19:42.205207",
+                        "annotations": [
+                            {
+                                "x": 318.0,
+                                "y": 158.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 3,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-16T11:19:27.243844"
+                            },
+                            {
+                                "x": 129.0,
+                                "y": 127.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-16T11:19:31.614609"
+                            },
+                            {
+                                "x": 116.0,
+                                "y": 225.0,
+                                "intensity": 10,
+                                "sensation": "Buzzing",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "shiiiitt",
+                                "created_at": "2026-04-16T11:19:41.171374"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 15.0,
+                    "current_time": "2026-04-16T11:19:54.577211",
+                    "patient_log": {
+                        "created_at": "2026-04-16T11:19:54.577211",
+                        "annotations": [
+                            {
+                                "x": 272.0,
+                                "y": 137.0,
+                                "intensity": 5,
+                                "sensation": "Pulsing",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-16T11:19:53.266235"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "current_time": "2026-04-16T11:19:59.887475",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 2,
+            "total_trial_time_seconds": 2,
+            "patient_reports": []
+        },
+        {
+            "current_time": "2026-04-16T11:20:02.266790",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 3,
+            "total_trial_time_seconds": 21,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-16T11:20:13.144994",
+                    "patient_log": {
+                        "created_at": "2026-04-16T11:20:13.142438",
+                        "annotations": [
+                            {
+                                "x": 309.0,
+                                "y": 174.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 5,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Crash here",
+                                "created_at": "2026-04-16T11:20:11.774830"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 20.0,
+                    "current_time": "2026-04-16T11:20:53.326483",
+                    "patient_log": {
+                        "created_at": "2026-04-16T11:20:53.326483",
+                        "annotations": [
+                            {
+                                "x": 321.0,
+                                "y": 226.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 3,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Another one here",
+                                "created_at": "2026-04-16T11:20:51.449095"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "current_time": "2026-04-16T11:21:29.306849",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 4,
+            "total_trial_time_seconds": 34,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-16T11:22:01.559748",
+                    "patient_log": {
+                        "created_at": "2026-04-16T11:22:01.559748",
+                        "annotations": [
+                            {
+                                "x": 322.0,
+                                "y": 220.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Great success",
+                                "created_at": "2026-04-16T11:22:00.722840"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "current_time": "2026-04-16T11:22:03.688272",
+            "condition": {
+                "electrode_config": "DO-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "order_number": 5,
+            "total_trial_time_seconds": 1,
+            "patient_reports": []
+        }
+    ]
+}

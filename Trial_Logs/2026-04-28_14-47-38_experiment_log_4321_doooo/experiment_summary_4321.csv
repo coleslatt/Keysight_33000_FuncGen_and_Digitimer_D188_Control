@@ -1,0 +1,18 @@
+Field,Value
+Start Time,2026-04-28T14:47:12.678433
+Image Path,
+Participant First Name,
+Participant Last Name,
+Participant ID,4321
+Total Experiment Time (s),19
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries,Total Trial Time (s)
+1,DV-I,Sham,Normal,Sham,0,19
+
+Intensity Change Time,Trial Index,Order Number,Electrode Config,Waveform,Previous Intensity (mA),New Intensity (mA),Increment (mA),Direction
+2026-04-28T14:47:16.979185,0,1,DV-I,Sham,5.0,10.0,5.0,increase
+2026-04-28T14:47:17.120030,0,1,DV-I,Sham,10.0,15.0,5.0,increase
+2026-04-28T14:47:17.341485,0,1,DV-I,Sham,15.0,20.0,5.0,increase
+2026-04-28T14:47:29.757837,0,1,DV-I,Sham,20.0,25.0,5.0,increase
+2026-04-28T14:47:29.973155,0,1,DV-I,Sham,25.0,30.0,5.0,increase
+2026-04-28T14:47:30.487566,0,1,DV-I,Sham,30.0,35.0,5.0,increase

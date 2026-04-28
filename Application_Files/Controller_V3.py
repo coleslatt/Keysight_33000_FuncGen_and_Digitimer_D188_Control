@@ -7,18 +7,32 @@ import threading
 import os
 import time
 
-from PySide6.QtWidgets import QApplication, QWidget, QSpinBox, QDoubleSpinBox, QDialog, QComboBox, QHBoxLayout, QRadioButton, QButtonGroup
+
+from PySide6.QtWidgets import (
+    QApplication, QWidget, QSpinBox, QDoubleSpinBox, QDialog,
+    QComboBox, QHBoxLayout, QRadioButton, QButtonGroup,
+    QMessageBox
+)
+
 from FuncGen_Selector_Function_2 import func_gen_control, func_gen_control_stateful
 from burst_mode_function import burst_mode
 
-from Trial_Program import (start_trial, 
-                            load_trial_settings, 
-                            increase_intensity, 
-                            decrease_intensity, 
-                            print_patient_log_counts, 
+from Trial_Program import (
+                            start_trial,
+                            load_trial_settings,
+                            increase_intensity,
+                            decrease_intensity,
+                            print_patient_log_counts,
                             create_log,
                             prompt_save_after_trial,
-                            build_trial_stateful_kwargs)
+                            build_trial_stateful_kwargs,
+                            AnnotationEditorDialog,
+                            PatientBodyLogDialog,
+                            TrialStartReviewDialog,
+                            maybe_prompt_resume_from_backup,
+                            simulate_crash_now,
+                            stop_crash_test_timer,
+                        )
 
 from stim_system_gui_v3 import Ui_Controller_Main
 
@@ -119,8 +133,63 @@ class ControllerMain(QDialog):
         super().__init__()
         self.ui = Ui_Controller_Main()
         self.ui.setupUi(self)
+        self.build_patient_information_groupbox()
 
-        # Timer Logic
+        self.resize(1100, 800)
+
+        self.recovered_session = False
+        self._crash_test_timer = None
+        self.current_trial_settings = {}
+        self.enable_crash_test_timer = False
+
+        # Change to false if hardware is not connected to allow app to run without hardware present (e.g. for testing or development)
+        self.hardware_enabled = 0
+
+        # Create one persistent annotation editor for the lifetime of the app.
+        # Guard construction so the app can still start even if dialog creation fails.
+        self.annotation_editor = None
+        try:
+            self.annotation_editor = AnnotationEditorDialog(parent=self)
+            self.annotation_editor.hide()
+            print("[ControllerMain.__init__] persistent AnnotationEditorDialog created successfully")
+        except Exception as e:
+            self.annotation_editor = None
+            print(f"[ControllerMain.__init__] failed to create persistent AnnotationEditorDialog: {e}")
+            traceback.print_exc()
+
+
+        # Create one persistent body-log dialog for the lifetime of the app.
+        # This avoids reconstructing PatientBodyLogDialog every time logging is opened.
+        self.patient_body_log_dialog = None
+        try:
+            base_dir = Path(__file__).resolve().parent
+            image_path = base_dir / "Body-chart-1.png"
+
+            self.patient_body_log_dialog = PatientBodyLogDialog(
+                image_path=str(image_path),
+                parent=self,
+                controller=self,
+            )
+            self.patient_body_log_dialog.hide()
+            print("[ControllerMain.__init__] persistent PatientBodyLogDialog created successfully")
+        except Exception as e:
+            self.patient_body_log_dialog = None
+            print(f"[ControllerMain.__init__] failed to create persistent PatientBodyLogDialog: {e}")
+            traceback.print_exc()
+
+        
+        # Create one persistent trial-start review dialog.
+        self.trial_start_review_dialog = None
+        try:
+            self.trial_start_review_dialog = TrialStartReviewDialog(parent=self)
+            self.trial_start_review_dialog.hide()
+            print("[ControllerMain.__init__] persistent TrialStartReviewDialog created successfully")
+        except Exception as e:
+            self.trial_start_review_dialog = None
+            print(f"[ControllerMain.__init__] failed to create persistent TrialStartReviewDialog: {e}")
+            traceback.print_exc()
+
+        
         # Timer Logic
         self.trial_start_monotonic = None
         self.experiment_start_monotonic = None
@@ -245,6 +314,8 @@ class ControllerMain(QDialog):
         self.ui.radioButton_40.setChecked(True)  # CH2 Polarity Normal default
         self.ui.groupBox_26.setEnabled(False)  # CH1 Custom Waveform settings hidden by default
         self.ui.groupBox_28.setEnabled(False)  # CH2 Custom Waveform settings hidden by default
+        self.ui.rf_settings.setEnabled(False)
+        self.ui.rf_off.setChecked(True)
         # endregion
 
         # region Burst mode dynamic UI logic
@@ -272,6 +343,10 @@ class ControllerMain(QDialog):
         self.ui.pushButton_4.clicked.connect(self.apply_burst_mode_settings)
         self.ui.stop_button.clicked.connect(self.stop_burst_mode)
         self.ui.stop_button.setEnabled(False)
+
+        self.ui.rf_on.toggled.connect(self.enable_rf_freq)
+        self.ui.rf_off.toggled.connect(self.enable_rf_freq)
+
         # endregion
 
         # region Enforce Limits
@@ -312,10 +387,7 @@ class ControllerMain(QDialog):
             "D188 Channel",
         ])
 
-        if page_name == "TrialMode":
-            self.ui.system_status.hide()
-        else:
-            self.ui.system_status.show()
+        self.update_system_status_visibility()
 
         self.ui.radioButton_3.toggled.connect(self.manual_v_auto_change)
         self.ui.radioButton_7.toggled.connect(self.manual_v_auto_change)
@@ -323,7 +395,21 @@ class ControllerMain(QDialog):
         self.ui.pushButton_5.clicked.connect(self.browse_load_file)
         self.ui.pushButton_6.clicked.connect(self.browse_save_file)
 
-        self.ui.current_output.textChanged.connect(self.disable_descrease)
+        # self.ui.current_output.textChanged.connect(self.disable_descrease)
+
+
+        # self._syncing_current_output = False
+
+        # # Configure current_output as a live current-control spinbox during trial mode.
+        # self.ui.current_output.setDecimals(2)
+        # self.ui.current_output.setSingleStep(0.1)
+        # self.ui.current_output.setMinimum(0.0)
+        # self.ui.current_output.setMaximum(1000000.0)
+        # self.ui.current_output.setKeyboardTracking(False)
+        # self.ui.current_output.setButtonSymbols(QAbstractSpinBox.UpDownArrows)
+
+        # self.ui.current_output.valueChanged.connect(self.on_current_output_value_changed)
+        # self.ui.current_output.textChanged.connect(self.disable_descrease)
         
         options = ["", "DV-I",  "DO-C", "DO-I"]
 
@@ -379,6 +465,18 @@ class ControllerMain(QDialog):
             )
         )
 
+        self.ui.inc_up.clicked.connect(
+            lambda: (
+                increase_intensity(self, inc=True)
+            )
+        )
+
+        self.ui.inc_down.clicked.connect(
+            lambda: (
+                decrease_intensity(self, inc=True)
+            )
+        )
+
         self.ui.log_button.clicked.connect(
             lambda: (
                 create_log(self)
@@ -388,41 +486,146 @@ class ControllerMain(QDialog):
         self.ui.radioButton_8.toggled.connect(self.change_state)
         self.ui.radioButton_9.toggled.connect(self.change_state)
 
+        QTimer.singleShot(0, lambda: maybe_prompt_resume_from_backup(self))
+
     #endregion
+
+    def enable_rf_freq(self):
+        if self.ui.rf_off.isChecked():
+            self.ui.rf_settings.setEnabled(False)
+        elif self.ui.rf_on.isChecked():
+            self.ui.rf_settings.setEnabled(True)
+
+
+    def confirm_trial_start(self) -> bool:
+        dialog = getattr(self, "trial_start_review_dialog", None)
+        if dialog is None:
+            QMessageBox.critical(
+                self,
+                "Start Error",
+                "Trial start review dialog is not available."
+            )
+            return False
+
+        conditions = self.collect_trial_conditions()
+
+        dialog.populate(
+            conditions=conditions,
+            ds5_input=self.ui.ds5_trial_input.currentText(),
+            ds5_output=self.ui.ds5_trial_output.currentText(),
+            starting_current=self.ui.trial_starting_current.value(),
+            current_increment=self.ui.comboBox.currentText(),
+        )
+
+        result = dialog.exec()
+        return result == QDialog.Accepted
+
+
+    def build_patient_information_groupbox(self):
+        self.ui.patient_information_groupBox = QtWidgets.QGroupBox(self.ui.trial_window)
+        self.ui.patient_information_groupBox.setObjectName("patient_information_groupBox")
+        self.ui.patient_information_groupBox.setTitle("Participant Information")
+
+        self.ui.patient_information_layout = QtWidgets.QGridLayout(self.ui.patient_information_groupBox)
+        self.ui.patient_information_layout.setObjectName("patient_information_layout")
+        self.ui.patient_information_layout.setColumnStretch(1, 1)
+        self.ui.patient_information_layout.setColumnStretch(3, 1)
+
+        self.ui.patient_first_name_label = QtWidgets.QLabel(self.ui.patient_information_groupBox)
+        self.ui.patient_first_name_label.setObjectName("patient_first_name_label")
+        self.ui.patient_first_name_label.setText("First Name")
+        self.ui.patient_information_layout.addWidget(self.ui.patient_first_name_label, 0, 0, 1, 1)
+
+        self.ui.patient_first_name_input = QtWidgets.QLineEdit(self.ui.patient_information_groupBox)
+        self.ui.patient_first_name_input.setObjectName("patient_first_name_input")
+        self.ui.patient_first_name_input.setMaximumWidth(320)
+        self.ui.patient_information_layout.addWidget(self.ui.patient_first_name_input, 0, 1, 1, 1)
+
+        self.ui.patient_last_name_label = QtWidgets.QLabel(self.ui.patient_information_groupBox)
+        self.ui.patient_last_name_label.setObjectName("patient_last_name_label")
+        self.ui.patient_last_name_label.setText("Last Name")
+        self.ui.patient_information_layout.addWidget(self.ui.patient_last_name_label, 0, 2, 1, 1)
+
+        self.ui.patient_last_name_input = QtWidgets.QLineEdit(self.ui.patient_information_groupBox)
+        self.ui.patient_last_name_input.setObjectName("patient_last_name_input")
+        self.ui.patient_last_name_input.setMaximumWidth(320)
+        self.ui.patient_information_layout.addWidget(self.ui.patient_last_name_input, 0, 3, 1, 1)
+
+        self.ui.patient_id_label = QtWidgets.QLabel(self.ui.patient_information_groupBox)
+        self.ui.patient_id_label.setObjectName("patient_id_label")
+        self.ui.patient_id_label.setText('Participant ID <span style="color: red;">*</span>')
+        self.ui.patient_information_layout.addWidget(self.ui.patient_id_label, 1, 0, 1, 1)
+
+        self.ui.patient_id_input = QtWidgets.QLineEdit(self.ui.patient_information_groupBox)
+        self.ui.patient_id_input.setObjectName("patient_id_input")
+        self.ui.patient_id_input.setMaximumWidth(320)
+        self.ui.patient_information_layout.addWidget(self.ui.patient_id_input, 1, 1, 1, 1)
+
+        self.ui.gridLayout_68.addWidget(self.ui.patient_information_groupBox, 1, 0, 1, 1)
+        self.ui.gridLayout_68.addWidget(self.ui.groupBox_4, 2, 0, 1, 1)
+        self.ui.gridLayout_68.addWidget(self.ui.trial_settings, 3, 0, 1, 1)
+        self.ui.gridLayout_68.addWidget(self.ui.widget_30, 4, 0, 1, 1)
+
+
+    def get_patient_information(self) -> dict:
+        return {
+            "first_name": self.ui.patient_first_name_input.text().strip(),
+            "last_name": self.ui.patient_last_name_input.text().strip(),
+            "patient_id": self.ui.patient_id_input.text().strip(),
+        }
+
 
     def on_start_trial_clicked(self):
         if self.trial_hw_busy:
             print("Trial hardware busy; cannot start.")
             return
 
+        conditions = self.collect_trial_conditions()
+        if not conditions:
+            QMessageBox.warning(
+                self,
+                "No Trial Conditions",
+                "Please configure at least one trial condition before starting."
+            )
+            return
+
+        confirmed = self.confirm_trial_start()
+        if not confirmed:
+            print("Trial start cancelled by user.")
+            return
+
         self.ui.stackedWidget.setCurrentWidget(self.ui.trial_running_page)
+        self.update_system_status_visibility()
         start_trial(
             self,
-            conditions=self.collect_trial_conditions(),
+            conditions=conditions,
             auto_man=0,
         )
 
     def disable_descrease(self):
-
-        increment_val = float(self.ui.comboBox.currentText())
-        if ((self.current_intensity - increment_val)<0):
+        try:
+            increment_text = (self.ui.comboBox.currentText() or "").strip()
+            increment_val = float(increment_text)
+        except (TypeError, ValueError):
+            # If increment is invalid, safest behavior is to disable decrease
             self.ui.decrease_intensity.setEnabled(False)
-            print('disabled')
-        else:
-            self.ui.decrease_intensity.setEnabled(True)
-            print('enabled')
+            print(f"Invalid current increment value: {self.ui.comboBox.currentText()!r}")
+            return
 
-    # def on_abort_trials_clicked(self):
-    #     cancelled = prompt_save_after_trial(self)
-    #     if cancelled:
-    #         return
+        current_intensity = getattr(self, "current_intensity", None)
+        if current_intensity is None:
+            self.ui.decrease_intensity.setEnabled(False)
+            print("current_intensity is not set yet; disabling decrease button.")
+            return
 
-    #     self.trial_running = False
-    #     self.stop_timers()
-    #     self.ui.stackedWidget.setCurrentWidget(self.ui.trial_settings_page)
-    #     print_patient_log_counts(self)
+        self.ui.decrease_intensity.setEnabled((current_intensity - increment_val) >= 0)
 
     def on_abort_trials_clicked(self):
+
+        self.trial_running = False
+        self.ui.radioButton_9.setChecked(True)
+        self.change_state()
+        
         if hasattr(self, "experiment_log") and self.experiment_log is not None:
             if self.experiment_log.trial_logs:
                 self.experiment_log.trial_logs[-1].total_trial_time_seconds = (
@@ -435,16 +638,22 @@ class ControllerMain(QDialog):
 
         cancelled = prompt_save_after_trial(self)
         if cancelled:
+
+            self.trial_running = True
+            # self.ui.radioButton_8.setChecked(True)
+            self.change_state()
+
             return
 
         self.trial_running = False
+        print("Trial aborted by user.")
         self.stop_timers()
         self.ui.stackedWidget.setCurrentWidget(self.ui.trial_settings_page)
+        self.update_system_status_visibility()
         print_patient_log_counts(self)
         self.ui.radioButton_9.setChecked(True)
         self.change_state()
     
-
     def update_timer_displays(self):
         # Total experiment timer
         if self.experiment_start_monotonic is None:
@@ -520,8 +729,21 @@ class ControllerMain(QDialog):
         self.current_trial_index -= 1
         load_trial_settings(self)
 
+
+
     def closeEvent(self, event):
         try:
+            stop_crash_test_timer(self)
+
+            if hasattr(self, "trial_start_review_dialog") and self.trial_start_review_dialog is not None:
+                self.trial_start_review_dialog.close()
+
+            if hasattr(self, "patient_body_log_dialog") and self.patient_body_log_dialog is not None:
+                self.patient_body_log_dialog.close()
+
+            if hasattr(self, "annotation_editor") and self.annotation_editor is not None:
+                self.annotation_editor.close()
+
             if hasattr(self, "trial_hw_thread") and self.trial_hw_thread is not None:
                 self.trial_hw_thread.quit()
                 self.trial_hw_thread.wait(2000)
@@ -692,243 +914,292 @@ class ControllerMain(QDialog):
 
     from pathlib import Path
 
-
+    
     def browse_load_file(self):
+
         start_dir = Path.cwd() / "Trial_Programs"
-        start_dir.mkdir(parents=True, exist_ok=True)
 
-        path, selected_filter = QFileDialog.getOpenFileName(
-            self,
-            "Load File",
-            str(start_dir),
-            "CSV Files (*.csv);;All Files (*)"
-        )
-
-        if not path:
+        try:
+            start_dir.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(
+                self,
+                "Load Error",
+                f"Could not create/open the Trial_Programs directory:\n{e}"
+            )
             return
 
-        path = Path(path)
-        self.ui.lineEdit.setText(str(path))
-        print(f"Loading file: {path}")
+        try:
+            path_str, _ = QFileDialog.getOpenFileName(
+                self,
+                "Load File",
+                str(start_dir),
+                "CSV Files (*.csv);;All Files (*)"
+            )
 
-        df = pd.read_csv(path)
+            if not path_str:
+                return
 
-        required_cols = {"RowType", "Montage", "Mode", "Polarity", "Setting", "Value"}
-        missing = required_cols - set(df.columns)
-        if missing:
-            raise ValueError(f"CSV is missing required columns: {sorted(missing)}")
+            path = Path(path_str)
+            self.ui.lineEdit.setText(str(path))
+            print(f"Loading file: {path}")
 
-        table = self.ui.tableWidget
+            df = pd.read_csv(path)
 
-        # ----------------------------
-        # Split table rows vs setting rows
-        # ----------------------------
-        table_df = df[df["RowType"] == "table"].reset_index(drop=True)
-        settings_df = df[df["RowType"] == "setting"].reset_index(drop=True)
+            required_cols = {"RowType", "Montage", "Mode", "Polarity", "Setting", "Value"}
+            missing = required_cols - set(df.columns)
+            if missing:
+                raise ValueError(f"CSV is missing required columns: {sorted(missing)}")
 
-        # ----------------------------
-        # Restore table rows
-        # ----------------------------
-        while table.rowCount() < len(table_df):
-            table.insertRow(table.rowCount())
+            table = self.ui.tableWidget
+            table_df = df[df["RowType"] == "table"].reset_index(drop=True)
+            settings_df = df[df["RowType"] == "setting"].reset_index(drop=True)
 
-        for row in range(len(table_df)):
-            montage_val = "" if pd.isna(table_df.at[row, "Montage"]) else str(table_df.at[row, "Montage"]).strip()
-            mode_val = "" if pd.isna(table_df.at[row, "Mode"]) else str(table_df.at[row, "Mode"]).strip().lower()
-            polarity_val = "" if pd.isna(table_df.at[row, "Polarity"]) else str(table_df.at[row, "Polarity"]).strip().lower()
+            # Ensure enough rows exist
+            while table.rowCount() < len(table_df):
+                table.insertRow(table.rowCount())
 
-            # Column 0: Montage combo
-            combo = table.cellWidget(row, 0)
-            if combo is None:
-                combo = QComboBox()
-                combo.addItems(["", "DV-I", "DO-I", "DO-C"])
-                table.setCellWidget(row, 0, combo)
+            valid_montages = ["", "DV-I", "DO-I", "DO-C"]
 
-            idx = combo.findText(montage_val)
-            if idx >= 0:
-                combo.setCurrentIndex(idx)
-            else:
-                combo.setCurrentIndex(0)
+            # Restore table rows
+            for row in range(len(table_df)):
+                montage_val = "" if pd.isna(table_df.at[row, "Montage"]) else str(table_df.at[row, "Montage"]).strip()
+                mode_val = "" if pd.isna(table_df.at[row, "Mode"]) else str(table_df.at[row, "Mode"]).strip().lower()
+                polarity_val = "" if pd.isna(table_df.at[row, "Polarity"]) else str(table_df.at[row, "Polarity"]).strip().lower()
 
-            # Column 1: Active / Sham
-            mode_widget = table.cellWidget(row, 1)
-            if mode_widget is None:
-                mode_widget = self.make_active_sham_widget()
-                table.setCellWidget(row, 1, mode_widget)
+                combo = table.cellWidget(row, 0)
+                if combo is None or not isinstance(combo, QComboBox):
+                    combo = QComboBox()
+                    combo.addItems(valid_montages)
+                    combo.currentTextChanged.connect(
+                        lambda text, r=row: self.update_d188_channel_for_row(r)
+                    )
+                    table.setCellWidget(row, 0, combo)
 
-            if mode_val == "active":
-                mode_widget.active_btn.setChecked(True)
-            elif mode_val == "sham":
-                mode_widget.sham_btn.setChecked(True)
+                idx = combo.findText(montage_val)
+                combo.setCurrentIndex(idx if idx >= 0 else 0)
 
-            # Column 2: Normal / Reversed
-            pol_widget = table.cellWidget(row, 2)
-            if pol_widget is None:
-                pol_widget = self.make_normal_reversed_widget()
-                table.setCellWidget(row, 2, pol_widget)
+                mode_widget = table.cellWidget(row, 1)
+                if mode_widget is None or not hasattr(mode_widget, "active_btn"):
+                    mode_widget = self.make_active_sham_widget()
+                    table.setCellWidget(row, 1, mode_widget)
 
-            if polarity_val == "normal":
-                pol_widget.normal_btn.setChecked(True)
-            elif polarity_val == "reversed":
-                pol_widget.reversed_btn.setChecked(True)
+                if mode_val == "active":
+                    mode_widget.active_btn.setChecked(True)
+                elif mode_val == "sham":
+                    mode_widget.sham_btn.setChecked(True)
+                else:
+                    mode_widget.active_btn.setChecked(True)
 
-        # Clear extra table rows beyond CSV length
-        for row in range(len(table_df), table.rowCount()):
-            combo = table.cellWidget(row, 0)
-            if combo is not None:
-                combo.setCurrentIndex(0)
+                pol_widget = table.cellWidget(row, 2)
+                if pol_widget is None or not hasattr(pol_widget, "normal_btn"):
+                    pol_widget = self.make_normal_reversed_widget()
+                    table.setCellWidget(row, 2, pol_widget)
 
-            mode_widget = table.cellWidget(row, 1)
-            if mode_widget is not None:
-                mode_widget.active_btn.setChecked(True)
+                if polarity_val == "normal":
+                    pol_widget.normal_btn.setChecked(True)
+                elif polarity_val == "reversed":
+                    pol_widget.reversed_btn.setChecked(True)
+                else:
+                    pol_widget.normal_btn.setChecked(True)
 
-            pol_widget = table.cellWidget(row, 2)
-            if pol_widget is not None:
-                pol_widget.normal_btn.setChecked(True)
+                self.update_d188_channel_for_row(row)
 
-        # ----------------------------
-        # Restore extra settings
-        # ----------------------------
-        settings_map = {}
+            # Clear extra rows beyond loaded profile
+            for row in range(len(table_df), table.rowCount()):
+                combo = table.cellWidget(row, 0)
+                if isinstance(combo, QComboBox):
+                    combo.setCurrentIndex(0)
 
-        for _, setting_row in settings_df.iterrows():
-            key = "" if pd.isna(setting_row["Setting"]) else str(setting_row["Setting"]).strip()
-            value = "" if pd.isna(setting_row["Value"]) else setting_row["Value"]
-            settings_map[key] = value
+                mode_widget = table.cellWidget(row, 1)
+                if mode_widget is not None and hasattr(mode_widget, "active_btn"):
+                    mode_widget.active_btn.setChecked(True)
 
-        if "Number of Trials" in settings_map:
-            self.ui.spinBox_2.setValue(int(float(settings_map["Number of Trials"])))
+                pol_widget = table.cellWidget(row, 2)
+                if pol_widget is not None and hasattr(pol_widget, "normal_btn"):
+                    pol_widget.normal_btn.setChecked(True)
 
-        if "Timing" in settings_map:
-            timing_value = str(settings_map["Timing"]).strip().lower()
-            if timing_value == "manual":
-                self.ui.radioButton_3.setChecked(True)
-            elif timing_value == "auto":
-                self.ui.radioButton_7.setChecked(True)
+                self.update_d188_channel_for_row(row)
 
-        if "Trial Length" in settings_map:
-            self.ui.spinBox_3.setValue(int(float(settings_map["Trial Length"])))
+            settings_map = {}
+            for _, setting_row in settings_df.iterrows():
+                key = "" if pd.isna(setting_row["Setting"]) else str(setting_row["Setting"]).strip()
+                value = "" if pd.isna(setting_row["Value"]) else setting_row["Value"]
+                settings_map[key] = value
 
-        if "Rest Period" in settings_map:
-            self.ui.spinBox_4.setValue(int(float(settings_map["Rest Period"])))
+            def set_spinbox_value(widget, key, cast_func=float):
+                if key not in settings_map:
+                    return
+                raw = settings_map[key]
+                value = cast_func(raw)
+                widget.setValue(value)
 
-        if "Max Intensity" in settings_map:
-            self.ui.doubleSpinBox_17.setValue(float(settings_map["Max Intensity"]))
+            set_spinbox_value(self.ui.spinBox_2, "Number of Trials", lambda v: int(float(v)))
 
-        if "% of Max" in settings_map:
-            self.ui.spinBox_5.setValue(int(float(settings_map["% of Max"])))
+            if "Timing" in settings_map:
+                timing_value = str(settings_map["Timing"]).strip().lower()
+                if timing_value == "manual":
+                    self.ui.radioButton_3.setChecked(True)
+                elif timing_value == "auto":
+                    self.ui.radioButton_7.setChecked(True)
 
-        if "Starting Current" in settings_map:
-            self.ui.trial_starting_current.setValue(float(settings_map["Starting Current"]))
+            set_spinbox_value(self.ui.spinBox_3, "Trial Length", lambda v: int(float(v)))
+            set_spinbox_value(self.ui.spinBox_4, "Rest Period", lambda v: int(float(v)))
+            set_spinbox_value(self.ui.doubleSpinBox_17, "Max Intensity", float)
+            set_spinbox_value(self.ui.spinBox_5, "% of Max", lambda v: int(float(v)))
+            set_spinbox_value(self.ui.trial_starting_current, "Starting Current", float)
 
-        if "Current Increment" in settings_map:
-            increment_text = str(settings_map["Current Increment"]).strip()
-            idx = self.ui.comboBox.findText(increment_text)
-            if idx >= 0:
-                self.ui.comboBox.setCurrentIndex(idx)
+            if "Current Increment" in settings_map:
+                increment_text = str(settings_map["Current Increment"]).strip()
+                idx = self.ui.comboBox.findText(increment_text)
+                if idx >= 0:
+                    self.ui.comboBox.setCurrentIndex(idx)
+                else:
+                    print(f"Warning: Current Increment value not found in comboBox: {increment_text!r}")
 
-        print(f"Loaded CSV from: {path}")
+            # NEW: restore DS5 trial settings
+            if "DS5 Input Voltage" in settings_map:
+                ds5_input_text = str(settings_map["DS5 Input Voltage"]).strip()
+                idx = self.ui.ds5_trial_input.findText(ds5_input_text)
+                if idx >= 0:
+                    self.ui.ds5_trial_input.setCurrentIndex(idx)
+                else:
+                    print(f"Warning: DS5 Input Voltage value not found in ds5_trial_input: {ds5_input_text!r}")
 
+            if "DS5 Output Current" in settings_map:
+                ds5_output_text = str(settings_map["DS5 Output Current"]).strip()
+                idx = self.ui.ds5_trial_output.findText(ds5_output_text)
+                if idx >= 0:
+                    self.ui.ds5_trial_output.setCurrentIndex(idx)
+                else:
+                    print(f"Warning: DS5 Output Current value not found in ds5_trial_output: {ds5_output_text!r}")
 
+            print(f"Loaded CSV from: {path}")
+
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(
+                self,
+                "Load Error",
+                f"Failed to load profile:\n{e}"
+            )
 
     def browse_save_file(self):
+        
         start_dir = Path.cwd() / "Trial_Programs"
-        start_dir.mkdir(parents=True, exist_ok=True)
 
-        path, selected_filter = QFileDialog.getSaveFileName(
-            self,
-            "Save File",
-            str(start_dir),
-            "CSV Files (*.csv);;All Files (*)"
-        )
-
-        if not path:
+        try:
+            start_dir.mkdir(parents=True, exist_ok=True)
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(
+                self,
+                "Save Error",
+                f"Could not create/open the Trial_Programs directory:\n{e}"
+            )
             return
 
-        path = Path(path)
+        try:
+            path_str, _ = QFileDialog.getSaveFileName(
+                self,
+                "Save File",
+                str(start_dir),
+                "CSV Files (*.csv);;All Files (*)"
+            )
 
-        if path.suffix.lower() != ".csv":
-            path = path.with_suffix(".csv")
+            if not path_str:
+                return
 
-        self.ui.lineEdit_2.setText(str(path))
-        print(f"File saved here: {path}")
+            path = Path(path_str)
+            if path.suffix.lower() != ".csv":
+                path = path.with_suffix(".csv")
 
-        rows = []
+            self.ui.lineEdit_2.setText(str(path))
+            print(f"Saving file to: {path}")
 
-        # ----------------------------
-        # Table rows
-        # ----------------------------
-        for row in range(self.ui.tableWidget.rowCount()):
-            combo = self.ui.tableWidget.cellWidget(row, 0)
-            montage = combo.currentText() if isinstance(combo, QComboBox) else ""
+            rows = []
 
-            mode_widget = self.ui.tableWidget.cellWidget(row, 1)
-            if mode_widget is not None:
-                if mode_widget.active_btn.isChecked():
-                    mode = "Active"
-                elif mode_widget.sham_btn.isChecked():
-                    mode = "Sham"
+            for row in range(self.ui.tableWidget.rowCount()):
+                combo = self.ui.tableWidget.cellWidget(row, 0)
+                montage = combo.currentText().strip() if isinstance(combo, QComboBox) else ""
+
+                mode_widget = self.ui.tableWidget.cellWidget(row, 1)
+                if mode_widget is not None and hasattr(mode_widget, "active_btn") and hasattr(mode_widget, "sham_btn"):
+                    if mode_widget.active_btn.isChecked():
+                        mode = "Active"
+                    elif mode_widget.sham_btn.isChecked():
+                        mode = "Sham"
+                    else:
+                        mode = ""
                 else:
                     mode = ""
-            else:
-                mode = ""
 
-            pol_widget = self.ui.tableWidget.cellWidget(row, 2)
-            if pol_widget is not None:
-                if pol_widget.normal_btn.isChecked():
-                    polarity = "Normal"
-                elif pol_widget.reversed_btn.isChecked():
-                    polarity = "Reversed"
+                pol_widget = self.ui.tableWidget.cellWidget(row, 2)
+                if pol_widget is not None and hasattr(pol_widget, "normal_btn") and hasattr(pol_widget, "reversed_btn"):
+                    if pol_widget.normal_btn.isChecked():
+                        polarity = "Normal"
+                    elif pol_widget.reversed_btn.isChecked():
+                        polarity = "Reversed"
+                    else:
+                        polarity = ""
                 else:
                     polarity = ""
+
+                rows.append({
+                    "RowType": "table",
+                    "Montage": montage,
+                    "Mode": mode,
+                    "Polarity": polarity,
+                    "Setting": "",
+                    "Value": "",
+                })
+
+            if self.ui.radioButton_3.isChecked():
+                timing_value = "Manual"
+            elif self.ui.radioButton_7.isChecked():
+                timing_value = "Auto"
             else:
-                polarity = ""
+                timing_value = ""
 
-            rows.append({
-                "RowType": "table",
-                "Montage": montage,
-                "Mode": mode,
-                "Polarity": polarity,
-                "Setting": "",
-                "Value": "",
-            })
+            extra_settings = [
+                ("Number of Trials", self.ui.spinBox_2.value()),
+                ("Timing", timing_value),
+                ("Trial Length", self.ui.spinBox_3.value()),
+                ("Rest Period", self.ui.spinBox_4.value()),
+                ("Max Intensity", self.ui.doubleSpinBox_17.value()),
+                ("% of Max", self.ui.spinBox_5.value()),
+                ("Starting Current", self.ui.trial_starting_current.value()),
+                ("Current Increment", self.ui.comboBox.currentText()),
 
-        # ----------------------------
-        # Extra settings rows
-        # ----------------------------
-        timing_widget = self.ui.manual_auto
-        if self.ui.radioButton_3.isChecked():
-            timing_value = "Manual"
-        elif self.ui.radioButton_7.isChecked():
-            timing_value = "Auto"
-        else:
-            timing_value = ""
+                # NEW: save DS5 trial settings
+                ("DS5 Input Voltage", self.ui.ds5_trial_input.currentText()),
+                ("DS5 Output Current", self.ui.ds5_trial_output.currentText()),
+            ]
 
-        extra_settings = [
-            ("Number of Trials", self.ui.spinBox_2.value()),
-            ("Timing", timing_value),
-            ("Trial Length", self.ui.spinBox_3.value()),
-            ("Rest Period", self.ui.spinBox_4.value()),
-            ("Max Intensity", self.ui.doubleSpinBox_17.value()),
-            ("% of Max", self.ui.spinBox_5.value()),
-            ("Starting Current", self.ui.trial_starting_current.value()),
-            ("Current Increment", self.ui.comboBox.currentText()),
-        ]
+            for setting_name, setting_value in extra_settings:
+                rows.append({
+                    "RowType": "setting",
+                    "Montage": "",
+                    "Mode": "",
+                    "Polarity": "",
+                    "Setting": setting_name,
+                    "Value": setting_value,
+                })
 
-        for setting_name, setting_value in extra_settings:
-            rows.append({
-                "RowType": "setting",
-                "Montage": "",
-                "Mode": "",
-                "Polarity": "",
-                "Setting": setting_name,
-                "Value": setting_value,
-            })
+            df = pd.DataFrame(rows)
+            df.to_csv(path, index=False)
 
-        df = pd.DataFrame(rows)
-        df.to_csv(path, index=False)
-        print(f"Saved CSV to: {path}")
+            print(f"Saved CSV to: {path}")
+            QMessageBox.information(self, "Save Complete", f"Profile saved to:\n{path}")
 
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(
+                self,
+                "Save Error",
+                f"Failed to save profile:\n{e}"
+            )
 
     def _set_burst_ui_running(self, running: bool):
         self.ui.pushButton_4.setEnabled(not running)
@@ -1047,6 +1318,14 @@ class ControllerMain(QDialog):
         ch1_reversed = self.ui.radioButton_36.isChecked()
         ch2_reversed = self.ui.radioButton_39.isChecked()
 
+        if self.ui.rf_on.isChecked():
+            rand_freq = True
+        else:
+            rand_freq = False
+
+        rand_freq_upper = self.ui.rf_upper.value()
+        rand_freq_lower = self.ui.rf_lower.value()
+
         print(
             f"num_stims={num_stims}, \n"
             f"interstim_delay={stim_period}, \n"
@@ -1058,6 +1337,9 @@ class ControllerMain(QDialog):
             f"ch2_delay={channel_2_delay}, \n"
             f"ch1_ttl={ch1_ttl}, \n"
             f"ch2_ttl={ch2_ttl}, \n"
+            f"rand_freq = {rand_freq}, \n"
+            f"rand_freq_upper = {rand_freq_upper}, \n"
+            f"rand_freq_lower = {rand_freq_lower}, \n"
             f"shape_1={shape_1}, \n"
             f"shape_2={shape_2}, \n"
             f"v_min={v_min}, \n"
@@ -1087,6 +1369,9 @@ class ControllerMain(QDialog):
             ch2_delay=channel_2_delay,
             ch1_ttl=ch1_ttl,
             ch2_ttl=ch2_ttl,
+            rand_freq = rand_freq,
+            rand_freq_upper = rand_freq_upper,
+            rand_freq_lower = rand_freq_lower,
             fg_ch1=dict(
                 v_min=v_min,
                 v_max=v_max,
@@ -1106,6 +1391,8 @@ class ControllerMain(QDialog):
         )
 
         return burst_kwargs
+    
+    
 
     def apply_burst_mode_settings(self):
         if self.burst_thread is not None:
@@ -1120,35 +1407,79 @@ class ControllerMain(QDialog):
 
         self.burst_thread.started.connect(self.burst_worker.run)
         self.burst_worker.finished.connect(self.burst_thread.quit)
-        self.burst_worker.finished.connect(self.burst_worker.deleteLater)
-        self.burst_thread.finished.connect(self.burst_thread.deleteLater)
-        self.burst_thread.finished.connect(self._cleanup_burst_thread_refs)
-
-        self.burst_worker.status.connect(self._on_burst_status)
-        self.burst_worker.error.connect(self._on_burst_error)
         self.burst_worker.finished.connect(self._on_burst_finished)
+        self.burst_worker.error.connect(self._on_burst_error)
+        self.burst_worker.status.connect(self._on_burst_status)
+
+        self.burst_worker.finished.connect(self.burst_worker.deleteLater)
+        self.burst_thread.finished.connect(self._cleanup_burst_thread_refs)
+        self.burst_thread.finished.connect(self.burst_thread.deleteLater)
 
         self._set_burst_ui_running(True)
         self.burst_thread.start()
 
+
+
+    # def apply_burst_mode_settings(self):
+    #     if self.burst_thread is not None:
+    #         print("Burst mode is already running.")
+    #         return
+
+    #     burst_kwargs = self._collect_burst_mode_settings()
+
+    #     self.burst_thread = QThread(self)
+    #     self.burst_worker = BurstWorker(burst_kwargs)
+    #     self.burst_worker.moveToThread(self.burst_thread)
+
+    #     self.burst_thread.started.connect(self.burst_worker.run)
+    #     self.burst_worker.finished.connect(self.burst_thread.quit)
+    #     self.burst_worker.finished.connect(self.burst_worker.deleteLater)
+    #     self.burst_thread.finished.connect(self.burst_thread.deleteLater)
+    #     self.burst_thread.finished.connect(self._cleanup_burst_thread_refs)
+
+    #     self.burst_worker.status.connect(self._on_burst_status)
+    #     self.burst_worker.error.connect(self._on_burst_error)
+    #     self.burst_worker.finished.connect(self._on_burst_finished)
+
+    #     self._set_burst_ui_running(True)
+    #     self.burst_thread.start()
+
     def stop_burst_mode(self):
-        if self.burst_worker is not None:
-            print("Stop requested from UI.")
-            self.burst_worker.stop()
+        if self.burst_worker is None:
+            return
+
+        print("Stop requested from UI.")
+        self.ui.stop_button.setEnabled(False)   # prevent repeated stop spam
+        self.burst_worker.stop()
+
+
+    # def stop_burst_mode(self):
+    #     if self.burst_worker is not None:
+    #         print("Stop requested from UI.")
+    #         self.burst_worker.stop()
+
 
     @Slot()
     def _on_burst_finished(self):
         print("Burst worker finished.")
         self._set_burst_ui_running(False)
 
+    # @Slot()
+    # def _on_burst_finished(self):
+    #     print("Burst worker finished.")
+    #     self._set_burst_ui_running(False)
+
     @Slot(str)
     def _on_burst_status(self, message: str):
         print(message)
 
+
     @Slot(str)
     def _on_burst_error(self, error_text: str):
         print("Burst worker error:")
-        print(error_text)
+        print(f'Error: {error_text}')
+        self._set_burst_ui_running(False)
+
 
     def _switch_delay_freq_1(self, text: str):
         if self.ui.freq_select_stim.isChecked():
@@ -1234,8 +1565,17 @@ class ControllerMain(QDialog):
             return 0
         
     def tab_mode_change(self, index: int):
-        page = self.ui.modeSelektor.widget(index)
-        page_name = page.objectName()
+        self.update_system_status_visibility()
+
+
+    def update_system_status_visibility(self):
+        stacked_page = self.ui.stackedWidget.currentWidget()
+        if stacked_page == self.ui.trial_running_page:
+            self.ui.system_status.hide()
+            return
+
+        page = self.ui.modeSelektor.widget(self.ui.modeSelektor.currentIndex())
+        page_name = page.objectName() if page is not None else ""
 
         if page_name == "TrialMode":
             self.ui.system_status.hide()
@@ -1420,8 +1760,8 @@ class ControllerMain(QDialog):
 
     def change_state(self, checked=None):
         # Ignore the signal if we are not currently in a running trial
-        if not getattr(self, "trial_running", False):
-            return
+        # if not getattr(self, "trial_running", False):
+        #     return
 
         # Ignore the "False" half of the toggled signal to avoid double-triggering
         if checked is False:
@@ -1450,19 +1790,30 @@ class ControllerMain(QDialog):
     
     def set_trial_controls_enabled(self, enabled: bool):
         self.ui.next_config.setEnabled(enabled)
-        self.ui.previous_config.setEnabled(enabled)
+        if self.current_trial_index != 0:
+            self.ui.previous_config.setEnabled(enabled)
+        else:
+            self.ui.previous_config.setEnabled(False)
         self.ui.increase_intensity.setEnabled(enabled)
         self.ui.decrease_intensity.setEnabled(enabled)
         self.ui.log_button.setEnabled(enabled)
         self.ui.abprt_button.setEnabled(enabled)
         self.ui.radioButton_8.setEnabled(enabled)
         self.ui.radioButton_9.setEnabled(enabled)
+        self.ui.inc_down.setEnabled(enabled)
+        self.ui.inc_up.setEnabled(enabled)
 
 
     def request_trial_apply(self, kwargs: dict):
         if self.trial_hw_busy:
             print("Trial hardware apply already in progress.")
             return False
+
+        if not self.hardware_enabled:
+            print("Hardware disabled: skipping trial hardware apply.")
+            print(f"Trial kwargs (simulated only): {kwargs}")
+            self.disable_descrease()
+            return True
 
         self.trial_hw_busy = True
         self.set_trial_controls_enabled(False)

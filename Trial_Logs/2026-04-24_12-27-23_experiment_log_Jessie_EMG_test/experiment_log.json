@@ -1,0 +1,326 @@
+{
+    "start_time": "2026-04-24T11:46:10.199700",
+    "total_experiment_time_seconds": 2457,
+    "trial_logs": [
+        {
+            "current_time": "2026-04-24T11:46:10.254145",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "order_number": 1,
+            "total_trial_time_seconds": 2457,
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 5.0,
+                    "current_time": "2026-04-24T11:51:06.849790",
+                    "patient_log": {
+                        "created_at": "2026-04-24T11:51:06.849790",
+                        "annotations": [
+                            {
+                                "x": 321.0,
+                                "y": 168.0,
+                                "intensity": 1,
+                                "sensation": "Buzzing",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T11:51:05.509210"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 15.0,
+                    "current_time": "2026-04-24T11:55:44.617944",
+                    "patient_log": {
+                        "created_at": "2026-04-24T11:55:44.617944",
+                        "annotations": [
+                            {
+                                "x": 96.0,
+                                "y": 194.0,
+                                "intensity": 1,
+                                "sensation": "Buzzing",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T11:55:22.479152"
+                            },
+                            {
+                                "x": 134.23771853053827,
+                                "y": 196.88198717812278,
+                                "intensity": 1,
+                                "sensation": "Buzzing",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T11:55:38.034576"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 15.0,
+                    "current_time": "2026-04-24T11:57:14.402380",
+                    "patient_log": {
+                        "created_at": "2026-04-24T11:57:14.402380",
+                        "annotations": [
+                            {
+                                "x": 320.0,
+                                "y": 172.0,
+                                "intensity": 3,
+                                "sensation": "Buzzing",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T11:56:28.404556"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 21.0,
+                    "current_time": "2026-04-24T11:59:23.116680",
+                    "patient_log": {
+                        "created_at": "2026-04-24T11:59:23.116680",
+                        "annotations": [
+                            {
+                                "x": 98.0,
+                                "y": 278.0,
+                                "intensity": 1,
+                                "sensation": "Tingling",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T11:59:10.939730"
+                            },
+                            {
+                                "x": 139.0,
+                                "y": 254.0,
+                                "intensity": 1,
+                                "sensation": "Tingling",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T11:59:21.766651"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 31.0,
+                    "current_time": "2026-04-24T12:06:47.522008",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:06:47.522008",
+                        "annotations": [
+                            {
+                                "x": 130.0,
+                                "y": 279.0,
+                                "intensity": 3,
+                                "sensation": "Pulsing",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 2,
+                                "motor_quality": "Visible activation",
+                                "motor_temporal_quality": "Continuous",
+                                "additional_notes": "Sensation: Tapping, in top of quads moving into feet,",
+                                "created_at": "2026-04-24T12:05:07.721818"
+                            },
+                            {
+                                "x": 98.0,
+                                "y": 241.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 2,
+                                "motor_quality": "Twitch",
+                                "motor_temporal_quality": "Rhythmic",
+                                "additional_notes": "Palpable twitch on top of quads",
+                                "created_at": "2026-04-24T12:06:23.642948"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 33.0,
+                    "current_time": "2026-04-24T12:09:46.310403",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:09:46.310403",
+                        "annotations": [
+                            {
+                                "x": 135.0,
+                                "y": 282.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 3,
+                                "motor_quality": "Rhythmic movement",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Top of knee cap is vibrating",
+                                "created_at": "2026-04-24T12:09:42.320013"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 29.5,
+                    "current_time": "2026-04-24T12:12:20.781260",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:12:20.781260",
+                        "annotations": [
+                            {
+                                "x": 135.0,
+                                "y": 281.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 1,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Muscle threshold reached here as a result of fine tuning",
+                                "created_at": "2026-04-24T12:12:18.741606"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 32.0,
+                    "current_time": "2026-04-24T12:13:28.983967",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:13:28.983967",
+                        "annotations": [
+                            {
+                                "x": 82.0,
+                                "y": 254.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 2,
+                                "motor_quality": "Brief contraction",
+                                "motor_temporal_quality": "Brief",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T12:13:26.419051"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 36.0,
+                    "current_time": "2026-04-24T12:15:23.595798",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:15:23.595798",
+                        "annotations": [
+                            {
+                                "x": 85.0,
+                                "y": 270.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 3,
+                                "motor_quality": "Jerking",
+                                "motor_temporal_quality": "Intermittent",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T12:15:06.474103"
+                            },
+                            {
+                                "x": 128.0,
+                                "y": 271.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 4,
+                                "motor_quality": "Rhythmic movement",
+                                "motor_temporal_quality": "Continuous",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T12:15:22.629074"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 38.0,
+                    "current_time": "2026-04-24T12:22:14.122012",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:22:14.122012",
+                        "annotations": [
+                            {
+                                "x": 151.0,
+                                "y": 243.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 4,
+                                "motor_quality": "Twitch",
+                                "motor_temporal_quality": "Rhythmic",
+                                "additional_notes": "",
+                                "created_at": "2026-04-24T12:22:11.478316"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "current_intensity_ma": 40.0,
+                    "current_time": "2026-04-24T12:24:57.856875",
+                    "patient_log": {
+                        "created_at": "2026-04-24T12:24:57.856875",
+                        "annotations": [
+                            {
+                                "x": 319.0,
+                                "y": 177.0,
+                                "intensity": 7,
+                                "sensation": "Pressure",
+                                "temporal_quality": "Continuous",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 1,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "Spasm in the back",
+                                "created_at": "2026-04-24T12:23:50.838641"
+                            },
+                            {
+                                "x": 82.0,
+                                "y": 238.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 4,
+                                "motor_quality": "Rhythmic movement",
+                                "motor_temporal_quality": "Continuous",
+                                "additional_notes": "Bilateral vastas lateralis",
+                                "created_at": "2026-04-24T12:24:56.543891"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

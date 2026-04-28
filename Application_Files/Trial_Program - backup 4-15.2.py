@@ -10,6 +10,7 @@ import traceback
 import os
 from dataclasses import asdict
 
+
 from PySide6.QtWidgets import (
     QGraphicsEllipseItem,
     QListWidgetItem,
@@ -32,9 +33,6 @@ from PySide6.QtWidgets import (
     QButtonGroup,
     QDialogButtonBox,
     QApplication,
-    QTableWidget,
-    QTableWidgetItem,
-    QHeaderView,
 )
 
 from PySide6.QtGui import QBrush, QPixmap, QWheelEvent, QCursor
@@ -62,7 +60,6 @@ SENSATION_OPTIONS = [
 TEMPORAL_QUALITY_OPTIONS = [
     "",
     "Brief",
-    "Consistent",
     "Momentary",
     "Transient",
     "Intermittent",
@@ -109,25 +106,9 @@ class TrialLogEntry:
     total_trial_time_seconds: int = 0
 
 @dataclass
-class IntensityChangeEvent:
-    current_time: datetime = field(default_factory=datetime.now)
-    trial_index: int = 0
-    order_number: int = 0
-    electrode_config: str = ""
-    waveform: str = ""
-    previous_intensity_ma: float = 0.0
-    new_intensity_ma: float = 0.0
-    increment_ma: float = 0.0
-    direction: str = ""
-
-@dataclass
 class ExperimentLog:
     start_time: datetime = field(default_factory=datetime.now)
     trial_logs: list[TrialLogEntry] = field(default_factory=list)
-    intensity_change_events: list[IntensityChangeEvent] = field(default_factory=list)
-    patient_first_name: str = ""
-    patient_last_name: str = ""
-    patient_id: str = ""
     total_experiment_time_seconds: int = 0
 
 # Dataclasses for body annotations on the body map
@@ -141,7 +122,6 @@ class BodyAnnotation:
     intensity: int = 0
     sensation: str = ""
     temporal_quality: str = ""
-    bilateral: bool = False
 
     # Motor
     motor_threshold_reached: bool = False
@@ -307,25 +287,6 @@ class AnnotationEditorDialog(QDialog):
         temporal_row.addWidget(self.temporal_combo)
         layout.addLayout(temporal_row)
 
-        bilateral_row = QHBoxLayout()
-        bilateral_row.addWidget(QLabel("Bilateral?"))
-
-        self.bilateral_group = QButtonGroup(self)
-        self.bilateral_group.setExclusive(True)
-
-        self.bilateral_yes = QRadioButton("Yes")
-        self.bilateral_no = QRadioButton("No")
-
-        self.bilateral_group.addButton(self.bilateral_yes)
-        self.bilateral_group.addButton(self.bilateral_no)
-
-        self.bilateral_no.setChecked(True)
-
-        bilateral_row.addWidget(self.bilateral_yes)
-        bilateral_row.addWidget(self.bilateral_no)
-        bilateral_row.addStretch()
-        layout.addLayout(bilateral_row)
-
     def _build_motor_section(self):
         self.motor_group_box = QGroupBox("Motor")
         layout = QVBoxLayout(self.motor_group_box)
@@ -429,11 +390,6 @@ class AnnotationEditorDialog(QDialog):
         if idx >= 0:
             self.temporal_combo.setCurrentIndex(idx)
 
-        if getattr(annotation, "bilateral", False):
-            self.bilateral_yes.setChecked(True)
-        else:
-            self.bilateral_no.setChecked(True)
-
         if annotation.motor_threshold_reached:
             self.motor_threshold_yes.setChecked(True)
         else:
@@ -462,7 +418,6 @@ class AnnotationEditorDialog(QDialog):
             intensity=self.intensity_group.checkedId() if self.intensity_group.checkedId() != -1 else 0,
             sensation=self.sensation_combo.currentText().strip(),
             temporal_quality=self.temporal_combo.currentText().strip(),
-            bilateral=self.bilateral_yes.isChecked(),
             motor_threshold_reached=self.motor_threshold_yes.isChecked(),
             motor_intensity=self.motor_intensity_group.checkedId() if self.motor_intensity_group.checkedId() != -1 else 0,
             motor_quality=self.motor_quality_combo.currentText().strip(),
@@ -475,7 +430,6 @@ class AnnotationEditorDialog(QDialog):
         annotation.intensity = self.intensity_group.checkedId() if self.intensity_group.checkedId() != -1 else 0
         annotation.sensation = self.sensation_combo.currentText().strip()
         annotation.temporal_quality = self.temporal_combo.currentText().strip()
-        annotation.bilateral = self.bilateral_yes.isChecked()
 
         annotation.motor_threshold_reached = self.motor_threshold_yes.isChecked()
         annotation.motor_intensity = self.motor_intensity_group.checkedId() if self.motor_intensity_group.checkedId() != -1 else 0
@@ -492,8 +446,6 @@ class AnnotationEditorDialog(QDialog):
 
         self.sensation_combo.setCurrentIndex(0)
         self.temporal_combo.setCurrentIndex(0)
-        self.bilateral_yes.setChecked(False)
-        self.bilateral_no.setChecked(True)
 
         self.motor_threshold_yes.setChecked(False)
         self.motor_threshold_no.setChecked(True)
@@ -566,102 +518,6 @@ class AnnotationMarker(QGraphicsEllipseItem):
             self.dialog.edit_annotation(self)
         elif chosen_action == delete_action:
             self.dialog.delete_annotation(self)
-
-class TrialStartReviewDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-        self.setWindowTitle("Review Trial Settings")
-        self.resize(900, 650)
-
-        self.title_label = QLabel("Please review the trial settings before starting.")
-        self.title_label.setStyleSheet("font-size: 16px; font-weight: bold;")
-
-        self.warning_label = QLabel(
-            "Please make sure that DS5 Input and Output settings match the corresponding settings on the DS5 hardware."
-        )
-        self.warning_label.setWordWrap(True)
-        self.warning_label.setStyleSheet("color: red; font-weight: bold; font-size: 14px;")
-
-        self.conditions_label = QLabel("Trial Conditions")
-        self.conditions_label.setStyleSheet("font-weight: bold;")
-
-        self.conditions_table = QTableWidget(0, 4)
-        self.conditions_table.setHorizontalHeaderLabels([
-            "Electrode Config",
-            "Waveform",
-            "Polarity",
-            "D188 Channel",
-        ])
-        self.conditions_table.verticalHeader().setVisible(False)
-        self.conditions_table.setEditTriggers(QTableWidget.NoEditTriggers)
-        self.conditions_table.setSelectionMode(QTableWidget.NoSelection)
-        self.conditions_table.setFocusPolicy(Qt.NoFocus)
-        self.conditions_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
-        self.additional_settings_label = QLabel("Additional Settings")
-        self.additional_settings_label.setStyleSheet("font-weight: bold;")
-
-        self.ds5_input_label = QLabel("DS5 Input Voltage: ")
-        self.ds5_output_label = QLabel("DS5 Output Current: ")
-        self.starting_current_label = QLabel("Initial Current: ")
-        self.current_increment_label = QLabel("Current Increment: ")
-
-        # Make the text under "Additional Settings" bigger
-        details_style = "font-size: 15px;"
-
-        self.ds5_input_label.setStyleSheet(details_style)
-        self.ds5_output_label.setStyleSheet(details_style)
-        self.starting_current_label.setStyleSheet(details_style)
-        self.current_increment_label.setStyleSheet(details_style)
-
-        self.button_box = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        self.button_box.button(QDialogButtonBox.Ok).setText("Confirm")
-        self.button_box.button(QDialogButtonBox.Cancel).setText("Cancel")
-        self.button_box.accepted.connect(self.accept)
-        self.button_box.rejected.connect(self.reject)
-
-        main_layout = QVBoxLayout(self)
-        main_layout.addWidget(self.title_label)
-        main_layout.addSpacing(8)
-        main_layout.addWidget(self.warning_label)
-        main_layout.addSpacing(12)
-        main_layout.addWidget(self.conditions_label)
-        main_layout.addWidget(self.conditions_table)
-        main_layout.addSpacing(12)
-        main_layout.addWidget(self.additional_settings_label)
-        main_layout.addWidget(self.ds5_input_label)
-        main_layout.addWidget(self.ds5_output_label)
-        main_layout.addWidget(self.starting_current_label)
-        main_layout.addWidget(self.current_increment_label)
-        main_layout.addStretch()
-        main_layout.addWidget(self.button_box)
-
-    def populate(self, *, conditions: dict, ds5_input: str, ds5_output: str, starting_current, current_increment: str):
-        self.conditions_table.setRowCount(0)
-
-        sorted_rows = sorted(conditions.items(), key=lambda item: item[0])
-
-        for _, settings in sorted_rows:
-            row = self.conditions_table.rowCount()
-            self.conditions_table.insertRow(row)
-
-            electrode_config = str(settings.get("electrode_config", "") or "")
-            waveform = str(settings.get("waveform", "") or "")
-            polarity = str(settings.get("polarity", "") or "")
-            channel = str(settings.get("channel", "") or "")
-
-            self.conditions_table.setItem(row, 0, QTableWidgetItem(electrode_config))
-            self.conditions_table.setItem(row, 1, QTableWidgetItem(waveform))
-            self.conditions_table.setItem(row, 2, QTableWidgetItem(polarity))
-            self.conditions_table.setItem(row, 3, QTableWidgetItem(channel))
-
-        self.ds5_input_label.setText(f"DS5 Input Voltage: {ds5_input}")
-        self.ds5_output_label.setText(f"DS5 Output Current: {ds5_output}")
-        self.starting_current_label.setText(f"Initial Current: {starting_current}")
-        self.current_increment_label.setText(f"Current Increment: {current_increment}")
-
-        self.setResult(0)
 
 class PatientBodyLogDialog(QDialog):
     def __init__(self, image_path, parent=None, controller=None):
@@ -1122,7 +978,6 @@ def _body_annotation_to_dict(ann: BodyAnnotation) -> dict:
         "intensity": ann.intensity,
         "sensation": ann.sensation,
         "temporal_quality": ann.temporal_quality,
-        "bilateral": ann.bilateral,
         "motor_threshold_reached": ann.motor_threshold_reached,
         "motor_intensity": ann.motor_intensity,
         "motor_quality": ann.motor_quality,
@@ -1147,20 +1002,6 @@ def _patient_report_to_dict(report: PatientReport) -> dict:
         "current_intensity_ma": report.current_intensity_ma,
         "current_time": report.current_time,
         "patient_log": _patient_body_log_to_dict(report.patient_log),
-    }
-
-
-def _intensity_change_event_to_dict(event: IntensityChangeEvent) -> dict:
-    return {
-        "current_time": event.current_time,
-        "trial_index": event.trial_index,
-        "order_number": event.order_number,
-        "electrode_config": event.electrode_config,
-        "waveform": event.waveform,
-        "previous_intensity_ma": event.previous_intensity_ma,
-        "new_intensity_ma": event.new_intensity_ma,
-        "increment_ma": event.increment_ma,
-        "direction": event.direction,
     }
 
 
@@ -1220,15 +1061,6 @@ def collect_trial_ui_settings_snapshot(controller) -> dict:
         "current_increment": controller.ui.comboBox.currentText(),
         "state_setting": "On" if controller.ui.radioButton_8.isChecked() else "Off",
         "displayed_condition_label": getattr(controller.ui.condition_label, "text", lambda: "")(),
-        "patient_information": (
-            controller.get_patient_information()
-            if hasattr(controller, "get_patient_information")
-            else {
-                "first_name": "",
-                "last_name": "",
-                "patient_id": "",
-            }
-        ),
 
         # DS5 / current-related settings used by trial mode
         "ds5_trial_input": controller.ui.ds5_trial_input.currentText(),
@@ -1337,7 +1169,6 @@ def _body_annotation_from_dict(data: dict) -> BodyAnnotation:
         intensity=int(data.get("intensity", 0) or 0),
         sensation=str(data.get("sensation", "") or ""),
         temporal_quality=str(data.get("temporal_quality", "") or ""),
-        bilateral=bool(data.get("bilateral", False)),
         motor_threshold_reached=bool(data.get("motor_threshold_reached", False)),
         motor_intensity=int(data.get("motor_intensity", 0) or 0),
         motor_quality=str(data.get("motor_quality", "") or ""),
@@ -1372,20 +1203,6 @@ def _patient_report_from_dict(data: dict) -> PatientReport:
     )
 
 
-def _intensity_change_event_from_dict(data: dict) -> IntensityChangeEvent:
-    return IntensityChangeEvent(
-        current_time=datetime.fromisoformat(data["current_time"]) if data.get("current_time") else datetime.now(),
-        trial_index=int(data.get("trial_index", 0) or 0),
-        order_number=int(data.get("order_number", 0) or 0),
-        electrode_config=str(data.get("electrode_config", "") or ""),
-        waveform=str(data.get("waveform", "") or ""),
-        previous_intensity_ma=float(data.get("previous_intensity_ma", 0.0) or 0.0),
-        new_intensity_ma=float(data.get("new_intensity_ma", 0.0) or 0.0),
-        increment_ma=float(data.get("increment_ma", 0.0) or 0.0),
-        direction=str(data.get("direction", "") or ""),
-    )
-
-
 def _trial_condition_from_dict(data: dict | None) -> TrialCondition:
     if not data:
         return TrialCondition()
@@ -1411,110 +1228,6 @@ def _trial_log_entry_from_dict(data: dict) -> TrialLogEntry:
     )
 
 
-# def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
-#     """
-#     Read the JSONL backup and reconstruct enough state to resume.
-#     Ignores malformed trailing lines.
-#     """
-#     journal_path = Path(journal_path)
-#     if not journal_path.exists():
-#         raise FileNotFoundError(f"Backup file not found: {journal_path}")
-
-#     header = None
-#     events = []
-
-#     with open(journal_path, "r", encoding="utf-8") as f:
-#         for line_no, raw_line in enumerate(f, start=1):
-#             line = raw_line.strip()
-#             if not line:
-#                 continue
-
-#             try:
-#                 obj = json.loads(line)
-#             except Exception:
-#                 print(f"[load_recovery_payload_from_jsonl] skipping malformed line {line_no}")
-#                 traceback.print_exc()
-#                 continue
-
-#             event_type = obj.get("event_type", "")
-#             if event_type == "session_header" and header is None:
-#                 header = obj
-#             else:
-#                 events.append(obj)
-
-#     if header is None:
-#         raise RuntimeError("Backup file does not contain a session_header event.")
-
-#     trial_settings_snapshot = header.get("trial_settings_snapshot", {}) or {}
-
-#     experiment_log = ExperimentLog()
-#     if trial_settings_snapshot.get("captured_at"):
-#         try:
-#             experiment_log.start_time = datetime.fromisoformat(trial_settings_snapshot["captured_at"])
-#         except Exception:
-#             pass
-
-#     latest_trial_entry_payload = None
-#     latest_trial_order_number = None
-
-#     for event in events:
-#         event_type = event.get("event_type", "")
-#         payload = event.get("payload", {}) or {}
-
-#         if event_type == "trial_entry_created":
-#             trial_entry_data = payload.get("trial_entry")
-#             if trial_entry_data:
-#                 trial_entry = _trial_log_entry_from_dict(trial_entry_data)
-
-#                 # Replace existing entry of same order_number if already present
-#                 replaced = False
-#                 for idx, existing in enumerate(experiment_log.trial_logs):
-#                     if existing.order_number == trial_entry.order_number:
-#                         experiment_log.trial_logs[idx] = trial_entry
-#                         replaced = True
-#                         break
-#                 if not replaced:
-#                     experiment_log.trial_logs.append(trial_entry)
-
-#                 latest_trial_entry_payload = trial_entry_data
-#                 latest_trial_order_number = trial_entry.order_number
-
-#         elif event_type == "patient_report_added":
-#             order_number = payload.get("order_number")
-#             report_data = payload.get("patient_report")
-
-#             if order_number is None or not report_data:
-#                 continue
-
-#             report = _patient_report_from_dict(report_data)
-
-#             target_entry = None
-#             for entry in experiment_log.trial_logs:
-#                 if entry.order_number == int(order_number):
-#                     target_entry = entry
-#                     break
-
-#             if target_entry is not None:
-#                 target_entry.patient_reports.append(report)
-
-#         elif event_type == "trial_entry_finalized":
-#             order_number = payload.get("order_number")
-#             total_trial_time_seconds = payload.get("total_trial_time_seconds", 0)
-
-#             for entry in experiment_log.trial_logs:
-#                 if entry.order_number == int(order_number):
-#                     entry.total_trial_time_seconds = int(total_trial_time_seconds or 0)
-#                     break
-
-#     return {
-#         "journal_path": journal_path,
-#         "trial_settings_snapshot": trial_settings_snapshot,
-#         "experiment_log": experiment_log,
-#         "latest_trial_entry_payload": latest_trial_entry_payload,
-#         "latest_trial_order_number": latest_trial_order_number,
-#     }
-
-
 def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
     """
     Read the JSONL backup and reconstruct enough state to resume.
@@ -1526,10 +1239,6 @@ def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
 
     header = None
     events = []
-
-    stored_trial_order = None
-    last_current_trial_index = None
-    last_current_intensity = None
 
     with open(journal_path, "r", encoding="utf-8") as f:
         for line_no, raw_line in enumerate(f, start=1):
@@ -1545,25 +1254,10 @@ def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
                 continue
 
             event_type = obj.get("event_type", "")
-
-            if obj.get("current_trial_index") is not None:
-                last_current_trial_index = int(obj.get("current_trial_index"))
-
-            if obj.get("current_intensity") is not None:
-                try:
-                    last_current_intensity = float(obj.get("current_intensity"))
-                except Exception:
-                    pass
-
             if event_type == "session_header" and header is None:
                 header = obj
             else:
                 events.append(obj)
-
-            if event_type == "experiment_started":
-                payload = obj.get("payload", {}) or {}
-                if payload.get("trial_order") is not None:
-                    stored_trial_order = payload.get("trial_order")
 
     if header is None:
         raise RuntimeError("Backup file does not contain a session_header event.")
@@ -1577,11 +1271,6 @@ def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
         except Exception:
             pass
 
-    patient_info = trial_settings_snapshot.get("patient_information", {}) or {}
-    experiment_log.patient_first_name = str(patient_info.get("first_name", "") or "")
-    experiment_log.patient_last_name = str(patient_info.get("last_name", "") or "")
-    experiment_log.patient_id = str(patient_info.get("patient_id", "") or "")
-
     latest_trial_entry_payload = None
     latest_trial_order_number = None
 
@@ -1594,6 +1283,7 @@ def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
             if trial_entry_data:
                 trial_entry = _trial_log_entry_from_dict(trial_entry_data)
 
+                # Replace existing entry of same order_number if already present
                 replaced = False
                 for idx, existing in enumerate(experiment_log.trial_logs):
                     if existing.order_number == trial_entry.order_number:
@@ -1633,65 +1323,13 @@ def load_recovery_payload_from_jsonl(journal_path: Path) -> dict:
                     entry.total_trial_time_seconds = int(total_trial_time_seconds or 0)
                     break
 
-        elif event_type == "intensity_changed":
-            event_data = payload.get("intensity_change_event")
-            if event_data:
-                experiment_log.intensity_change_events.append(
-                    _intensity_change_event_from_dict(event_data)
-                )
-
     return {
         "journal_path": journal_path,
         "trial_settings_snapshot": trial_settings_snapshot,
         "experiment_log": experiment_log,
         "latest_trial_entry_payload": latest_trial_entry_payload,
         "latest_trial_order_number": latest_trial_order_number,
-        "stored_trial_order": stored_trial_order,
-        "last_current_trial_index": last_current_trial_index,
-        "last_current_intensity": last_current_intensity,
     }
-
-
-def _rebuild_trial_order_from_snapshot(trial_settings_snapshot: dict, stored_trial_order=None) -> list[tuple[int, dict]]:
-    """
-    Rebuild controller.trial_order from recovery data.
-
-    Priority:
-    1) exact stored randomized trial_order from the journal
-    2) fallback to trial_conditions_table from the session header
-    """
-    if stored_trial_order:
-        rebuilt = []
-        for item in stored_trial_order:
-            if not isinstance(item, (list, tuple)) or len(item) != 2:
-                continue
-
-            raw_key, raw_settings = item
-            try:
-                row = int(raw_key)
-            except Exception:
-                row = raw_key
-
-            settings = dict(raw_settings or {})
-            rebuilt.append((row, settings))
-
-        if rebuilt:
-            return rebuilt
-
-    table = trial_settings_snapshot.get("trial_conditions_table", {}) or {}
-    rebuilt = []
-
-    for raw_key, raw_settings in table.items():
-        try:
-            row = int(raw_key)
-        except Exception:
-            row = raw_key
-
-        settings = dict(raw_settings or {})
-        rebuilt.append((row, settings))
-
-    rebuilt.sort(key=lambda item: item[0] if isinstance(item[0], int) else str(item[0]))
-    return rebuilt
 
 
 def _find_matching_trial_index(controller, trial_entry_payload: dict | None) -> int | None:
@@ -1727,114 +1365,53 @@ def apply_recovered_trial_settings(controller, recovery_payload: dict):
     latest_trial_entry_payload = recovery_payload["latest_trial_entry_payload"]
     latest_trial_order_number = recovery_payload["latest_trial_order_number"]
     journal_path = recovery_payload["journal_path"]
-    stored_trial_order = recovery_payload.get("stored_trial_order")
-    last_current_trial_index = recovery_payload.get("last_current_trial_index")
-    last_current_intensity = recovery_payload.get("last_current_intensity")
 
     controller.experiment_log = experiment_log
     controller._auto_backup_path = str(journal_path)
     controller.trial_running = True
     controller.recovered_session = True
 
-    patient_info = trial_settings_snapshot.get("patient_information", {}) or {}
-    if hasattr(controller, "ui"):
-        if hasattr(controller.ui, "patient_first_name_input"):
-            controller.ui.patient_first_name_input.setText(str(patient_info.get("first_name", "") or ""))
-        if hasattr(controller.ui, "patient_last_name_input"):
-            controller.ui.patient_last_name_input.setText(str(patient_info.get("last_name", "") or ""))
-        if hasattr(controller.ui, "patient_id_input"):
-            controller.ui.patient_id_input.setText(str(patient_info.get("patient_id", "") or ""))
+    # Rebuild trial_order from current UI table
+    conditions = controller.collect_trial_conditions()
+    controller.trial_order = list(conditions.items())
 
-    # Restore UI trial settings from snapshot first
-    try:
-        starting_current = float(
-            trial_settings_snapshot.get(
-                "starting_current",
-                controller.ui.trial_starting_current.value()
-            )
-        )
-    except Exception:
-        starting_current = float(controller.ui.trial_starting_current.value())
+    recovered_index = _find_matching_trial_index(controller, latest_trial_entry_payload)
+    if recovered_index is None:
+        recovered_index = max(0, int(latest_trial_order_number or 1) - 1)
 
-    controller.ui.trial_starting_current.setValue(starting_current)
-
-    increment_text = str(
-        trial_settings_snapshot.get(
-            "current_increment",
-            controller.ui.comboBox.currentText()
-        )
-    ).strip()
-    increment_idx = controller.ui.comboBox.findText(increment_text)
-    if increment_idx >= 0:
-        controller.ui.comboBox.setCurrentIndex(increment_idx)
-    else:
-        print(f"[apply_recovered_trial_settings] warning: current increment {increment_text!r} not found in comboBox")
-
-    # Rebuild exact trial_order from stored randomized order if available
-    controller.trial_order = _rebuild_trial_order_from_snapshot(
-        trial_settings_snapshot,
-        stored_trial_order=stored_trial_order,
-    )
-
-    if not controller.trial_order:
-        raise RuntimeError("Recovered backup does not contain any trial conditions.")
-
-    # Prefer the exact last current_trial_index stored in the journal
-    if last_current_trial_index is not None:
-        recovered_index = int(last_current_trial_index)
-    else:
-        recovered_index = _find_matching_trial_index(controller, latest_trial_entry_payload)
-        if recovered_index is None:
-            recovered_index = max(0, int(latest_trial_order_number or 1) - 1)
-
-    recovered_index = max(0, min(recovered_index, len(controller.trial_order) - 1))
     controller.current_trial_index = recovered_index
 
-    # Explicitly restore current trial settings
-    _, recovered_settings = controller.trial_order[controller.current_trial_index]
-    controller.current_trial_settings = dict(recovered_settings or {})
-
-    # Per your stated behavior, resume at starting_current
+    # Reset current to starting_current as requested
+    starting_current = float(trial_settings_snapshot.get("starting_current", controller.ui.trial_starting_current.value()))
     controller.current_intensity = starting_current
     controller.current_v_max = 0.0
 
     # Reflect current in UI
     controller.ui.current_output.setText(f"{controller.current_intensity:.2f}")
     controller.ui.stackedWidget.setCurrentWidget(controller.ui.trial_running_page)
-    if hasattr(controller, "update_system_status_visibility"):
-        controller.update_system_status_visibility()
     controller.ui.radioButton_8.setChecked(True)
 
-    # Start timers fresh for resumed session
+    # Start timers fresh for the resumed run
     controller.start_experiment_timers()
 
-    # Load the recovered condition into the live UI/runtime
+    # Load the recovered condition back into the live UI/runtime
     load_trial_settings(controller)
 
     # Force current back to starting_current after load_trial_settings
     controller.current_intensity = starting_current
     controller.ui.current_output.setText(f"{controller.current_intensity:.2f}")
 
-    # Refresh decrease button state now that increment/current are restored
-    if hasattr(controller, "disable_descrease"):
-        controller.disable_descrease()
-
-    # Only reapply if current_trial_settings still exists after load_trial_settings
-    if hasattr(controller, "current_trial_settings") and controller.current_trial_settings:
-        apply_current_trial_settings(controller)
-    else:
-        raise RuntimeError("Recovery failed to restore current_trial_settings.")
+    # Reapply hardware/software state for resumed trial
+    apply_current_trial_settings(controller)
 
     print(f"[apply_recovered_trial_settings] resumed from backup {journal_path}")
     print(f"[apply_recovered_trial_settings] recovered trial index={controller.current_trial_index}")
     print(f"[apply_recovered_trial_settings] restored starting current={controller.current_intensity}")
-    print(f"[apply_recovered_trial_settings] restored current increment={controller.ui.comboBox.currentText()!r}")
 
 
 def maybe_prompt_resume_from_backup(controller):
     """
     If a backup journal exists, ask the user whether to resume.
-    If the user declines, delete that backup file.
     """
     try:
         journal_path = get_latest_auto_backup_journal()
@@ -1848,19 +1425,11 @@ def maybe_prompt_resume_from_backup(controller):
             QMessageBox.Yes | QMessageBox.No
         )
 
-        if reply == QMessageBox.Yes:
-            recovery_payload = load_recovery_payload_from_jsonl(journal_path)
-            apply_recovered_trial_settings(controller, recovery_payload)
+        if reply != QMessageBox.Yes:
             return
 
-        # User chose No -> delete the backup file
-        try:
-            if journal_path.exists():
-                journal_path.unlink()
-                print(f"[maybe_prompt_resume_from_backup] deleted declined backup {journal_path}")
-        except Exception as delete_exc:
-            print(f"[maybe_prompt_resume_from_backup] failed to delete declined backup: {delete_exc}")
-            traceback.print_exc()
+        recovery_payload = load_recovery_payload_from_jsonl(journal_path)
+        apply_recovered_trial_settings(controller, recovery_payload)
 
     except Exception as e:
         traceback.print_exc()
@@ -2001,30 +1570,17 @@ def start_trial(controller, conditions, auto_man):
     controller.current_v_max = 0.0
     controller.current_intensity = controller.ui.trial_starting_current.value()
     controller.experiment_log = ExperimentLog()
-    if hasattr(controller, "get_patient_information"):
-        patient_info = controller.get_patient_information()
-        controller.experiment_log.patient_first_name = patient_info.get("first_name", "")
-        controller.experiment_log.patient_last_name = patient_info.get("last_name", "")
-        controller.experiment_log.patient_id = patient_info.get("patient_id", "")
-    controller.recovered_session = False
 
-    # Initialize append-only autosave journal.
+    # Initialize append-only autosave journal in Trial_Logs.
     controller._auto_backup_path = None
     append_auto_backup_event(
         controller,
         "experiment_started",
         payload={
             "experiment_start_time": controller.experiment_log.start_time,
-            "trial_order": controller.trial_order,
         },
         show_message_on_error=False,
     )
-
-    # Arm simulated crash timer for testing by default.
-    if getattr(controller, "enable_crash_test_timer", False):
-        setup_crash_test_timer(controller, timeout_ms=60000)
-    else:
-        stop_crash_test_timer(controller)
 
     print(f'Current Time: {controller.experiment_log.start_time}')
     load_trial_settings(controller)
@@ -2062,7 +1618,6 @@ def load_trial_settings(controller):
     if not controller.trial_running:
         return
     
-    
     # Finalize the previous trial before loading a new one
     if controller.current_trial_index > 0 and controller.experiment_log.trial_logs:
         previous_order_number = controller.current_trial_index
@@ -2090,8 +1645,6 @@ def load_trial_settings(controller):
         controller.trial_running = False
         controller.stop_timers()
         controller.ui.stackedWidget.setCurrentWidget(controller.ui.trial_settings_page)
-        if hasattr(controller, "update_system_status_visibility"):
-            controller.update_system_status_visibility()
         print_patient_log_counts(controller)
 
         controller.ui.radioButton_9.setChecked(True)
@@ -2180,13 +1733,9 @@ def load_trial_settings(controller):
 
 
 def build_trial_stateful_kwargs(controller):
-    settings = getattr(controller, "current_trial_settings", None)
-    if not settings:
-        raise RuntimeError("controller.current_trial_settings is missing or empty.")
-
-    waveform = settings.get("waveform", "")
-    channel = settings.get("channel", "")
-    polarity = settings.get("polarity", "")
+    waveform = controller.current_trial_settings.get("waveform", "")
+    channel = controller.current_trial_settings.get("channel", "")
+    polarity = controller.current_trial_settings.get("polarity", "")
 
     reverse = True if polarity == "Reversed" else False
     state = 1 if controller.ui.radioButton_8.isChecked() and getattr(controller, "trial_running", True) else 0
@@ -2233,7 +1782,7 @@ def build_trial_stateful_kwargs(controller):
         custom=custom,
         v_min=0,
         v_max=v_out,
-        d188_led=False,
+        d188_led = False,
     )
 
     if freq_hz != 0:
@@ -2251,68 +1800,16 @@ def apply_current_trial_settings(controller):
     return
   
 
-def record_intensity_change(controller, *, previous_intensity: float, new_intensity: float, increment: float, direction: str):
-    experiment_log = getattr(controller, "experiment_log", None)
-    if experiment_log is None:
-        print("[record_intensity_change] experiment_log is missing; skipping intensity-change log.")
-        return
-
-    settings = getattr(controller, "current_trial_settings", {}) or {}
-
-    event = IntensityChangeEvent(
-        current_time=datetime.now(),
-        trial_index=int(getattr(controller, "current_trial_index", 0) or 0),
-        order_number=int(getattr(controller, "current_trial_index", 0) or 0) + 1,
-        electrode_config=str(settings.get("electrode_config", "") or ""),
-        waveform=str(settings.get("waveform", "") or ""),
-        previous_intensity_ma=float(previous_intensity),
-        new_intensity_ma=float(new_intensity),
-        increment_ma=float(increment),
-        direction=direction,
-    )
-
-    if not hasattr(experiment_log, "intensity_change_events"):
-        experiment_log.intensity_change_events = []
-
-    experiment_log.intensity_change_events.append(event)
-
-    append_auto_backup_event(
-        controller,
-        "intensity_changed",
-        payload={
-            "intensity_change_event": _intensity_change_event_to_dict(event),
-        },
-        show_message_on_error=False,
-    )
-
-
-def increase_intensity(controller, inc = False):
+def increase_intensity(controller):
     print("Increasing intensity...")
 
     if getattr(controller, "trial_hw_busy", False):
         print("Trial hardware busy; ignoring increase.")
         return
 
-    previous_intensity = float(controller.current_intensity)
-
-    if not inc:
-        increment_val = float(controller.ui.comboBox.currentText())
-        controller.current_intensity += increment_val
-        controller.ui.current_output.setText(f"{controller.current_intensity:.2f}")
-    
-    else:
-        increment_val = 0.5
-        controller.current_intensity += increment_val
-        controller.ui.current_output.setText(f"{controller.current_intensity:.2f}")
-
-
-    record_intensity_change(
-        controller,
-        previous_intensity=previous_intensity,
-        new_intensity=float(controller.current_intensity),
-        increment=increment_val,
-        direction="increase",
-    )
+    increment_val = float(controller.ui.comboBox.currentText())
+    controller.current_intensity += increment_val
+    controller.ui.current_output.setText(f"{controller.current_intensity:.2f}")
 
     kwargs = build_trial_stateful_kwargs(controller)
     controller.request_trial_apply(kwargs)
@@ -2320,41 +1817,19 @@ def increase_intensity(controller, inc = False):
     return
 
 
-def decrease_intensity(controller, inc = False):
+def decrease_intensity(controller):
     print("Decreasing intensity...")
 
     if getattr(controller, "trial_hw_busy", False):
         print("Trial hardware busy; ignoring decrease.")
         return
 
-    previous_intensity = float(controller.current_intensity)
-    intensity_changed = False
+    increment_val = float(controller.ui.comboBox.currentText())
 
-    if not inc:    
-        increment_val = float(controller.ui.comboBox.currentText())
-
-        if (controller.current_intensity - increment_val) >= 0:
-            controller.current_intensity -= increment_val
-            intensity_changed = True
-    
-    else:
-        increment_val = 0.5
-
-        if (controller.current_intensity - increment_val) >= 0:
-            controller.current_intensity -= increment_val
-            intensity_changed = True
-
+    if (controller.current_intensity - increment_val) >= 0:
+        controller.current_intensity -= increment_val
 
     controller.ui.current_output.setText(f"{controller.current_intensity:.2f}")
-
-    if intensity_changed:
-        record_intensity_change(
-            controller,
-            previous_intensity=previous_intensity,
-            new_intensity=float(controller.current_intensity),
-            increment=increment_val,
-            direction="decrease",
-        )
 
     kwargs = build_trial_stateful_kwargs(controller)
     controller.request_trial_apply(kwargs)
@@ -2553,24 +2028,7 @@ def _manual_experiment_log_to_dict(experiment_log: ExperimentLog) -> dict:
     """
     return {
         "start_time": experiment_log.start_time,
-        "patient_first_name": getattr(experiment_log, "patient_first_name", ""),
-        "patient_last_name": getattr(experiment_log, "patient_last_name", ""),
-        "patient_id": getattr(experiment_log, "patient_id", ""),
         "total_experiment_time_seconds": experiment_log.total_experiment_time_seconds,
-        "intensity_change_events": [
-            {
-                "current_time": event.current_time,
-                "trial_index": event.trial_index,
-                "order_number": event.order_number,
-                "electrode_config": event.electrode_config,
-                "waveform": event.waveform,
-                "previous_intensity_ma": event.previous_intensity_ma,
-                "new_intensity_ma": event.new_intensity_ma,
-                "increment_ma": event.increment_ma,
-                "direction": event.direction,
-            }
-            for event in getattr(experiment_log, "intensity_change_events", [])
-        ],
         "trial_logs": [
             {
                 "current_time": trial_entry.current_time,
@@ -2595,7 +2053,6 @@ def _manual_experiment_log_to_dict(experiment_log: ExperimentLog) -> dict:
                                     "intensity": ann.intensity,
                                     "sensation": ann.sensation,
                                     "temporal_quality": ann.temporal_quality,
-                                    "bilateral": ann.bilateral,
                                     "motor_threshold_reached": ann.motor_threshold_reached,
                                     "motor_intensity": ann.motor_intensity,
                                     "motor_quality": ann.motor_quality,
@@ -2661,10 +2118,10 @@ def save_experiment_log_json(
 
     Behavior:
     - Creates a new folder inside out_dir named:
-        {date}_{time}_experiment_log_{participant_id}_{custom_name}
+        {date}_{time}_experiment_log_{custom_name}
     - Saves:
-        experiment_log_{participant_id}.json
-        experiment_summary_{participant_id}.csv
+        experiment_log.json
+        experiment_summary.csv
     - If filename is provided, its stem is used as {custom_name}
     """
     try:
@@ -2703,18 +2160,13 @@ def save_experiment_log_json(
 
         safe_custom_name = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in custom_name)
 
-        participant_id = str(getattr(experiment_log, "patient_id", "") or "").strip()
-        safe_participant_id = "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in participant_id)
-        if not safe_participant_id:
-            safe_participant_id = "no_participant_id"
-
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        experiment_dir = out_dir / f"{timestamp}_experiment_log_{safe_participant_id}_{safe_custom_name}"
+        experiment_dir = out_dir / f"{timestamp}_experiment_log_{safe_custom_name}"
         experiment_dir.mkdir(parents=True, exist_ok=True)
 
         print(f"[save_experiment_log_json] experiment_dir created at {experiment_dir}")
 
-        json_path = experiment_dir / f"experiment_log_{safe_participant_id}.json"
+        json_path = experiment_dir / "experiment_log.json"
 
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False, default=json_converter)
@@ -2724,7 +2176,7 @@ def save_experiment_log_json(
         export_experiment_summary_csv(
             experiment_log=experiment_log,
             experiment_dir=experiment_dir,
-            filename=f"experiment_summary_{safe_participant_id}.csv",
+            filename="experiment_summary.csv",
             image_path=image_path,
         )
 
@@ -2756,9 +2208,6 @@ def export_experiment_summary_csv(experiment_log, experiment_dir, filename="expe
         writer.writerow(["Field", "Value"])
         writer.writerow(["Start Time", start_time_str])
         writer.writerow(["Image Path", image_path])
-        writer.writerow(["Participant First Name", getattr(experiment_log, "patient_first_name", "")])
-        writer.writerow(["Participant Last Name", getattr(experiment_log, "patient_last_name", "")])
-        writer.writerow(["Participant ID", getattr(experiment_log, "patient_id", "")])
         writer.writerow(["Total Experiment Time (s)", getattr(experiment_log, "total_experiment_time_seconds", 0)])
         writer.writerow([])
 
@@ -2795,13 +2244,6 @@ def export_experiment_summary_csv(experiment_log, experiment_dir, filename="expe
 
 
 def prompt_save_after_trial(controller):
-    experiment_log = getattr(controller, "experiment_log", None)
-    if experiment_log is not None and hasattr(controller, "get_patient_information"):
-        patient_info = controller.get_patient_information()
-        experiment_log.patient_first_name = patient_info.get("first_name", "")
-        experiment_log.patient_last_name = patient_info.get("last_name", "")
-        experiment_log.patient_id = patient_info.get("patient_id", "")
-
     reply = QMessageBox.question(
         controller,
         "Save Experiment Log",
@@ -2838,7 +2280,6 @@ def prompt_save_after_trial(controller):
 
             # Only delete backup after final save succeeds
             delete_auto_backup_log(controller, show_message_on_error=False)
-            stop_crash_test_timer(controller)
     
         except Exception as e:
             traceback.print_exc()
@@ -2853,7 +2294,6 @@ def prompt_save_after_trial(controller):
         # User intentionally chose not to save final log.
         # Delete backup file since it's no longer needed, but don't show an error message if deletion fails since it's not critical.
         delete_auto_backup_log(controller, show_message_on_error=False)
-        stop_crash_test_timer(controller)
         return None
 
     else:

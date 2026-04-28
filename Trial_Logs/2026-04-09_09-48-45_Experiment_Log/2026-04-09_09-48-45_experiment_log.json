@@ -1,0 +1,53 @@
+{
+    "start_time": "2026-04-09T09:44:50.243069",
+    "trial_logs": [
+        {
+            "current_time": "2026-04-09T09:44:50.255054",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Active",
+            "patient_reports": [],
+            "order_number": 1,
+            "total_trial_time_seconds": 194
+        },
+        {
+            "current_time": "2026-04-09T09:48:04.646742",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 1.0,
+                    "patient_log": {
+                        "annotations": [
+                            {
+                                "x": 331.0,
+                                "y": 229.0,
+                                "intensity": 5,
+                                "sensation": "Sharp",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 7,
+                                "motor_quality": "Brief contraction",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-04-09T09:48:32.524114"
+                            }
+                        ],
+                        "created_at": "2026-04-09T09:48:34.000376"
+                    },
+                    "current_time": "2026-04-09T09:48:34.000376"
+                }
+            ],
+            "order_number": 2,
+            "total_trial_time_seconds": 1
+        }
+    ],
+    "total_experiment_time_seconds": 227
+}
