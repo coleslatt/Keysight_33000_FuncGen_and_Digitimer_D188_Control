@@ -1,0 +1,79 @@
+{
+    "start_time": "2026-03-27T16:06:21.235404",
+    "trial_logs": [
+        {
+            "current_time": "2026-03-27T16:06:21.235404",
+            "condition": {
+                "electrode_config": "DO-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 3.0,
+                    "patient_log": {
+                        "annotations": [
+                            {
+                                "x": 125.0,
+                                "y": 178.0,
+                                "intensity": 3,
+                                "sensation": "Tingling",
+                                "temporal_quality": "Transient",
+                                "additional_notes": "",
+                                "created_at": "2026-03-27T16:06:30.928869"
+                            }
+                        ],
+                        "created_at": "2026-03-27T16:06:32.059502"
+                    },
+                    "current_time": "2026-03-27T16:06:32.059502"
+                }
+            ],
+            "order_number": 1
+        },
+        {
+            "current_time": "2026-03-27T16:06:33.945373",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [],
+            "order_number": 2
+        },
+        {
+            "current_time": "2026-03-27T16:06:34.116920",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [],
+            "order_number": 3
+        },
+        {
+            "current_time": "2026-03-27T16:06:34.297113",
+            "condition": {
+                "electrode_config": "DO-C",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [],
+            "order_number": 4
+        },
+        {
+            "current_time": "2026-03-27T16:06:34.509927",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Active",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [],
+            "order_number": 5
+        }
+    ]
+}

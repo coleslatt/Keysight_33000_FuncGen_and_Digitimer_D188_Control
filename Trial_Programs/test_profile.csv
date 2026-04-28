@@ -1,0 +1,13 @@
+RowType,Montage,Mode,Polarity,Setting,Value
+table,DO-I,Sham,Normal,,
+table,DO-C,Active,Normal,,
+table,DV-I,Sham,Normal,,
+table,,Sham,Normal,,
+table,,Sham,Normal,,
+table,,Active,Normal,,
+setting,,,,Number of Trials,0
+setting,,,,Timing,
+setting,,,,Trial Length,0
+setting,,,,Rest Period,0
+setting,,,,Max Intensity,0.0
+setting,,,,% of Max,0

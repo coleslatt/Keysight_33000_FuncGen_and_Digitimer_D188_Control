@@ -1,0 +1,13 @@
+RowType,Montage,Mode,Polarity,Setting,Value
+table,DV-I,Sham,Normal,,
+table,DO-I,Sham,Reversed,,
+table,DO-C,Active,Normal,,
+table,DO-I,Sham,Reversed,,
+table,,Active,Normal,,
+table,,Active,Normal,,
+setting,,,,Number of Trials,8
+setting,,,,Timing,Auto
+setting,,,,Trial Length,9
+setting,,,,Rest Period,30
+setting,,,,Max Intensity,60.0
+setting,,,,% of Max,80

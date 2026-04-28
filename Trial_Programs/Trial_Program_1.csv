@@ -1,0 +1,17 @@
+RowType,Montage,Mode,Polarity,Setting,Value
+table,DV-I,Active,Normal,,
+table,DO-C,Active,Normal,,
+table,DO-C,Sham,Normal,,
+table,DO-I,Active,Normal,,
+table,DV-I,Sham,Normal,,
+table,,Active,Normal,,
+setting,,,,Number of Trials,0
+setting,,,,Timing,Manual
+setting,,,,Trial Length,0
+setting,,,,Rest Period,0
+setting,,,,Max Intensity,0.0
+setting,,,,% of Max,0
+setting,,,,Starting Current,5
+setting,,,,Current Increment,5
+setting,,,,DS5 Input Voltage,5
+setting,,,,DS5 Output Current,50

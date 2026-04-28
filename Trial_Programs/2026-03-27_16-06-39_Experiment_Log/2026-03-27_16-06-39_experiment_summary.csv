@@ -1,0 +1,10 @@
+Field,Value
+Start Time,2026-03-27T16:06:21.235404
+Image Path,
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries
+1,DO-I,Active,Normal,Sham,1
+2,DO-C,Active,Normal,Sham,0
+3,DV-I,Sham,Normal,Sham,0
+4,DO-C,Sham,Normal,Sham,0
+5,DV-I,Active,Normal,Sham,0

@@ -1,0 +1,78 @@
+{
+    "start_time": "2026-03-30T13:43:37.836274",
+    "trial_logs": [
+        {
+            "current_time": "2026-03-30T13:43:37.839007",
+            "condition": {
+                "electrode_config": "DV-I",
+                "waveform": "Sham",
+                "polarity": "Normal"
+            },
+            "displayed_status": "Sham",
+            "patient_reports": [
+                {
+                    "current_intensity_ma": 0.0,
+                    "patient_log": {
+                        "annotations": [
+                            {
+                                "x": 300.0,
+                                "y": 272.0,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-03-30T13:43:47.056334"
+                            },
+                            {
+                                "x": 337.99621928166357,
+                                "y": 316.82419659735353,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": false,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-03-30T13:43:51.290044"
+                            },
+                            {
+                                "x": 344.04536862003783,
+                                "y": 279.773156899811,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 0,
+                                "motor_quality": "",
+                                "motor_temporal_quality": "",
+                                "additional_notes": "",
+                                "created_at": "2026-03-30T13:43:56.400359"
+                            },
+                            {
+                                "x": 141.39886578449907,
+                                "y": 308.5066162570889,
+                                "intensity": 0,
+                                "sensation": "",
+                                "temporal_quality": "",
+                                "motor_threshold_reached": true,
+                                "motor_intensity": 0,
+                                "motor_quality": "Twitch",
+                                "motor_temporal_quality": "Intermittent",
+                                "additional_notes": "",
+                                "created_at": "2026-03-30T13:44:06.682424"
+                            }
+                        ],
+                        "created_at": "2026-03-30T13:44:08.259355"
+                    },
+                    "current_time": "2026-03-30T13:44:08.259355"
+                }
+            ],
+            "order_number": 1
+        }
+    ]
+}
