@@ -81,7 +81,7 @@ Windows (Powershell):
 
 TTL-on-CH1 use
 ```
-burst_mode(
+burst_mode(t
     num_stims=50,
     interpulse_delay=10,   # CH2 10 ms after CH1
     interstim_delay=0.1,
@@ -165,7 +165,6 @@ burst_mode(
 )
 ```
 
-
 For Nader Burst mode function
 ```
 burst_mode(
@@ -190,16 +189,7 @@ burst_mode(
 ```
 
 
-
 ### Hardware Setup (Function Generator + DS5)
-
-1. 
-
-
-
-
-
-
 
 
 
