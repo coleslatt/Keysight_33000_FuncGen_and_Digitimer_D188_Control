@@ -710,6 +710,8 @@ class PatientBodyLogDialog(QDialog):
         main_layout.addLayout(content_layout)
         main_layout.addLayout(button_layout)
 
+        QTimer.singleShot(0, self._fit_body_map_to_view)
+
     def _load_body_map_image(self, image_path: str):
         print(f"Image path: {image_path}")
         pixmap = QPixmap(image_path)
@@ -725,6 +727,7 @@ class PatientBodyLogDialog(QDialog):
 
         self.body_pixmap_item = self.scene.addPixmap(pixmap)
         self.scene.setSceneRect(self.body_pixmap_item.boundingRect())
+        self._fit_body_map_to_view()
 
     def _clear_annotation_markers(self):
         try:
@@ -739,10 +742,17 @@ class PatientBodyLogDialog(QDialog):
         except Exception:
             traceback.print_exc()
 
+    def _fit_body_map_to_view(self):
+        if self.body_pixmap_item is None:
+            return
+
+        self.view.resetTransform()
+        self.view.fitInView(self.body_pixmap_item, Qt.KeepAspectRatio)
+        self.view._zoom = 1.0
+
     def _reset_view(self):
         try:
-            self.view.resetTransform()
-            self.view._zoom = 1.0
+            self._fit_body_map_to_view()
         except Exception:
             traceback.print_exc()
 
@@ -2481,7 +2491,7 @@ def open_body_log_dialog(controller):
         print("[open_body_log_dialog] start")
 
         base_dir = Path(__file__).resolve().parent
-        image_path = base_dir / "Body-chart-1.png"
+        image_path = base_dir / "myotome.2.png"
         print(f"[open_body_log_dialog] image_path={image_path}")
 
         if not image_path.exists():

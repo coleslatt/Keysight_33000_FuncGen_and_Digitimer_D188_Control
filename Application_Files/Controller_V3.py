@@ -163,7 +163,7 @@ class ControllerMain(QDialog):
         self.patient_body_log_dialog = None
         try:
             base_dir = Path(__file__).resolve().parent
-            image_path = base_dir / "Body-chart-1.png"
+            image_path = base_dir / "myotome.2.png"
 
             self.patient_body_log_dialog = PatientBodyLogDialog(
                 image_path=str(image_path),
