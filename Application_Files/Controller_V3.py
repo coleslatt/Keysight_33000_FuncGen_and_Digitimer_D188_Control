@@ -36,7 +36,7 @@ from Trial_Program import (
 
 from stim_system_gui_v3 import Ui_Controller_Main
 
-from PySide6.QtCore import QObject, QEvent, QThread, Signal, Slot, QTimer
+from PySide6.QtCore import QObject, QEvent, QThread, Signal, Slot, QTimer, QLocale
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtWidgets import QFileDialog
 from pathlib import Path
@@ -133,6 +133,9 @@ class ControllerMain(QDialog):
         super().__init__()
         self.ui = Ui_Controller_Main()
         self.ui.setupUi(self)
+        self.numeric_locale = QLocale(QLocale.English, QLocale.UnitedStates)
+        for w in self.findChildren(QDoubleSpinBox):
+            w.setLocale(self.numeric_locale)
         self.build_patient_information_groupbox()
 
         self.resize(1100, 800)
@@ -1845,6 +1848,7 @@ class ControllerMain(QDialog):
 
 
 if __name__ == "__main__":
+    QLocale.setDefault(QLocale(QLocale.English, QLocale.UnitedStates))
     app = QApplication(sys.argv)
     w = ControllerMain()
     w.show()
