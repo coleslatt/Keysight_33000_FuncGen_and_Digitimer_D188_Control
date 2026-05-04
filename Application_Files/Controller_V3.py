@@ -493,8 +493,14 @@ class ControllerMain(QDialog):
     def enable_rf_freq(self):
         if self.ui.rf_off.isChecked():
             self.ui.rf_settings.setEnabled(False)
+            self.ui.widget_26.setEnabled(True)  # Disable burst mode settings when RF is on
+            self.ui.widget_8.setEnabled(True)   # Disable continuous mode settings when RF is on
+
         elif self.ui.rf_on.isChecked():
             self.ui.rf_settings.setEnabled(True)
+            self.ui.widget_26.setEnabled(False)  # Disable burst mode settings when RF is on
+            self.ui.widget_8.setEnabled(False)   # Disable continuous mode settings when RF is on
+
 
 
     def confirm_trial_start(self) -> bool:
