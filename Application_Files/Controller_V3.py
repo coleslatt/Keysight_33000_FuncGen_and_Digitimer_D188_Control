@@ -33,6 +33,7 @@ from Trial_Program import (
                             simulate_crash_now,
                             stop_crash_test_timer,
                         )
+from Trial_Results_Viewer import ResultsFolderDialog, TrialResultsViewer
 
 from stim_system_gui_v3 import Ui_Controller_Main
 
@@ -144,6 +145,7 @@ class ControllerMain(QDialog):
         self._crash_test_timer = None
         self.current_trial_settings = {}
         self.enable_crash_test_timer = False
+        self.results_viewer_window = None
 
         # Change to false if hardware is not connected to allow app to run without hardware present (e.g. for testing or development)
         self.hardware_enabled = 0
@@ -450,6 +452,7 @@ class ControllerMain(QDialog):
         # )
 
         self.ui.pushButton_7.clicked.connect(self.on_start_trial_clicked)
+        self.add_view_results_button()
 
         self.ui.abprt_button.clicked.connect(self.on_abort_trials_clicked)
 
@@ -492,6 +495,62 @@ class ControllerMain(QDialog):
         QTimer.singleShot(0, lambda: maybe_prompt_resume_from_backup(self))
 
     #endregion
+
+    def add_view_results_button(self):
+        self.ui.view_results_button = QtWidgets.QPushButton(self.ui.widget_30)
+        self.ui.view_results_button.setObjectName("view_results_button")
+        self.ui.view_results_button.setText("View results")
+        self.ui.view_results_button.setMinimumSize(111, 0)
+        self.ui.gridLayout_90.addWidget(self.ui.view_results_button, 0, 3, 1, 1)
+        self.ui.view_results_button.clicked.connect(self.open_trial_results)
+
+
+    def default_trial_logs_dir(self) -> Path:
+        candidates = [
+            Path.cwd() / "Trial_Logs",
+            Path(__file__).resolve().parent.parent / "Trial_Logs",
+            Path(__file__).resolve().parent / "Trial_Logs",
+        ]
+
+        for candidate in candidates:
+            if candidate.exists() and candidate.is_dir():
+                return candidate
+
+        return candidates[0]
+
+
+    def open_trial_results(self):
+        try:
+            default_folder = self.default_trial_logs_dir()
+            default_folder.mkdir(parents=True, exist_ok=True)
+
+            folder_dialog = ResultsFolderDialog(default_folder, parent=self)
+            if folder_dialog.exec() != QDialog.Accepted:
+                return
+
+            image_path = Path(__file__).resolve().parent / "myotome.2.png"
+            if not image_path.exists():
+                QMessageBox.critical(
+                    self,
+                    "Results Viewer Error",
+                    f"Body map image not found:\n{image_path}"
+                )
+                return
+
+            self.results_viewer_window = TrialResultsViewer(
+                results_folder=folder_dialog.selected_folder,
+                image_path=image_path,
+                parent=self,
+            )
+            self.results_viewer_window.show()
+
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(
+                self,
+                "Results Viewer Error",
+                f"Could not open trial results:\n{e}"
+            )
 
     def enable_rf_freq(self):
         if self.ui.rf_off.isChecked():
