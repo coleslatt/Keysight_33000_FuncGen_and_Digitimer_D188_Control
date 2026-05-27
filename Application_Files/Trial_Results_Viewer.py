@@ -475,6 +475,7 @@ class TrialResultsViewer(QtWidgets.QDialog):
             lines.append(f"  Motor intensity: {annotation.get('motor_intensity', '') or 'Not recorded'}")
             lines.append(f"  Motor quality: {annotation.get('motor_quality', '') or 'Not recorded'}")
             lines.append(f"  Motor consistency: {annotation.get('motor_temporal_quality', '') or 'Not recorded'}")
+            lines.append(f"  Target threshold reached: {'Yes' if annotation.get('target_threshold_reached', False) else 'No'}")
             lines.append(f"  Notes: {annotation.get('additional_notes', '') or 'None'}")
             lines.append("")
 
@@ -487,6 +488,7 @@ class TrialResultsViewer(QtWidgets.QDialog):
                 f"Feeling: {annotation.get('sensation', '') or 'Not recorded'}",
                 f"Intensity: {annotation.get('intensity', '') or 'Not recorded'}",
                 f"Consistency: {annotation.get('temporal_quality', '') or 'Not recorded'}",
+                f"Target threshold reached: {'Yes' if annotation.get('target_threshold_reached', False) else 'No'}",
                 f"Notes: {annotation.get('additional_notes', '') or 'None'}",
             ]
         )

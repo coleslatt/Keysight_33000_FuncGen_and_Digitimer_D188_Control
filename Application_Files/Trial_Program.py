@@ -30,6 +30,7 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QRadioButton,
     QButtonGroup,
+    QCheckBox,
     QDialogButtonBox,
     QApplication,
     QTableWidget,
@@ -149,6 +150,9 @@ class BodyAnnotation:
     motor_quality: str = ""
     motor_temporal_quality: str = ""
 
+    # Target
+    target_threshold_reached: bool = False
+
     # Free text
     additional_notes: str = ""
 
@@ -239,9 +243,11 @@ class AnnotationEditorDialog(QDialog):
 
         self.setWindowTitle("Body Annotation")
         self.resize(500, 520)
+        self._target_threshold_locked = False
 
         self._build_sensation_section()
         self._build_motor_section()
+        self._build_target_threshold_section()
         self._build_notes_section()
         self._build_buttons()
         self._build_main_layout()
@@ -371,6 +377,16 @@ class AnnotationEditorDialog(QDialog):
         motor_temporal_row.addWidget(self.motor_temporal_combo)
         layout.addLayout(motor_temporal_row)
 
+    def _build_target_threshold_section(self):
+        self.target_threshold_group_box = QGroupBox("Target")
+        layout = QVBoxLayout(self.target_threshold_group_box)
+
+        self.target_threshold_checkbox = QCheckBox("target threshold reached")
+        self.target_threshold_checkbox.setToolTip(
+            "Can only be marked once per trial."
+        )
+        layout.addWidget(self.target_threshold_checkbox)
+
     def _build_notes_section(self):
         self.notes_group_box = QGroupBox("Additional Notes")
         layout = QVBoxLayout(self.notes_group_box)
@@ -387,6 +403,7 @@ class AnnotationEditorDialog(QDialog):
         main_layout = QVBoxLayout(self)
         main_layout.addWidget(self.sensation_group_box)
         main_layout.addWidget(self.motor_group_box)
+        main_layout.addWidget(self.target_threshold_group_box)
         main_layout.addWidget(self.notes_group_box)
         main_layout.addWidget(self.button_box)
 
@@ -396,6 +413,33 @@ class AnnotationEditorDialog(QDialog):
 
         self.motor_threshold_yes.toggled.connect(self.update_motor_controls_enabled_state)
         self.motor_threshold_no.toggled.connect(self.update_motor_controls_enabled_state)
+        self.motor_threshold_yes.toggled.connect(self.update_target_threshold_enabled_state)
+        self.motor_threshold_no.toggled.connect(self.update_target_threshold_enabled_state)
+        self.target_threshold_checkbox.clicked.connect(self._on_target_threshold_clicked)
+
+    def _on_target_threshold_clicked(self, checked: bool):
+        if not checked:
+            return
+
+        QMessageBox.warning(
+            self,
+            "Target Threshold Reached",
+            "Target threshold reached can only be marked once per trial.",
+        )
+
+    def set_target_threshold_locked(self, locked: bool):
+        self._target_threshold_locked = bool(locked)
+        self.update_target_threshold_enabled_state()
+
+    def update_target_threshold_enabled_state(self):
+        enabled = (
+            self.motor_threshold_yes.isChecked()
+            and not self._target_threshold_locked
+        )
+        self.target_threshold_checkbox.setEnabled(enabled)
+
+        if not self.motor_threshold_yes.isChecked():
+            self.target_threshold_checkbox.setChecked(False)
 
     def update_motor_controls_enabled_state(self):
         enabled = self.motor_threshold_yes.isChecked()
@@ -452,6 +496,10 @@ class AnnotationEditorDialog(QDialog):
         if idx >= 0:
             self.motor_temporal_combo.setCurrentIndex(idx)
 
+        self.target_threshold_checkbox.setChecked(
+            bool(getattr(annotation, "target_threshold_reached", False))
+        )
+
         self.additional_notes_edit.setPlainText(annotation.additional_notes)
         self.update_motor_controls_enabled_state()
 
@@ -467,6 +515,7 @@ class AnnotationEditorDialog(QDialog):
             motor_intensity=self.motor_intensity_group.checkedId() if self.motor_intensity_group.checkedId() != -1 else 0,
             motor_quality=self.motor_quality_combo.currentText().strip(),
             motor_temporal_quality=self.motor_temporal_combo.currentText().strip(),
+            target_threshold_reached=self.target_threshold_checkbox.isChecked(),
             additional_notes=self.additional_notes_edit.toPlainText().strip(),
             created_at=created_at or datetime.now(),
         )
@@ -481,6 +530,7 @@ class AnnotationEditorDialog(QDialog):
         annotation.motor_intensity = self.motor_intensity_group.checkedId() if self.motor_intensity_group.checkedId() != -1 else 0
         annotation.motor_quality = self.motor_quality_combo.currentText().strip()
         annotation.motor_temporal_quality = self.motor_temporal_combo.currentText().strip()
+        annotation.target_threshold_reached = self.target_threshold_checkbox.isChecked()
 
         annotation.additional_notes = self.additional_notes_edit.toPlainText().strip()
 
@@ -506,15 +556,26 @@ class AnnotationEditorDialog(QDialog):
         self.motor_quality_combo.setCurrentIndex(0)
         self.motor_temporal_combo.setCurrentIndex(0)
 
+        self.target_threshold_checkbox.setChecked(False)
+        self.set_target_threshold_locked(False)
+
         self.additional_notes_edit.clear()
 
         self.update_motor_controls_enabled_state()
+        self.update_target_threshold_enabled_state()
 
-    def load_annotation(self, annotation: BodyAnnotation | None):
+    def load_annotation(
+        self,
+        annotation: BodyAnnotation | None,
+        *,
+        target_threshold_locked: bool = False,
+    ):
         self.clear_form()
 
         if annotation is not None:
             self.set_from_annotation(annotation)
+
+        self.set_target_threshold_locked(target_threshold_locked)
 
 class AnnotationMarker(QGraphicsEllipseItem):
     def __init__(self, annotation, list_item=None, dialog=None, radius=6):
@@ -674,6 +735,7 @@ class PatientBodyLogDialog(QDialog):
         self.annotations = []
         self._pending_annotation_pos = None
         self._annotation_open_scheduled = False
+        self._target_threshold_reached_this_trial = False
 
         self.view = ZoomableGraphicsView()
         self.scene = BodyMapScene(parent_dialog=self)
@@ -756,7 +818,12 @@ class PatientBodyLogDialog(QDialog):
         except Exception:
             traceback.print_exc()
 
-    def reset_for_new_session(self, image_path: str | None = None):
+    def reset_for_new_session(
+        self,
+        image_path: str | None = None,
+        *,
+        target_threshold_already_reached: bool = False,
+    ):
         """
         Clear all state so the dialog behaves like a fresh new body-log window.
         """
@@ -775,6 +842,9 @@ class PatientBodyLogDialog(QDialog):
 
             self._pending_annotation_pos = None
             self._annotation_open_scheduled = False
+            self._target_threshold_reached_this_trial = bool(
+                target_threshold_already_reached
+            )
 
             self._reset_view()
 
@@ -815,6 +885,11 @@ class PatientBodyLogDialog(QDialog):
             motor_parts.append(annotation.motor_temporal_quality)
         parts.append("Motor: " + ", ".join(motor_parts))
 
+        parts.append(
+            "Target threshold: "
+            + ("Yes" if getattr(annotation, "target_threshold_reached", False) else "No")
+        )
+
         # Notes
         if annotation.additional_notes:
             parts.append(f"Notes: {annotation.additional_notes}")
@@ -827,6 +902,8 @@ class PatientBodyLogDialog(QDialog):
                 raise ValueError("annotation is None")
 
             self.annotations.append(annotation)
+            if getattr(annotation, "target_threshold_reached", False):
+                self._target_threshold_reached_this_trial = True
 
             list_item = QListWidgetItem(self.format_annotation_text(annotation))
             self.annotation_list.addItem(list_item)
@@ -852,7 +929,10 @@ class PatientBodyLogDialog(QDialog):
                 raise ValueError("Invalid annotation marker.")
 
             editor = self.get_annotation_editor()
-            editor.load_annotation(marker.annotation)
+            editor.load_annotation(
+                marker.annotation,
+                target_threshold_locked=self._target_threshold_reached_this_trial,
+            )
 
             print("[PatientBodyLogDialog.edit_annotation] before editor.exec()")
             result = editor.exec()
@@ -862,6 +942,8 @@ class PatientBodyLogDialog(QDialog):
                 return
 
             editor.update_annotation(marker.annotation)
+            if getattr(marker.annotation, "target_threshold_reached", False):
+                self._target_threshold_reached_this_trial = True
             marker.refresh_brush()
 
             if marker.list_item is not None:
@@ -990,7 +1072,10 @@ class PatientBodyLogDialog(QDialog):
             print(f"[PatientBodyLogDialog.open_annotation_editor_for_xy] start ({x}, {y})")
 
             editor = self.get_annotation_editor()
-            editor.load_annotation(None)
+            editor.load_annotation(
+                None,
+                target_threshold_locked=self._target_threshold_reached_this_trial,
+            )
 
             print("[PatientBodyLogDialog.open_annotation_editor_for_xy] before editor.exec()")
             result = editor.exec()
@@ -1002,6 +1087,8 @@ class PatientBodyLogDialog(QDialog):
 
             print("[PatientBodyLogDialog.open_annotation_editor_for_xy] building annotation")
             ann = editor.build_annotation(x=x, y=y)
+            if getattr(ann, "target_threshold_reached", False):
+                self._target_threshold_reached_this_trial = True
 
             print("[PatientBodyLogDialog.open_annotation_editor_for_xy] adding annotation")
             self.add_annotation(ann)
@@ -1137,6 +1224,7 @@ def _body_annotation_to_dict(ann: BodyAnnotation) -> dict:
         "motor_intensity": ann.motor_intensity,
         "motor_quality": ann.motor_quality,
         "motor_temporal_quality": ann.motor_temporal_quality,
+        "target_threshold_reached": ann.target_threshold_reached,
         "additional_notes": ann.additional_notes,
         "created_at": ann.created_at,
     }
@@ -1352,6 +1440,7 @@ def _body_annotation_from_dict(data: dict) -> BodyAnnotation:
         motor_intensity=int(data.get("motor_intensity", 0) or 0),
         motor_quality=str(data.get("motor_quality", "") or ""),
         motor_temporal_quality=str(data.get("motor_temporal_quality", "") or ""),
+        target_threshold_reached=bool(data.get("target_threshold_reached", False)),
         additional_notes=str(data.get("additional_notes", "") or ""),
         created_at=datetime.fromisoformat(data["created_at"]) if data.get("created_at") else datetime.now(),
     )
@@ -2486,6 +2575,19 @@ def print_patient_log_counts(controller):
         print(f"Trial entry {i}: {count} patient log(s)")
 
 
+def trial_has_target_threshold_reached(trial_entry: TrialLogEntry | None) -> bool:
+    if trial_entry is None:
+        return False
+
+    for report in getattr(trial_entry, "patient_reports", []):
+        patient_log = getattr(report, "patient_log", None)
+        for annotation in getattr(patient_log, "annotations", []) if patient_log is not None else []:
+            if getattr(annotation, "target_threshold_reached", False):
+                return True
+
+    return False
+
+
 def open_body_log_dialog(controller):
     try:
         print("[open_body_log_dialog] start")
@@ -2503,8 +2605,18 @@ def open_body_log_dialog(controller):
         if dialog is None:
             raise RuntimeError("Persistent PatientBodyLogDialog is not available on controller.")
 
+        trial_entry = None
+        experiment_log = getattr(controller, "experiment_log", None)
+        if experiment_log is not None and getattr(experiment_log, "trial_logs", None):
+            trial_entry = experiment_log.trial_logs[-1]
+
+        target_threshold_already_reached = trial_has_target_threshold_reached(trial_entry)
+
         print("[open_body_log_dialog] resetting persistent PatientBodyLogDialog")
-        dialog.reset_for_new_session(controller.image_path)
+        dialog.reset_for_new_session(
+            controller.image_path,
+            target_threshold_already_reached=target_threshold_already_reached,
+        )
 
         print("[open_body_log_dialog] before dialog.exec()")
         result = dialog.exec()
@@ -2610,6 +2722,7 @@ def _manual_experiment_log_to_dict(experiment_log: ExperimentLog) -> dict:
                                     "motor_intensity": ann.motor_intensity,
                                     "motor_quality": ann.motor_quality,
                                     "motor_temporal_quality": ann.motor_temporal_quality,
+                                    "target_threshold_reached": ann.target_threshold_reached,
                                     "additional_notes": ann.additional_notes,
                                     "created_at": ann.created_at,
                                 }
