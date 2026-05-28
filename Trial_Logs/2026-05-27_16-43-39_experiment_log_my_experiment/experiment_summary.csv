@@ -1,0 +1,11 @@
+Field,Value
+Start Time,2026-05-27T16:42:29.421650
+Image Path,C:\Users\aaron\func gneerator and digitimer control\Keysight_33000_FuncGen_and_Digitimer_D188_Control-1\Application_Files\myotome.2.png
+Participant First Name,
+Participant Last Name,
+Participant ID,
+Total Experiment Time (s),59
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries,Total Trial Time (s)
+1,DV-I,Active,Normal,Active,2,36
+2,DV-I,Active,Normal,Sham,2,23
