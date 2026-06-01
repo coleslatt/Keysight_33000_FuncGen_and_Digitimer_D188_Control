@@ -422,9 +422,11 @@ class ControllerMain(QDialog):
         # self.ui.current_output.valueChanged.connect(self.on_current_output_value_changed)
         # self.ui.current_output.textChanged.connect(self.disable_descrease)
         
-        options = ["", "DV-I",  "DO-C", "DO-I"]
+        options = ["", "DV-I", "DO-C", "DO-I", "DM-C"]
 
-        for row in range(6):
+        self.ui.tableWidget.setRowCount(8)
+
+        for row in range(self.ui.tableWidget.rowCount()):
             combo = QComboBox()
             combo.addItems(options)
             self.ui.tableWidget.setCellWidget(row, 0, combo)
@@ -914,6 +916,7 @@ class ControllerMain(QDialog):
                 "DV-I": "1",
                 "DO-C": "2",
                 "DO-I": "3",
+                "DM-C": "4",
             }
 
             channel_text = channel_map.get(montage, "")
@@ -1134,7 +1137,7 @@ class ControllerMain(QDialog):
             while table.rowCount() < len(table_df):
                 table.insertRow(table.rowCount())
 
-            valid_montages = ["", "DV-I", "DO-I", "DO-C"]
+            valid_montages = ["", "DV-I", "DO-C", "DO-I", "DM-C"]
 
             # Restore table rows
             for row in range(len(table_df)):
