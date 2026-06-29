@@ -2724,10 +2724,10 @@ class Ui_Controller_Main(object):
         self.tableWidget.setHorizontalHeaderItem(1, __qtablewidgetitem1)
         __qtablewidgetitem2 = QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(2, __qtablewidgetitem2)
-        if (self.tableWidget.rowCount() < 6):
-            self.tableWidget.setRowCount(6)
+        if (self.tableWidget.rowCount() < 8):
+            self.tableWidget.setRowCount(8)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setRowCount(6)
+        self.tableWidget.setRowCount(8)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(True)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(100)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(200)

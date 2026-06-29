@@ -4114,7 +4114,7 @@
                      <item row="0" column="0">
                       <widget class="QTableWidget" name="tableWidget">
                        <property name="rowCount">
-                        <number>6</number>
+                        <number>8</number>
                        </property>
                        <attribute name="horizontalHeaderCascadingSectionResizes">
                         <bool>true</bool>

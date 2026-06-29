@@ -2099,6 +2099,7 @@ def start_trial(controller, conditions, auto_man):
     controller.trial_running = True
     controller.current_v_max = 0.0
     controller.current_intensity = controller.ui.trial_starting_current.value()
+    controller._last_logged_stim_output_on = None
     controller.experiment_log = ExperimentLog()
     if hasattr(controller, "get_patient_information"):
         patient_info = controller.get_patient_information()
