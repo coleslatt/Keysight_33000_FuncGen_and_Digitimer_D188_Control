@@ -77,16 +77,20 @@ class BurstWorker(QObject):
     error = Signal(str)
     status = Signal(str)
 
-    def __init__(self, burst_kwargs: dict):
+    def __init__(self, burst_kwargs: dict, hardware_enabled=True):
         super().__init__()
         self.burst_kwargs = burst_kwargs
+        self.hardware_enabled = hardware_enabled
         self.stop_event = threading.Event()
 
     @Slot()
     def run(self):
         try:
             self.status.emit("Resetting function generator state...")
-            func_gen_control_stateful(reset=True)
+            func_gen_control_stateful(
+                reset=True,
+                hardware_enabled=self.hardware_enabled,
+            )
 
             if self.stop_event.is_set():
                 self.status.emit("Burst run cancelled before start.")
@@ -96,6 +100,7 @@ class BurstWorker(QObject):
             burst_mode(
                 **self.burst_kwargs,
                 stop_event=self.stop_event,
+                hardware_enabled=self.hardware_enabled,
             )
 
             if self.stop_event.is_set():
@@ -355,6 +360,8 @@ class ControllerMain(QDialog):
         self.ui.pulse_delay_csv_browse.clicked.connect(self.browse_pulse_delay_csv)
         self.ui.pulse_delay_csv_clear.clicked.connect(self.clear_pulse_delay_csv)
         self.ui.pulse_delay_csv_clear.setEnabled(False)
+        self.ui.pulse_delay_csv_label.setText("Load Stim Delay CSV")
+        self._move_pulse_delay_csv_controls_to_stim_settings()
         self._build_intra_stim_delay_csv_controls()
 
         self.ui.rf_on.toggled.connect(self.enable_rf_freq)
@@ -996,41 +1003,107 @@ class ControllerMain(QDialog):
     def _set_pulse_delay_csv_loaded(self, loaded: bool):
         self.ui.widget_7.setEnabled(not loaded)
         self.ui.interpulsedelay_widget.setEnabled(not loaded)
-        self.ui.num_stims.setEnabled(not loaded)
+        self._set_stim_settings_locked_by_stim_csv(loaded)
         self.ui.pulse_delay_csv_browse.setEnabled(not loaded)
         self.ui.pulse_delay_csv_clear.setEnabled(loaded)
         if hasattr(self.ui, "intra_stim_delay_csv_browse"):
             self.ui.intra_stim_delay_csv_browse.setEnabled(not loaded)
 
-    def _build_intra_stim_delay_csv_controls(self):
-        self.ui.intra_stim_delay_csv_label = QtWidgets.QLabel(self.ui.pulse_delay_csv_widget)
-        self.ui.intra_stim_delay_csv_label.setText("Within-stim delays CSV")
+    def _set_stim_settings_locked_by_stim_csv(self, locked: bool):
+        enabled = not locked
 
-        self.ui.intra_stim_delay_csv_path = QtWidgets.QLineEdit(self.ui.pulse_delay_csv_widget)
+        for widget in (
+            self.ui.num_stims_label,
+            self.ui.num_stims,
+            self.ui.widget_8,
+            self.ui.widget_26,
+            self.ui.widget_11,
+            self.ui.random_freq_widget,
+        ):
+            widget.setEnabled(enabled)
+
+        if enabled:
+            self.enable_jitter_1(None)
+            self.enable_rf_freq()
+
+    def _move_pulse_delay_csv_controls_to_stim_settings(self):
+        self.ui.gridLayout_40.removeWidget(self.ui.pulse_delay_csv_widget)
+
+        self.ui.pulse_delay_csv_divider = QtWidgets.QFrame(self.ui.StimSettings)
+        self.ui.pulse_delay_csv_divider.setObjectName("pulse_delay_csv_divider")
+        self.ui.pulse_delay_csv_divider.setFrameShape(QtWidgets.QFrame.Shape.HLine)
+        self.ui.pulse_delay_csv_divider.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
+
+        self.ui.gridLayout_42.addWidget(self.ui.pulse_delay_csv_divider, 4, 0, 1, 7)
+        self.ui.gridLayout_42.addWidget(self.ui.pulse_delay_csv_widget, 5, 0, 1, 7)
+
+    def _build_intra_stim_delay_csv_controls(self):
+        self.ui.intra_stim_delay_csv_widget = QtWidgets.QWidget(self.ui.PulseSettings)
+        self.ui.intra_stim_delay_csv_widget.setObjectName("intra_stim_delay_csv_widget")
+        self.ui.gridLayout_intra_stim_delay_csv = QtWidgets.QGridLayout(
+            self.ui.intra_stim_delay_csv_widget
+        )
+        self.ui.gridLayout_intra_stim_delay_csv.setObjectName("gridLayout_intra_stim_delay_csv")
+
+        self.ui.intra_stim_delay_csv_divider = QtWidgets.QFrame(self.ui.intra_stim_delay_csv_widget)
+        self.ui.intra_stim_delay_csv_divider.setObjectName("intra_stim_delay_csv_divider")
+        self.ui.intra_stim_delay_csv_divider.setFrameShape(QtWidgets.QFrame.Shape.HLine)
+        self.ui.intra_stim_delay_csv_divider.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
+
+        self.ui.intra_stim_delay_csv_label = QtWidgets.QLabel(self.ui.intra_stim_delay_csv_widget)
+        self.ui.intra_stim_delay_csv_label.setText("Load Pulse Delay CSV")
+
+        self.ui.intra_stim_delay_csv_path = QtWidgets.QLineEdit(self.ui.intra_stim_delay_csv_widget)
         self.ui.intra_stim_delay_csv_path.setReadOnly(True)
 
-        self.ui.intra_stim_delay_csv_browse = QtWidgets.QPushButton(self.ui.pulse_delay_csv_widget)
+        self.ui.intra_stim_delay_csv_browse = QtWidgets.QPushButton(self.ui.intra_stim_delay_csv_widget)
         self.ui.intra_stim_delay_csv_browse.setText("Browse")
 
-        self.ui.intra_stim_delay_csv_clear = QtWidgets.QPushButton(self.ui.pulse_delay_csv_widget)
+        self.ui.intra_stim_delay_csv_clear = QtWidgets.QPushButton(self.ui.intra_stim_delay_csv_widget)
         self.ui.intra_stim_delay_csv_clear.setText("Clear")
         self.ui.intra_stim_delay_csv_clear.setEnabled(False)
 
-        self.ui.gridLayout_pulse_delay_csv.addWidget(self.ui.intra_stim_delay_csv_label, 2, 0, 1, 1)
-        self.ui.gridLayout_pulse_delay_csv.addWidget(self.ui.intra_stim_delay_csv_path, 2, 1, 1, 1)
-        self.ui.gridLayout_pulse_delay_csv.addWidget(self.ui.intra_stim_delay_csv_browse, 2, 2, 1, 1)
-        self.ui.gridLayout_pulse_delay_csv.addWidget(self.ui.intra_stim_delay_csv_clear, 2, 3, 1, 1)
+        self.ui.gridLayout_intra_stim_delay_csv.addWidget(
+            self.ui.intra_stim_delay_csv_divider, 0, 0, 1, 5
+        )
+        self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_label, 1, 0, 1, 1)
+        self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_path, 1, 1, 1, 1)
+        self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_browse, 1, 2, 1, 1)
+        self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_clear, 1, 3, 1, 1)
+
+        self.ui.intra_stim_delay_csv_spacer = QtWidgets.QSpacerItem(
+            40,
+            20,
+            QtWidgets.QSizePolicy.Policy.Expanding,
+            QtWidgets.QSizePolicy.Policy.Minimum,
+        )
+        self.ui.gridLayout_intra_stim_delay_csv.addItem(
+            self.ui.intra_stim_delay_csv_spacer, 1, 4, 1, 1
+        )
+        self.ui.gridLayout_40.addWidget(self.ui.intra_stim_delay_csv_widget, 1, 0, 1, 7)
 
         self.ui.intra_stim_delay_csv_browse.clicked.connect(self.browse_intra_stim_delay_csv)
         self.ui.intra_stim_delay_csv_clear.clicked.connect(self.clear_intra_stim_delay_csv)
 
     def _set_intra_stim_delay_csv_loaded(self, loaded: bool):
-        self.ui.widget_7.setEnabled(not loaded)
-        self.ui.interpulsedelay_widget.setEnabled(not loaded)
-        self.ui.spinBox.setEnabled(not loaded)
+        self._set_pulse_settings_locked_by_pulse_csv(loaded)
         self.ui.intra_stim_delay_csv_browse.setEnabled(not loaded)
         self.ui.intra_stim_delay_csv_clear.setEnabled(loaded)
         self.ui.pulse_delay_csv_browse.setEnabled(not loaded)
+
+    def _set_pulse_settings_locked_by_pulse_csv(self, locked: bool):
+        enabled = not locked
+
+        for widget in (
+            self.ui.label_3,
+            self.ui.spinBox,
+            self.ui.widget_7,
+            self.ui.interpulsedelay_widget,
+        ):
+            widget.setEnabled(enabled)
+
+        if enabled:
+            self._switch_delay_freq_2(None)
 
     def browse_intra_stim_delay_csv(self):
         start_dir = Path.cwd()
@@ -1038,7 +1111,7 @@ class ControllerMain(QDialog):
         try:
             path_str, _ = QFileDialog.getOpenFileName(
                 self,
-                "Load Within-Stim Delay CSV",
+                "Load Pulse Delay CSV",
                 str(start_dir),
                 "CSV Files (*.csv);;All Files (*)"
             )
@@ -1047,20 +1120,15 @@ class ControllerMain(QDialog):
                 return
 
             path = Path(path_str)
-            values = self._read_intra_stim_delay_csv_values(path)
-            if not self._review_intra_stim_delay_csv_values(values):
-                return
-
             self.ui.intra_stim_delay_csv_path.setText(str(path))
-            self.ui.spinBox.setValue(len(values) + 1)
             self._set_intra_stim_delay_csv_loaded(True)
-            print(f"Selected within-stim delay CSV: {path}")
+            print(f"Selected pulse delay CSV: {path}")
         except Exception as e:
             traceback.print_exc()
             QMessageBox.critical(
                 self,
                 "Load Error",
-                f"Could not select the within-stim delay CSV:\n{e}"
+                f"Could not select the pulse delay CSV:\n{e}"
             )
 
     def clear_intra_stim_delay_csv(self):
@@ -1069,56 +1137,59 @@ class ControllerMain(QDialog):
 
     def _read_intra_stim_delay_csv_values(self, path: Path) -> list[float]:
         with path.open("r", newline="") as csv_file:
-            rows = list(csv.reader(csv_file))
+            raw_lines = csv_file.read().splitlines()
 
-        rows = [row for row in rows if any(cell.strip() for cell in row)]
-        if not rows:
+        if not raw_lines:
             raise ValueError("CSV is empty.")
-        if len(rows) != 1:
-            raise ValueError("Within-stim delay CSV must contain exactly one non-empty row.")
 
         values = []
-        for cell in rows[0]:
+        for line in raw_lines:
+            if line.strip() == "":
+                raise ValueError("CSV contains a blank row.")
+
+            row = next(csv.reader([line]))
+            if len(row) != 1:
+                raise ValueError("CSV must contain exactly one column.")
+
+            cell = row[0]
             if cell != cell.strip():
                 raise ValueError("CSV values cannot contain leading or trailing spaces.")
-            if cell == "":
-                raise ValueError("CSV cannot contain empty delay cells.")
+
             try:
                 value = float(cell)
             except ValueError as exc:
                 raise ValueError("CSV values must be numeric.") from exc
-            if value <= 0:
-                raise ValueError("CSV delay values must be greater than 0 ms.")
+            if value < 0:
+                raise ValueError("CSV delay values must be >= 0 ms.")
             values.append(value)
 
         return values
 
     def _review_intra_stim_delay_csv_values(self, values: list[float]) -> bool:
         dialog = QDialog(self)
-        dialog.setWindowTitle("Review Within-Stim Delay CSV")
-        dialog.resize(520, 240)
+        dialog.setWindowTitle("Review Pulse Delay CSV")
+        dialog.resize(420, 500)
 
         layout = QtWidgets.QVBoxLayout(dialog)
-        layout.addWidget(QtWidgets.QLabel(
-            f"Pulses per stim: {len(values) + 1}. This delay pattern repeats for every stim."
-        ))
+
+        total_label = QtWidgets.QLabel(f"Total number of stims: {len(values) + 1}")
+        layout.addWidget(total_label)
 
         table = QtWidgets.QTableWidget(dialog)
-        table.setColumnCount(2)
+        table.setColumnCount(1)
         table.setRowCount(len(values))
-        table.setHorizontalHeaderLabels(["Between pulses", "Delay (ms)"])
+        table.setHorizontalHeaderLabels(["Pulse Delay (ms)"])
         table.horizontalHeader().setStretchLastSection(True)
         table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
         for row, value in enumerate(values):
-            table.setItem(row, 0, QtWidgets.QTableWidgetItem(f"{row + 1} -> {row + 2}"))
-            table.setItem(row, 1, QtWidgets.QTableWidgetItem(str(value)))
+            table.setItem(row, 0, QtWidgets.QTableWidgetItem(str(value)))
 
         layout.addWidget(table)
 
         button_row = QtWidgets.QHBoxLayout()
         button_row.addStretch()
-        start_button = QtWidgets.QPushButton("Use Pattern", dialog)
+        start_button = QtWidgets.QPushButton("Start", dialog)
         cancel_button = QtWidgets.QPushButton("Cancel", dialog)
         start_button.clicked.connect(dialog.accept)
         cancel_button.clicked.connect(dialog.reject)
@@ -1134,7 +1205,7 @@ class ControllerMain(QDialog):
         try:
             path_str, _ = QFileDialog.getOpenFileName(
                 self,
-                "Load Pulse Delay CSV",
+                "Load Stim Delay CSV",
                 str(start_dir),
                 "CSV Files (*.csv);;All Files (*)"
             )
@@ -1187,7 +1258,7 @@ class ControllerMain(QDialog):
 
     def _review_pulse_delay_csv_values(self, values: list[float]) -> bool:
         dialog = QDialog(self)
-        dialog.setWindowTitle("Review Pulse Delay CSV")
+        dialog.setWindowTitle("Review Stim Delay CSV")
         dialog.resize(420, 500)
 
         layout = QtWidgets.QVBoxLayout(dialog)
@@ -1198,7 +1269,7 @@ class ControllerMain(QDialog):
         table = QtWidgets.QTableWidget(dialog)
         table.setColumnCount(1)
         table.setRowCount(len(values))
-        table.setHorizontalHeaderLabels(["Pulse Delay"])
+        table.setHorizontalHeaderLabels(["Stim Delay (ms)"])
         table.horizontalHeader().setStretchLastSection(True)
         table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
@@ -1676,9 +1747,7 @@ class ControllerMain(QDialog):
             jitter_quantize=jitter_quantize,
             burst_cycles=pulses_per_stim,
             ch2_state=channel_2_state,
-            ch2_delay=channel_2_delay,
             ch1_ttl=ch1_ttl,
-            ch2_ttl=ch2_ttl,
             rand_freq = rand_freq,
             rand_freq_upper = rand_freq_upper,
             rand_freq_lower = rand_freq_lower,
@@ -1690,15 +1759,21 @@ class ControllerMain(QDialog):
                 charge_balance=charge_balance_ch1,
                 reverse=ch1_reversed,
             ),
-            fg_ch2=dict(
-                v_min=v_min_ch2,
-                v_max=v_max_ch2,
-                shape=shape_2,
-                pw=ch2_pw,
-                charge_balance=charge_balance_ch2,
-                reverse=ch2_reversed,
-            ),
         )
+
+        if channel_2_state:
+            burst_kwargs.update(
+                ch2_delay=channel_2_delay,
+                ch2_ttl=ch2_ttl,
+                fg_ch2=dict(
+                    v_min=v_min_ch2,
+                    v_max=v_max_ch2,
+                    shape=shape_2,
+                    pw=ch2_pw,
+                    charge_balance=charge_balance_ch2,
+                    reverse=ch2_reversed,
+                ),
+            )
 
         return burst_kwargs
     
@@ -1734,20 +1809,22 @@ class ControllerMain(QDialog):
                 QMessageBox.warning(
                     self,
                     "CSV Format Error",
-                    "Error, within-stim delay CSV should be one row of numerical millisecond values with no spaces."
+                    "Error, pulse delay CSV file format is incorrect. CSV should be 1 column of numerical values with no spaces."
                 )
                 return
 
+            if not self._review_intra_stim_delay_csv_values(intra_stim_delay_values):
+                return
+
         burst_kwargs = self._collect_burst_mode_settings()
-        if pulse_delay_values is not None:
-            burst_kwargs["num_stims"] = len(pulse_delay_values)
-            burst_kwargs["interpulse_delay_sequence"] = pulse_delay_values
         if intra_stim_delay_values is not None:
-            burst_kwargs["burst_cycles"] = len(intra_stim_delay_values) + 1
-            burst_kwargs["interpulse_delay_pattern"] = intra_stim_delay_values
+            burst_kwargs["pulse_delay_values_ms"] = intra_stim_delay_values
 
         self.burst_thread = QThread(self)
-        self.burst_worker = BurstWorker(burst_kwargs)
+        self.burst_worker = BurstWorker(
+            burst_kwargs,
+            hardware_enabled=self.hardware_enabled,
+        )
         self.burst_worker.moveToThread(self.burst_thread)
 
         self.burst_thread.started.connect(self.burst_worker.run)
@@ -2005,7 +2082,10 @@ class ControllerMain(QDialog):
             kwargs["v_min"] = v_min
             kwargs["v_max"] = v_max
 
-        func_gen_control_stateful(**kwargs)
+        func_gen_control_stateful(
+            **kwargs,
+            hardware_enabled=self.hardware_enabled,
+        )
 
         self.ui.frequency_display_3.setText(f"{freq_hz}")
 
@@ -2082,7 +2162,10 @@ class ControllerMain(QDialog):
             kwargs["v_max"] = v_max
 
         try:
-            func_gen_control_stateful(**kwargs)
+            func_gen_control_stateful(
+                **kwargs,
+                hardware_enabled=self.hardware_enabled,
+            )
         except Exception:
             pass
 
@@ -2192,6 +2275,8 @@ class ControllerMain(QDialog):
 
         self.trial_hw_busy = True
         self.set_trial_controls_enabled(False)
+        kwargs = dict(kwargs)
+        kwargs["hardware_enabled"] = self.hardware_enabled
         self.request_trial_hardware_apply.emit(kwargs)
         return True
 

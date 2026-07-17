@@ -526,7 +526,8 @@ def func_gen_control(
     charge_balance = False,
     reverse = False,
     burst_mode = False,
-    driver = None
+    driver = None,
+    hardware_enabled = True
     ):
 
     """
@@ -600,6 +601,39 @@ def func_gen_control(
     """
 
     print ("\n\nFull Parameter Change\n------------------------\n")
+
+    if shape == 'sine':
+        shape_def = ks.FunctionShape.SINUSOID
+    elif shape == 'square':
+        shape_def = ks.FunctionShape.SQUARE
+    elif shape == 'ramp':
+        shape_def = ks.FunctionShape.RAMP
+    elif shape == 'pulse':
+        shape_def = ks.FunctionShape.PULSE
+    elif shape in ('arb', 'arbitrary'):
+        shape_def = ks.FunctionShape.ARBITRARY
+    elif shape == 'triangle':
+        shape_def = ks.FunctionShape.TRIANGLE
+    else:
+        raise ValueError(
+            f"Unknown shape '{shape}'. Must be one of "
+            f"'sine', 'square', 'ramp', 'pulse', 'arb', 'arbitrary', 'triangle'."
+        )
+
+    if channel not in (1, 2):
+        raise ValueError('Channel selection is invalid, must be 1 or 2')
+
+    if state not in (0, 1):
+        raise ValueError('State selection is invalid, must be on or off')
+
+    if not hardware_enabled:
+        print("[func_gen_control] Hardware disabled; skipping Keysight/D188 commands.")
+        print(
+            "[func_gen_control] Simulated request: "
+            f"channel={channel}, state={state}, shape={shape!r}, freq={freq}, "
+            f"v_min={v_min}, v_max={v_max}, custom={custom!r}, burst_mode={burst_mode}"
+        )
+        return
     
 
     if not burst_mode:
@@ -620,24 +654,6 @@ def func_gen_control(
         driver = driver
         
     # ch1 = driver.output_channels[0]  
-
-    if shape == 'sine':
-        shape_def = ks.FunctionShape.SINUSOID
-    elif shape == 'square':
-        shape_def = ks.FunctionShape.SQUARE
-    elif shape == 'ramp':
-        shape_def = ks.FunctionShape.RAMP
-    elif shape == 'pulse':
-        shape_def = ks.FunctionShape.PULSE
-    elif shape in ('arb', 'arbitrary'):
-        shape_def = ks.FunctionShape.ARBITRARY
-    elif shape == 'triangle':
-        shape_def = ks.FunctionShape.TRIANGLE
-    else:
-        raise ValueError(
-            f"Unknown shape '{shape}'. Must be one of "
-            f"'sine', 'square', 'ramp', 'pulse', 'arb', 'arbitrary', 'triangle'."
-        )
     
     if (channel==1):
         ch = driver.output_channels[0]
@@ -932,6 +948,7 @@ def adjust_current(
     ramp_rate: float = 1.0,
     step_size: float = 0.01,
     debug: bool = True,
+    hardware_enabled: bool = True,
 ):
     """
     Update output levels (v_min/v_max) without toggling output enable.
@@ -1019,6 +1036,16 @@ def adjust_current(
 
     if debug:
         print("\n\nVoltage-Only Change (Fast Path)\n------------------------\n")
+
+    if not hardware_enabled:
+        print("[adjust_current] Hardware disabled; skipping Keysight voltage update.")
+        print(
+            "[adjust_current] Simulated request: "
+            f"channel={channel}, prev_v_min={prev_v_min}, new_v_min={new_v_min}, "
+            f"prev_v_max={prev_v_max}, new_v_max={new_v_max}, vpp={vpp}, "
+            f"reverse={reverse}, charge_balance={charge_balance}, ramp={ramp}"
+        )
+        return
 
     resource_name = "33512B"
     id_query = True
@@ -1170,12 +1197,19 @@ _current_defaults_by_channel = {
     2: FuncGenDefaults(channel=2),
 }
 
-def turn_channels_off(*channels: int, disable_burst: bool = True):
+def turn_channels_off(*channels: int, disable_burst: bool = True, hardware_enabled: bool = True):
     """
     Safely disable one or more output channels without reconfiguring waveform,
     voltage, polarity, or ARB content.
     """
     print("\n\nSafe Output-Off\n------------------------\n")
+
+    if not hardware_enabled:
+        print(
+            "[turn_channels_off] Hardware disabled; simulated output-off for "
+            f"channels={channels}, disable_burst={disable_burst}."
+        )
+        return
 
     resource_name = "33512B"
     id_query = True
@@ -1206,6 +1240,7 @@ def turn_channels_off(*channels: int, disable_burst: bool = True):
 def func_gen_control_stateful(
     reset: bool = False,
     debug: bool = True,
+    hardware_enabled: bool = True,
     **ui_values,
 ):
     """
@@ -1274,7 +1309,7 @@ def func_gen_control_stateful(
                     print(f"  {k}: {v!r}")
                 print()
 
-        turn_channels_off(1, 2, disable_burst=True)
+        turn_channels_off(1, 2, disable_burst=True, hardware_enabled=hardware_enabled)
         return None
 
     current_state = _current_defaults_by_channel[requested_channel]
@@ -1338,12 +1373,13 @@ def func_gen_control_stateful(
             ramp_rate=1,      # backend-controlled
             step_size=0.01,
             debug=debug,
+            hardware_enabled=hardware_enabled,
         )
 
     if debug:
         print(f"\n--> FULL PATH: func_gen_control() for CH{requested_channel}\n")
 
-    return func_gen_control(**asdict(next_state))
+    return func_gen_control(**asdict(next_state), hardware_enabled=hardware_enabled)
 
 
 # from dataclasses import dataclass, asdict, replace

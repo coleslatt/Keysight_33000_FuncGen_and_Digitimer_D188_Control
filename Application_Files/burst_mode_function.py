@@ -2,8 +2,10 @@ import keysight_kt33000 as ks
 import numpy as np
 from typing import Literal
 import datetime
+import csv
 import random
 import time
+from pathlib import Path
 from FuncGen_Selector_Function_2 import func_gen_control
 
 # d188.py — minimal ctypes bridge for DGD188API.DLL (Windows) — fixed prototypes to allow None
@@ -154,7 +156,7 @@ def _sleep_with_stop(duration_s: float, stop_event=None, chunk_s: float = 0.01) 
         if _stop_requested(stop_event):
             return True
         remaining = end_time - time.monotonic()
-        print(f"\rRemaining time: {remaining:6.2f} s", end="", flush=True)
+        # print(f"\rRemaining time: {remaining:6.2f} s", end="", flush=True)
         time.sleep(min(chunk_s, max(0.0, remaining)))
     print ("[_sleep_with_stop] Ended")
     print("\n")
@@ -167,6 +169,108 @@ def _estimated_run_time(num_stims, freq):
     return run_time
 
 
+def _export_burst_delay_log(delay_rows):
+    log_dir = Path(__file__).resolve().parent.parent / "Burst_Logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
+    log_path = log_dir / f"{timestamp}_burst_delay_log.csv"
+
+    with log_path.open("w", newline="") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(["Stim_Number", "Delay (Seconds)"])
+        writer.writerows(delay_rows)
+
+    print(f"Burst delay log created: {log_path}")
+    return log_path
+
+
+def load_pulse_delay_waveform(
+    *,
+    ch,
+    driver,
+    pulse_delay_values_ms,
+    pulse_width_ms,
+    freq,
+    v_min=0,
+    v_max=5,
+    waveform_name="PULSECSV",
+    sample_count=100000,
+):
+    """
+    Build and download one arbitrary waveform from pulse delays.
+
+    Each CSV delay value is the low-time after a pulse ends before the next
+    pulse starts. A list of N delays therefore creates N + 1 pulses. The
+    millisecond timing is scaled into one arbitrary-waveform period using freq,
+    matching custom_waveform_pp2.
+    """
+    pulse_delay_values_ms = [float(delay_ms) for delay_ms in pulse_delay_values_ms]
+    pulse_width_ms = float(pulse_width_ms)
+    freq = float(freq)
+
+    if freq <= 0:
+        raise ValueError("freq must be > 0.")
+    if pulse_width_ms <= 0:
+        raise ValueError("pulse_width_ms must be > 0.")
+    if any(delay_ms < 0 for delay_ms in pulse_delay_values_ms):
+        raise ValueError("pulse_delay_values_ms values must be >= 0.")
+
+    period = 1.0 / freq
+    time_per_point = period / sample_count
+
+    pulse_starts_ms = [0.0]
+    current_start_ms = 0.0
+    for delay_ms in pulse_delay_values_ms:
+        current_start_ms += pulse_width_ms + delay_ms
+        pulse_starts_ms.append(current_start_ms)
+
+    waveform_duration_ms = pulse_starts_ms[-1] + pulse_width_ms
+    if waveform_duration_ms <= 0:
+        raise ValueError("Generated waveform duration must be > 0.")
+
+    waveform_points = int(waveform_duration_ms * 1e-3 / time_per_point)
+    if waveform_points <= 0 or waveform_points > sample_count:
+        raise ValueError(
+            "Pulse delay waveform duration exceeds one period at the selected frequency."
+        )
+
+    waveform = np.zeros(sample_count, dtype=">f4")
+    for start_ms in pulse_starts_ms:
+        start_idx = int(round(start_ms * 1e-3 / time_per_point))
+        end_idx = int(round((start_ms + pulse_width_ms) * 1e-3 / time_per_point))
+        end_idx = min(sample_count, max(start_idx + 1, end_idx))
+        waveform[start_idx:end_idx] = 1.0
+
+    waveform_bytes = waveform.view(np.uint8)
+
+    ch.output_function.function = ks.FunctionShape.ARBITRARY
+    driver.display.arb_rate_unit = ks.DisplayARBRateUnits.FREQUENCY
+    ch.output_function.arbitrary_waveform.clear()
+    ch.output_function.arbitrary_waveform.load_arb_waveform(
+        name=waveform_name,
+        data=waveform_bytes,
+    )
+    ch.output_function.arbitrary_waveform.select_arb_waveform(waveform_name)
+    ch.output_function.arbitrary_waveform.frequency = freq
+    ch.output.frequency = freq
+    ch.output.voltage.high = v_max
+    ch.output.voltage.low = v_min
+
+    print(
+        f"Loaded {waveform_name}: {len(pulse_starts_ms)} pulses, "
+        f"pulse_width={pulse_width_ms} ms, duration={waveform_duration_ms} ms, "
+        f"frequency={freq} Hz, occupied_points={waveform_points}/{sample_count}"
+    )
+
+    return {
+        "pulse_count": len(pulse_starts_ms),
+        "duration_ms": waveform_duration_ms,
+        "frequency_hz": freq,
+        "occupied_points": waveform_points,
+    }
+
+
 
 def burst_mode(
     interpulse_delay=0,   # ms
@@ -175,8 +279,7 @@ def burst_mode(
     jitter=False,
     jitter_rate=0,        # seconds
     jitter_quantize=0.0001,
-    interpulse_delay_sequence=None,
-    interpulse_delay_pattern=None,
+    pulse_delay_values_ms=None,
     burst_cycles=1,
     ch2_state=0,
     ch2_delay=0,
@@ -189,50 +292,78 @@ def burst_mode(
     fg_ch1: dict | None = None,
     fg_ch2: dict | None = None,
     stop_event=None,
+    hardware_enabled=True,
 ):
     """
     Configure and trigger paired-pulse burst-mode output on a Keysight 33512B.
-
-    interpulse_delay_pattern:
-        Optional list of delays in ms between pulses inside each stim. For
-        example [0.5, 2000] creates a three-pulse stim and repeats that
-        same within-stim timing pattern for every stim.
 
     stop_event:
         Optional threading.Event-like object. If set, the function exits early
         and performs cleanup before returning.
     """
-    if interpulse_delay_pattern is not None:
-        if interpulse_delay_sequence is not None:
-            raise ValueError(
-                "interpulse_delay_pattern cannot be combined with interpulse_delay_sequence."
-            )
-        interpulse_delay_pattern = [float(delay_ms) for delay_ms in interpulse_delay_pattern]
-        burst_cycles = len(interpulse_delay_pattern) + 1
-
-    if interpulse_delay_sequence is not None:
-        interpulse_delay_sequence = [float(delay_ms) for delay_ms in interpulse_delay_sequence]
-        num_stims = len(interpulse_delay_sequence)
+    if pulse_delay_values_ms is not None:
+        pulse_delay_values_ms = [float(delay_ms) for delay_ms in pulse_delay_values_ms]
 
     assert interstim_delay > 0, "interstim_delay must be > 0 seconds"
     assert num_stims >= 1, "num_stims must be >= 1"
     assert jitter_rate >= 0, "jitter_rate must be >= 0 seconds"
     assert jitter_quantize > 0, "jitter_quantize must be > 0 seconds"
-    if interpulse_delay_sequence is not None:
-        assert all(delay_ms > 0 for delay_ms in interpulse_delay_sequence), (
-            "interpulse_delay_sequence values must be > 0 ms."
-        )
-    if interpulse_delay_pattern is not None:
-        assert len(interpulse_delay_pattern) >= 1, (
-            "interpulse_delay_pattern must contain at least one delay."
-        )
-        assert all(delay_ms > 0 for delay_ms in interpulse_delay_pattern), (
-            "interpulse_delay_pattern values must be > 0 ms."
+    if pulse_delay_values_ms is not None:
+        assert all(delay_ms >= 0 for delay_ms in pulse_delay_values_ms), (
+            "pulse_delay_values_ms values must be >= 0 ms."
         )
     assert jitter_rate <= interstim_delay, (
         f"jitter_rate ({jitter_rate}s) must be <= interstim_delay ({interstim_delay}s) "
         "to avoid negative or invalid sleep intervals when jitter=True."
     )
+
+    def _prepare_fg_args(fg_args, channel_num):
+        fg_args = {} if fg_args is None else dict(fg_args)
+        allowed_fg = {
+            "v_min", "v_max", "vpp", "shape",
+            "custom", "ramp",
+            "auto_k", "k",
+            "pph", "ppw", "pw",
+            "channel", "state",
+            "charge_balance", "reverse",
+        }
+        unknown = set(fg_args) - allowed_fg
+        assert not unknown, (
+            f"Unknown func_gen_control kwargs in fg_ch{channel_num}: {sorted(unknown)}"
+        )
+        fg_args.setdefault("channel", channel_num)
+        fg_args.setdefault("state", 1)
+        return fg_args
+
+    if not ch1_ttl:
+        fg_ch1 = _prepare_fg_args(fg_ch1, 1)
+
+    if not ch2_ttl:
+        fg_ch2 = _prepare_fg_args(fg_ch2, 2)
+
+    jitter_delay_rows = []
+
+    if not hardware_enabled:
+        if jitter:
+            for stim_number in range(1, num_stims + 1):
+                delay = random.uniform(
+                    interstim_delay - jitter_rate,
+                    interstim_delay + jitter_rate
+                )
+                delay = round(delay / jitter_quantize) * jitter_quantize
+                jitter_delay_rows.append([stim_number, delay])
+            _export_burst_delay_log(jitter_delay_rows)
+
+        print("[burst_mode] Hardware disabled; skipping Keysight burst commands.")
+        print(
+            "[burst_mode] Simulated request: "
+            f"num_stims={num_stims}, interstim_delay={interstim_delay}, "
+            f"interpulse_delay={interpulse_delay}, jitter={jitter}, "
+            f"jitter_rate={jitter_rate}, burst_cycles={burst_cycles}, "
+            f"ch2_state={ch2_state}, ch1_ttl={ch1_ttl}, ch2_ttl={ch2_ttl}, "
+            f"rand_freq={rand_freq}, pulse_delay_values_ms={pulse_delay_values_ms}"
+        )
+        return
 
     resource_name = "33512B"
     id_query = True
@@ -286,7 +417,8 @@ def burst_mode(
                 freq=1 / interstim_delay,
                 **fg_ch1,
                 burst_mode = True,
-                driver = driver
+                driver = driver,
+                hardware_enabled = hardware_enabled
             )
 
         if _stop_requested(stop_event):
@@ -331,7 +463,8 @@ def burst_mode(
                     freq=1 / interstim_delay,
                     **fg_ch2,
                     burst_mode = True,
-                    driver = driver
+                    driver = driver,
+                    hardware_enabled = hardware_enabled
                 )
 
 
@@ -339,19 +472,45 @@ def burst_mode(
             print("Stop requested after CH2 setup.")
             return
 
+        if pulse_delay_values_ms is not None:
+            ch1_args = {} if fg_ch1 is None else dict(fg_ch1)
+            ch2_args = {} if fg_ch2 is None else dict(fg_ch2)
+
+            ch1_pw_ms = ch1_args.get("pw", 1)
+            ch2_pw_ms = ch2_args.get("pw", ch1_pw_ms)
+            pulse_delay_waveform_freq = 1 / interstim_delay
+
+            load_pulse_delay_waveform(
+                ch=ch1,
+                driver=driver,
+                pulse_delay_values_ms=pulse_delay_values_ms,
+                pulse_width_ms=ch1_pw_ms,
+                freq=pulse_delay_waveform_freq,
+                v_min=0 if ch1_ttl else ch1_args.get("v_min", 0),
+                v_max=5 if ch1_ttl else ch1_args.get("v_max", 5),
+                waveform_name="PULSECSV1",
+            )
+
+            if ch2_state:
+                load_pulse_delay_waveform(
+                    ch=ch2,
+                    driver=driver,
+                    pulse_delay_values_ms=pulse_delay_values_ms,
+                    pulse_width_ms=ch2_pw_ms,
+                    freq=pulse_delay_waveform_freq,
+                    v_min=0 if ch2_ttl else ch2_args.get("v_min", 0),
+                    v_max=5 if ch2_ttl else ch2_args.get("v_max", 5),
+                    waveform_name="PULSECSV2",
+                )
+
         # --- burst + trigger config ---
         ch1.burst.enabled = True
         ch2.burst.enabled = True
 
-        def set_pulse_period_ms(period_ms):
-            pulse_freq = 1000.0 / period_ms
-            ch1.output.frequency = pulse_freq
-            ch2.output.frequency = pulse_freq
-
         ch1.trigger.source = ks.TriggerSource.BUS
         ch2.trigger.source = ks.TriggerSource.BUS
 
-        if rand_freq and interpulse_delay_sequence is None:
+        if rand_freq and pulse_delay_values_ms is None:
                 random_frequency = random.uniform(
                     rand_freq_lower,
                     rand_freq_upper
@@ -359,17 +518,17 @@ def burst_mode(
                 ch1.output.frequency = random_frequency
                 ch2.output.frequency = random_frequency
 
-        else:
+        elif pulse_delay_values_ms is None:
 
             ch1.output.frequency = 1 / interstim_delay
             ch2.output.frequency = 1 / interstim_delay
 
         print(f"burst cycles = {burst_cycles}")
 
-        if interpulse_delay_pattern is not None:
+        if pulse_delay_values_ms is not None:
             ch1.burst.number_of_cycles = 1
             ch2.burst.number_of_cycles = 1
-        elif (not jitter) and (burst_cycles == 1) and interpulse_delay_sequence is None:
+        elif (not jitter) and (burst_cycles == 1):
             print("burst = num_stims")
             ch1.burst.number_of_cycles = num_stims
             ch2.burst.number_of_cycles = num_stims
@@ -402,8 +561,8 @@ def burst_mode(
         # --- trigger ---
         def trigger_once():
             if interpulse_delay >= 0:
-                print("triggered")
-                print(ch1.trigger.source)
+                # print("triggered")
+                # print(ch1.trigger.source)
                 ch1.trigger.software_trigger()
             else:
                 ch2.trigger.software_trigger()
@@ -411,15 +570,13 @@ def burst_mode(
         if (
             jitter
             or (burst_cycles > 1)
-            or (interpulse_delay_sequence is not None)
-            or (interpulse_delay_pattern is not None)
+            or (pulse_delay_values_ms is not None)
         ):
             
             if (
                 burst_cycles != 1
                 and not rand_freq
-                and interpulse_delay_sequence is None
-                and interpulse_delay_pattern is None
+                and pulse_delay_values_ms is None
             ):
                 if interpulse_delay <= 0:
                     raise ValueError(
@@ -435,11 +592,7 @@ def burst_mode(
                     print("Stop requested during burst loop.")
                     return
                 
-                if interpulse_delay_sequence is not None:
-                    interpulse_delay = interpulse_delay_sequence[count - 1]
-                    set_pulse_period_ms(interpulse_delay)
-                    print(f"Pulse period for stim {count}: {interpulse_delay} ms")
-                elif rand_freq:
+                if rand_freq and pulse_delay_values_ms is None:
                     random_frequency = random.uniform(
                         rand_freq_lower,
                         rand_freq_upper
@@ -447,39 +600,16 @@ def burst_mode(
                     ch1.output.frequency = random_frequency
                     ch2.output.frequency = random_frequency
 
-                if interpulse_delay_pattern is not None:
-                    print(
-                        f"Stim {count}: triggering {burst_cycles} pulses "
-                        f"with within-stim delays {interpulse_delay_pattern} ms"
-                    )
-                    for pulse_index in range(burst_cycles):
-                        if _stop_requested(stop_event):
-                            print("Stop requested during within-stim pulse loop.")
-                            return
-
-                        trigger_once()
-                        print(f"Trigger: {count}, pulse: {pulse_index + 1}")
-
-                        if pulse_index < len(interpulse_delay_pattern):
-                            delay_s = interpulse_delay_pattern[pulse_index] / 1000.0
-                            stopped = _sleep_with_stop(
-                                delay_s,
-                                stop_event=stop_event,
-                                chunk_s=0.001,
-                            )
-                            if stopped:
-                                print("Stop requested during within-stim wait.")
-                                return
-                else:
-                    trigger_once()
-                    print(f"Trigger: {count}")
-
+                trigger_once()
+                # print(f"Trigger: {count}")
 
                 rand = random.uniform(
                     interstim_delay - jitter_rate,
                     interstim_delay + jitter_rate
                 )
                 rand = round(rand / jitter_quantize) * jitter_quantize
+                if jitter:
+                    jitter_delay_rows.append([count, rand])
 
                 stopped = _sleep_with_stop(rand, stop_event=stop_event, chunk_s=0.01)
                 if stopped:
@@ -506,6 +636,9 @@ def burst_mode(
             # _sleep_with_stop(estimated_run_time, stop_event=stop_event, chunk_s=0.01)
 
     finally:
+
+        if jitter:
+            _export_burst_delay_log(jitter_delay_rows)
 
         try:
             # Put hardware in a safe state on normal exit or Stop.
