@@ -162,6 +162,41 @@ def _sleep_with_stop(duration_s: float, stop_event=None, chunk_s: float = 0.01) 
     print("\n")
     return _stop_requested(stop_event)
 
+
+def _wait_until_with_stop(
+    deadline_s: float,
+    stop_event=None,
+    *,
+    sleep_chunk_s: float = 0.005,
+    spin_window_s: float = 0.001,
+) -> bool:
+    """Wait for an absolute ``perf_counter`` deadline with low scheduler jitter.
+
+    Most of the wait is cooperative so a Stop request remains responsive.  The
+    final short window is a busy wait, avoiding the relatively large and
+    variable overshoot of ``time.sleep`` on Windows.
+
+    Returns True if stopped while waiting, otherwise False.
+    """
+    while True:
+        if _stop_requested(stop_event):
+            return True
+
+        remaining_s = deadline_s - time.perf_counter()
+        if remaining_s <= 0:
+            return False
+
+        if remaining_s > spin_window_s:
+            sleep_s = min(sleep_chunk_s, remaining_s - spin_window_s)
+            stop_wait = getattr(stop_event, "wait", None)
+            if callable(stop_wait):
+                if stop_wait(sleep_s):
+                    return True
+            else:
+                time.sleep(sleep_s)
+        # For the final spin window, loop on perf_counter without yielding the
+        # thread. This costs a small amount of CPU but improves trigger timing.
+
 def _estimated_run_time(num_stims, freq):
     # A triggered burst contains ``num_stims`` complete waveform cycles.  Waiting
     # for all of them keeps the worker (and therefore the Stop button) alive
@@ -250,23 +285,29 @@ def load_pulse_delay_waveform(
     v_max=5,
     waveform_name="PULSECSV",
     sample_count=100000,
+    trailing_settling_ms=5.0,
 ):
     """
     Build and download one arbitrary waveform from pulse delays.
 
     Each CSV delay value is the low-time after a pulse ends before the next
-    pulse starts. A list of N delays therefore creates N + 1 pulses. The
-    millisecond timing is scaled into one arbitrary-waveform period using freq,
-    matching custom_waveform_pp2.
+    pulse starts. A list of N delays therefore creates N + 1 pulses. ``freq``
+    and ``sample_count`` define the sample interval. The downloaded waveform
+    starts with five low samples and ends with a configurable low settling
+    section after the final pulse. Its playback frequency is adjusted to
+    preserve the original sample interval.
     """
     pulse_delay_values_ms = [float(delay_ms) for delay_ms in pulse_delay_values_ms]
     pulse_width_ms = float(pulse_width_ms)
     freq = float(freq)
+    trailing_settling_ms = float(trailing_settling_ms)
 
     if freq <= 0:
         raise ValueError("freq must be > 0.")
     if pulse_width_ms <= 0:
         raise ValueError("pulse_width_ms must be > 0.")
+    if trailing_settling_ms <= 0:
+        raise ValueError("trailing_settling_ms must be > 0.")
     if any(delay_ms < 0 for delay_ms in pulse_delay_values_ms):
         raise ValueError("pulse_delay_values_ms values must be >= 0.")
 
@@ -283,20 +324,36 @@ def load_pulse_delay_waveform(
     if waveform_duration_ms <= 0:
         raise ValueError("Generated waveform duration must be > 0.")
 
-    waveform_points = int(waveform_duration_ms * 1e-3 / time_per_point)
-    if waveform_points <= 0 or waveform_points > sample_count:
+    leading_low_points = 5
+    pulse_ranges = []
+    for start_ms in pulse_starts_ms:
+        start_idx = leading_low_points + int(
+            round(start_ms * 1e-3 / time_per_point)
+        )
+        end_idx = leading_low_points + int(
+            round((start_ms + pulse_width_ms) * 1e-3 / time_per_point)
+        )
+        end_idx = max(start_idx + 1, end_idx)
+        pulse_ranges.append((start_idx, end_idx))
+
+    last_end_idx = pulse_ranges[-1][1]
+    trailing_low_points = max(
+        1,
+        int(round(trailing_settling_ms * 1e-3 / time_per_point)),
+    )
+    trimmed_sample_count = last_end_idx + trailing_low_points
+    if trimmed_sample_count > sample_count:
         raise ValueError(
-            "Pulse delay waveform duration exceeds one period at the selected frequency."
+            "Pulse delay waveform, including its leading and trailing low "
+            "samples, exceeds one period at the selected frequency."
         )
 
-    waveform = np.zeros(sample_count, dtype=">f4")
-    for start_ms in pulse_starts_ms:
-        start_idx = int(round(start_ms * 1e-3 / time_per_point))
-        end_idx = int(round((start_ms + pulse_width_ms) * 1e-3 / time_per_point))
-        end_idx = min(sample_count, max(start_idx + 1, end_idx))
+    waveform = np.full(trimmed_sample_count, -1.0, dtype=">f4")
+    for start_idx, end_idx in pulse_ranges:
         waveform[start_idx:end_idx] = 1.0
 
     waveform_bytes = waveform.view(np.uint8)
+    waveform_freq = 1.0 / (trimmed_sample_count * time_per_point)
 
     ch.output_function.function = ks.FunctionShape.ARBITRARY
     driver.display.arb_rate_unit = ks.DisplayARBRateUnits.FREQUENCY
@@ -306,22 +363,29 @@ def load_pulse_delay_waveform(
         data=waveform_bytes,
     )
     ch.output_function.arbitrary_waveform.select_arb_waveform(waveform_name)
-    ch.output_function.arbitrary_waveform.frequency = freq
-    ch.output.frequency = freq
+    ch.output_function.arbitrary_waveform.frequency = waveform_freq
+    ch.output.frequency = waveform_freq
     ch.output.voltage.high = v_max
     ch.output.voltage.low = v_min
 
     print(
         f"Loaded {waveform_name}: {len(pulse_starts_ms)} pulses, "
         f"pulse_width={pulse_width_ms} ms, duration={waveform_duration_ms} ms, "
-        f"frequency={freq} Hz, occupied_points={waveform_points}/{sample_count}"
+        f"trailing_settling={trailing_low_points * time_per_point * 1e3} ms, "
+        f"frequency={waveform_freq} Hz, downloaded_points="
+        f"{trimmed_sample_count}/{sample_count}"
     )
 
     return {
         "pulse_count": len(pulse_starts_ms),
         "duration_ms": waveform_duration_ms,
-        "frequency_hz": freq,
-        "occupied_points": waveform_points,
+        "frequency_hz": waveform_freq,
+        "requested_frequency_hz": freq,
+        "occupied_points": last_end_idx,
+        "downloaded_points": trimmed_sample_count,
+        "leading_low_points": leading_low_points,
+        "trailing_low_points": trailing_low_points,
+        "trailing_settling_ms": trailing_low_points * time_per_point * 1e3,
     }
 
 
@@ -560,6 +624,28 @@ def burst_mode(
                 )
 
         # --- burst + trigger config ---
+        if pulse_delay_values_ms is not None:
+            def _set_burst_phase_zero(channel, channel_name):
+                burst_attributes = set(dir(channel.burst))
+                for phase_attribute in ("phase", "start_phase", "burst_phase"):
+                    if phase_attribute in burst_attributes:
+                        setattr(channel.burst, phase_attribute, 0.0)
+                        print(
+                            f"{channel_name} burst start phase set to 0 degrees "
+                            f"using {phase_attribute}."
+                        )
+                        return
+
+                raise AttributeError(
+                    f"The Keysight driver does not expose a recognized burst "
+                    f"phase property for {channel_name}. Available burst "
+                    f"attributes: {sorted(burst_attributes)}"
+                )
+
+            _set_burst_phase_zero(ch1, "CH1")
+            if ch2_state:
+                _set_burst_phase_zero(ch2, "CH2")
+
         ch1.burst.enabled = True
         ch2.burst.enabled = True
 
@@ -657,6 +743,10 @@ def burst_mode(
                     ch2.output.frequency = random_frequency
 
                 trigger_once()
+                # Start the deadline after the trigger command returns. This
+                # compensates the Python work below without ever shortening a
+                # requested wait to catch up after a slow VISA transaction.
+                trigger_complete_s = time.perf_counter()
                 # print(f"Trigger: {count}")
 
                 rand = random.uniform(
@@ -667,7 +757,10 @@ def burst_mode(
                 if jitter:
                     jitter_delay_rows.append([count, rand])
 
-                stopped = _sleep_with_stop(rand, stop_event=stop_event, chunk_s=0.01)
+                stopped = _wait_until_with_stop(
+                    trigger_complete_s + rand,
+                    stop_event=stop_event,
+                )
                 if stopped:
                     print("Stop requested during interstim wait.")
                     return

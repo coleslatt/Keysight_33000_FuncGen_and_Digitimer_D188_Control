@@ -6,7 +6,6 @@ import traceback
 import threading
 import os
 import time
-import csv
 
 
 from PySide6.QtWidgets import (
@@ -37,6 +36,7 @@ from Trial_Program import (
                             stop_crash_test_timer,
                         )
 from Trial_Results_Viewer import ResultsFolderDialog, TrialResultsViewer
+from csv_editor import NumericCsvEditorDialog, read_numeric_csv_file
 
 from stim_system_gui_v3 import Ui_Controller_Main
 
@@ -362,6 +362,19 @@ class ControllerMain(QDialog):
         self.ui.pulse_delay_csv_clear.clicked.connect(self.clear_pulse_delay_csv)
         self.ui.pulse_delay_csv_clear.setEnabled(False)
         self.ui.pulse_delay_csv_label.setText("Load Stim Delay CSV")
+        self.ui.pulse_delay_csv_edit = QtWidgets.QPushButton(
+            "Edit / Create", self.ui.pulse_delay_csv_widget
+        )
+        self.ui.gridLayout_pulse_delay_csv.removeItem(
+            self.ui.pulse_delay_csv_spacer
+        )
+        self.ui.gridLayout_pulse_delay_csv.addWidget(
+            self.ui.pulse_delay_csv_edit, 1, 4, 1, 1
+        )
+        self.ui.gridLayout_pulse_delay_csv.addItem(
+            self.ui.pulse_delay_csv_spacer, 1, 5, 1, 1
+        )
+        self.ui.pulse_delay_csv_edit.clicked.connect(self.edit_pulse_delay_csv)
         self._move_pulse_delay_csv_controls_to_stim_settings()
         self._build_intra_stim_delay_csv_controls()
 
@@ -1024,6 +1037,7 @@ class ControllerMain(QDialog):
         self.ui.pulse_delay_csv_clear.setEnabled(loaded)
         if hasattr(self.ui, "intra_stim_delay_csv_browse"):
             self.ui.intra_stim_delay_csv_browse.setEnabled(not loaded)
+            self.ui.intra_stim_delay_csv_edit.setEnabled(not loaded)
 
     def _set_stim_settings_locked_by_stim_csv(self, locked: bool):
         enabled = not locked
@@ -1079,6 +1093,10 @@ class ControllerMain(QDialog):
         self.ui.intra_stim_delay_csv_clear.setText("Clear")
         self.ui.intra_stim_delay_csv_clear.setEnabled(False)
 
+        self.ui.intra_stim_delay_csv_edit = QtWidgets.QPushButton(
+            "Edit / Create", self.ui.intra_stim_delay_csv_widget
+        )
+
         self.ui.gridLayout_intra_stim_delay_csv.addWidget(
             self.ui.intra_stim_delay_csv_divider, 0, 0, 1, 5
         )
@@ -1086,26 +1104,29 @@ class ControllerMain(QDialog):
         self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_path, 1, 1, 1, 1)
         self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_browse, 1, 2, 1, 1)
         self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_clear, 1, 3, 1, 1)
+        self.ui.gridLayout_intra_stim_delay_csv.addWidget(self.ui.intra_stim_delay_csv_edit, 1, 4, 1, 1)
 
         self.ui.intra_stim_delay_csv_spacer = QtWidgets.QSpacerItem(
-            40,
+            20,
             20,
             QtWidgets.QSizePolicy.Policy.Expanding,
             QtWidgets.QSizePolicy.Policy.Minimum,
         )
         self.ui.gridLayout_intra_stim_delay_csv.addItem(
-            self.ui.intra_stim_delay_csv_spacer, 1, 4, 1, 1
+            self.ui.intra_stim_delay_csv_spacer, 1, 5, 1, 1
         )
         self.ui.gridLayout_40.addWidget(self.ui.intra_stim_delay_csv_widget, 1, 0, 1, 7)
 
         self.ui.intra_stim_delay_csv_browse.clicked.connect(self.browse_intra_stim_delay_csv)
         self.ui.intra_stim_delay_csv_clear.clicked.connect(self.clear_intra_stim_delay_csv)
+        self.ui.intra_stim_delay_csv_edit.clicked.connect(self.edit_intra_stim_delay_csv)
 
     def _set_intra_stim_delay_csv_loaded(self, loaded: bool):
         self._set_pulse_settings_locked_by_pulse_csv(loaded)
         self.ui.intra_stim_delay_csv_browse.setEnabled(not loaded)
         self.ui.intra_stim_delay_csv_clear.setEnabled(loaded)
         self.ui.pulse_delay_csv_browse.setEnabled(not loaded)
+        self.ui.pulse_delay_csv_edit.setEnabled(not loaded)
 
     def _set_pulse_settings_locked_by_pulse_csv(self, locked: bool):
         enabled = not locked
@@ -1151,35 +1172,25 @@ class ControllerMain(QDialog):
         self.ui.intra_stim_delay_csv_path.clear()
         self._set_intra_stim_delay_csv_loaded(False)
 
+    def edit_intra_stim_delay_csv(self):
+        current_path = self.ui.intra_stim_delay_csv_path.text().strip()
+        dialog = NumericCsvEditorDialog(
+            self,
+            path=Path(current_path) if current_path else None,
+            title="Pulse Delay CSV Editor",
+            column_title="Pulse Delay (ms)",
+            allow_negative=False,
+            default_directory=Path.cwd(),
+        )
+        dialog.file_saved.connect(self._select_edited_intra_stim_delay_csv)
+        dialog.exec()
+
+    def _select_edited_intra_stim_delay_csv(self, path: str):
+        self.ui.intra_stim_delay_csv_path.setText(path)
+        self._set_intra_stim_delay_csv_loaded(True)
+
     def _read_intra_stim_delay_csv_values(self, path: Path) -> list[float]:
-        with path.open("r", newline="") as csv_file:
-            raw_lines = csv_file.read().splitlines()
-
-        if not raw_lines:
-            raise ValueError("CSV is empty.")
-
-        values = []
-        for line in raw_lines:
-            if line.strip() == "":
-                raise ValueError("CSV contains a blank row.")
-
-            row = next(csv.reader([line]))
-            if len(row) != 1:
-                raise ValueError("CSV must contain exactly one column.")
-
-            cell = row[0]
-            if cell != cell.strip():
-                raise ValueError("CSV values cannot contain leading or trailing spaces.")
-
-            try:
-                value = float(cell)
-            except ValueError as exc:
-                raise ValueError("CSV values must be numeric.") from exc
-            if value < 0:
-                raise ValueError("CSV delay values must be >= 0 ms.")
-            values.append(value)
-
-        return values
+        return read_numeric_csv_file(path, allow_negative=False)
 
     def _review_intra_stim_delay_csv_values(self, values: list[float]) -> bool:
         dialog = QDialog(self)
@@ -1245,32 +1256,25 @@ class ControllerMain(QDialog):
         self.ui.pulse_delay_csv_path.clear()
         self._set_pulse_delay_csv_loaded(False)
 
+    def edit_pulse_delay_csv(self):
+        current_path = self.ui.pulse_delay_csv_path.text().strip()
+        dialog = NumericCsvEditorDialog(
+            self,
+            path=Path(current_path) if current_path else None,
+            title="Stim Delay CSV Editor",
+            column_title="Stim Delay (ms)",
+            allow_negative=True,
+            default_directory=Path.cwd(),
+        )
+        dialog.file_saved.connect(self._select_edited_pulse_delay_csv)
+        dialog.exec()
+
+    def _select_edited_pulse_delay_csv(self, path: str):
+        self.ui.pulse_delay_csv_path.setText(path)
+        self._set_pulse_delay_csv_loaded(True)
+
     def _read_pulse_delay_csv_values(self, path: Path) -> list[float]:
-        with path.open("r", newline="") as csv_file:
-            raw_lines = csv_file.read().splitlines()
-
-        if not raw_lines:
-            raise ValueError("CSV is empty.")
-
-        values = []
-        for line in raw_lines:
-            if line.strip() == "":
-                raise ValueError("CSV contains a blank row.")
-
-            row = next(csv.reader([line]))
-            if len(row) != 1:
-                raise ValueError("CSV must contain exactly one column.")
-
-            cell = row[0]
-            if cell != cell.strip():
-                raise ValueError("CSV values cannot contain leading or trailing spaces.")
-
-            try:
-                values.append(float(cell))
-            except ValueError as exc:
-                raise ValueError("CSV values must be numeric.") from exc
-
-        return values
+        return read_numeric_csv_file(path, allow_negative=True)
 
     def _review_pulse_delay_csv_values(self, values: list[float]) -> bool:
         dialog = QDialog(self)
