@@ -1,0 +1,11 @@
+Field,Value
+Start Time,2026-07-27T17:21:38.536475
+Image Path,
+Participant First Name,
+Participant Last Name,
+Participant ID,
+Total Experiment Time (s),161
+
+Trial Index,Electrode Config,Waveform,Polarity,Displayed Status,Number of Log Entries,Total Trial Time (s)
+1,DV-I,Sham,Normal,Active,0,15
+2,DV-I,Active,Normal,Active,0,27

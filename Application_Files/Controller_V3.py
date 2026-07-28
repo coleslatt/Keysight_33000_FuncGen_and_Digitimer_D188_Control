@@ -28,6 +28,7 @@ from Trial_Program import (
                             prompt_save_after_trial,
                             build_trial_stateful_kwargs,
                             record_intensity_change,
+                            record_stim_off_if_needed,
                             AnnotationEditorDialog,
                             PatientBodyLogDialog,
                             TrialStartReviewDialog,
@@ -799,6 +800,7 @@ class ControllerMain(QDialog):
             print("Trial hardware busy; ignoring Next Config.")
             return
 
+        self._prepare_trial_config_transition()
         self.current_trial_index += 1
         load_trial_settings(self)
 
@@ -811,8 +813,22 @@ class ControllerMain(QDialog):
             print("Trial hardware busy; ignoring Previous Config.")
             return
 
+        self._prepare_trial_config_transition()
         self.current_trial_index -= 1
         load_trial_settings(self)
+
+    def _prepare_trial_config_transition(self):
+        """
+        End effective stimulation under the old trial before changing indexes.
+
+        Block the radio-button signal so the next trial's single settings apply
+        performs the hardware shutdown/reconfiguration in the Off state.
+        """
+        record_stim_off_if_needed(self)
+
+        blocker = QtCore.QSignalBlocker(self.ui.radioButton_9)
+        self.ui.radioButton_9.setChecked(True)
+        del blocker
 
 
 
@@ -2222,7 +2238,10 @@ class ControllerMain(QDialog):
         current_intensity = float(getattr(self, "current_intensity", 0.0) or 0.0)
 
         if last_state_on is None:
-            self._last_logged_stim_output_on = state_on
+            if state_on:
+                self._last_logged_stim_output_on = True
+            else:
+                record_stim_off_if_needed(self)
             return
 
         if last_state_on != state_on:
@@ -2231,9 +2250,8 @@ class ControllerMain(QDialog):
                 new_intensity = current_intensity
                 direction = "stim_on"
             else:
-                previous_intensity = current_intensity
-                new_intensity = 0.0
-                direction = "stim_off"
+                record_stim_off_if_needed(self)
+                return
 
             record_intensity_change(
                 self,
