@@ -198,10 +198,64 @@ def _wait_until_with_stop(
         # thread. This costs a small amount of CPU but improves trigger timing.
 
 def _estimated_run_time(num_stims, freq):
+    # A triggered burst contains ``num_stims`` complete waveform cycles.  Waiting
+    # for all of them keeps the worker (and therefore the Stop button) alive
+    # until the instrument has actually finished its burst.
+    return num_stims / freq
 
-    run_time = (num_stims - 1) / freq
 
-    return run_time
+def _shutdown_burst_channels(ch1, ch2):
+    """
+    Best-effort shutdown for both function-generator channels.
+
+    This is deliberately called from the burst worker thread.  Keeping all
+    driver access on one thread prevents Stop from racing an in-progress
+    configuration or trigger command.
+    """
+    cleanup_errors = []
+
+    # Abort first so an in-progress finite or infinite burst is halted before
+    # changing its configuration.
+    for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
+        if channel is None:
+            continue
+        try:
+            channel.trigger.abort()
+        except Exception as exc:
+            cleanup_errors.append(f"{channel_name} trigger abort: {exc}")
+
+    # Remove the electrical output even if an abort command was unsuccessful.
+    for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
+        if channel is None:
+            continue
+        try:
+            channel.output.enabled = 0
+        except Exception as exc:
+            cleanup_errors.append(f"{channel_name} output disable: {exc}")
+
+    # Leave burst mode disabled so a later trigger cannot resume the old run.
+    for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
+        if channel is None:
+            continue
+        try:
+            channel.burst.enabled = False
+        except Exception as exc:
+            cleanup_errors.append(f"{channel_name} burst disable: {exc}")
+
+    # With output and burst disabled, return the trigger system to its normal
+    # idle source.  This avoids leaving a stale BUS-triggered run armed.
+    for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
+        if channel is None:
+            continue
+        try:
+            channel.trigger.source = ks.TriggerSource.IMMEDIATE
+        except Exception as exc:
+            cleanup_errors.append(f"{channel_name} trigger source reset: {exc}")
+
+    for cleanup_error in cleanup_errors:
+        print(f"Cleanup warning: {cleanup_error}")
+
+    return not cleanup_errors
 
 
 def _export_burst_delay_log(delay_rows):
@@ -434,6 +488,8 @@ def burst_mode(
     reset = False
     options = ""
     driver = ks.Kt33000(resource_name, id_query, reset, options)
+    ch1 = None
+    ch2 = None
 
     print("  identifier: ", driver.identity.identifier)
     print("  revision:   ", driver.identity.revision)
@@ -722,53 +778,29 @@ def burst_mode(
 
             freq = 1 / interstim_delay
 
-            estimated_run_time = int(_estimated_run_time(num_stims, freq))
+            estimated_run_time = _estimated_run_time(num_stims, freq)
 
-            print(f'Estimated run time: {estimated_run_time}')
+            print(f"Estimated run time: {estimated_run_time:.3f} s")
 
-            # _sleep_with_stop(estimated_run_time, stop_event=stop_event, chunk_s=0.01)
+            if _sleep_with_stop(
+                estimated_run_time,
+                stop_event=stop_event,
+                chunk_s=0.01,
+            ):
+                print("Stop requested during hardware burst.")
 
     finally:
-
-        if jitter:
-            _export_burst_delay_log(jitter_delay_rows)
+        print("Disabling hardware")
+        if _shutdown_burst_channels(ch1, ch2):
+            print("Hardware disabled")
 
         try:
-            # Put hardware in a safe state on normal exit or Stop.
-
-            print("Disabling Hardware")
-
-            # ch1.output.enabled = 0
-            # ch2.output.enabled = 0
-
-            # ch1.burst.enabled = False
-            # ch2.burst.enabled = False
-
-            # ch1.trigger.abort()
-            # ch2.trigger.abort()
-
-            # # 2) Put channels back into inert trigger mode
-            # ch1.trigger.source = ks.TriggerSource.IMMEDIATE
-            # ch2.trigger.source = ks.TriggerSource.IMMEDIATE
-
-            # print("Hardware Disabled")
-
-            # PLACEHOLDER:
-            # Insert the actual Keysight/function-generator command here that
-            # aborts or stops burst execution immediately, once you know it.
-            #
-            # Example placeholder only:
-            # ch1.some_abort_or_stop_command()
-            # ch2.some_abort_or_stop_command()
-        
-            # driver.utility.reset()
-
-        except Exception as cleanup_error:
-            print(f"Cleanup warning: {cleanup_error}")
-
-        print("Closing Driver")
-        driver.close()
-        print ("Driver Closed")
+            if jitter:
+                _export_burst_delay_log(jitter_delay_rows)
+        finally:
+            print("Closing Driver")
+            driver.close()
+            print("Driver Closed")
 
 
 

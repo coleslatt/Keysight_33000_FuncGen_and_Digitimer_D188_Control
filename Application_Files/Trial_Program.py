@@ -2176,6 +2176,11 @@ def load_trial_settings(controller):
         # Finalize the last trial before ending
         finalize_current_trial_log_entry(controller)
 
+        # Shut stimulation down before saving so the final stim_off event is
+        # present in both the in-memory log and the saved JSON.
+        controller.ui.radioButton_9.setChecked(True)
+        controller.change_state()
+
         # Capture total experiment time before stopping timers
         if hasattr(controller, "experiment_log") and controller.experiment_log is not None:
             controller.experiment_log.total_experiment_time_seconds = (
@@ -2193,9 +2198,6 @@ def load_trial_settings(controller):
         if hasattr(controller, "update_system_status_visibility"):
             controller.update_system_status_visibility()
         print_patient_log_counts(controller)
-
-        controller.ui.radioButton_9.setChecked(True)
-        controller.change_state()
 
         return
 
@@ -2384,6 +2386,37 @@ def record_intensity_change(controller, *, previous_intensity: float, new_intens
         },
         show_message_on_error=False,
     )
+
+
+def record_stim_off_if_needed(controller) -> bool:
+    """
+    Record the effective output transition to zero once.
+
+    ``current_intensity`` remains the configured setpoint while stimulation is
+    off, so ``_last_logged_stim_output_on`` is the deduplication source of
+    truth. Treat an uninitialized state as on when an off transition is
+    explicitly requested; this also covers the first asynchronous trial apply,
+    where the initial ``change_state`` call can be ignored while hardware is
+    busy.
+    """
+    last_state_on = getattr(controller, "_last_logged_stim_output_on", None)
+    if last_state_on is False:
+        return False
+
+    previous_intensity = float(getattr(controller, "current_intensity", 0.0) or 0.0)
+    controller._last_logged_stim_output_on = False
+
+    if previous_intensity <= 0.0:
+        return False
+
+    record_intensity_change(
+        controller,
+        previous_intensity=previous_intensity,
+        new_intensity=0.0,
+        increment=previous_intensity,
+        direction="stim_off",
+    )
+    return True
 
 
 def increase_intensity(controller, inc = False):
