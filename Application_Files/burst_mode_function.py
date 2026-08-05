@@ -284,35 +284,44 @@ def load_pulse_delay_waveform(
     v_min=0,
     v_max=5,
     waveform_name="PULSECSV",
-    sample_count=100000,
+    sample_count=1000000,
+    sample_rate_hz=100000.0,
     trailing_settling_ms=5.0,
 ):
     """
     Build and download one arbitrary waveform from pulse delays.
 
     Each CSV delay value is the low-time after a pulse ends before the next
-    pulse starts. A list of N delays therefore creates N + 1 pulses. ``freq``
-    and ``sample_count`` define the sample interval. The downloaded waveform
-    starts with five low samples and ends with a configurable low settling
-    section after the final pulse. Its playback frequency is adjusted to
-    preserve the original sample interval.
+    pulse starts. A list of N delays therefore creates N + 1 pulses.
+    ``sample_rate_hz`` defines the sample interval independently of ``freq``;
+    ``freq`` is used only to verify that the complete waveform fits before the
+    next stimulation trigger. The downloaded waveform starts with five low
+    samples and ends with a configurable low settling section after the final
+    pulse. ``sample_count`` is the maximum number of points that may be
+    downloaded.
     """
     pulse_delay_values_ms = [float(delay_ms) for delay_ms in pulse_delay_values_ms]
     pulse_width_ms = float(pulse_width_ms)
     freq = float(freq)
+    sample_count = int(sample_count)
+    sample_rate_hz = float(sample_rate_hz)
     trailing_settling_ms = float(trailing_settling_ms)
 
     if freq <= 0:
         raise ValueError("freq must be > 0.")
     if pulse_width_ms <= 0:
         raise ValueError("pulse_width_ms must be > 0.")
+    if sample_count < 8:
+        raise ValueError("sample_count must be at least 8 points.")
+    if sample_rate_hz <= 0:
+        raise ValueError("sample_rate_hz must be > 0.")
     if trailing_settling_ms <= 0:
         raise ValueError("trailing_settling_ms must be > 0.")
     if any(delay_ms < 0 for delay_ms in pulse_delay_values_ms):
         raise ValueError("pulse_delay_values_ms values must be >= 0.")
 
     period = 1.0 / freq
-    time_per_point = period / sample_count
+    time_per_point = 1.0 / sample_rate_hz
 
     pulse_starts_ms = [0.0]
     current_start_ms = 0.0
@@ -342,10 +351,16 @@ def load_pulse_delay_waveform(
         int(round(trailing_settling_ms * 1e-3 / time_per_point)),
     )
     trimmed_sample_count = last_end_idx + trailing_low_points
-    if trimmed_sample_count > sample_count:
+    downloaded_duration_s = trimmed_sample_count * time_per_point
+    if downloaded_duration_s > period:
         raise ValueError(
             "Pulse delay waveform, including its leading and trailing low "
             "samples, exceeds one period at the selected frequency."
+        )
+    if trimmed_sample_count > sample_count:
+        raise ValueError(
+            "Pulse delay waveform exceeds the configured maximum of "
+            f"{sample_count} downloaded points at {sample_rate_hz:g} Sa/s."
         )
 
     waveform = np.full(trimmed_sample_count, -1.0, dtype=">f4")
@@ -353,7 +368,7 @@ def load_pulse_delay_waveform(
         waveform[start_idx:end_idx] = 1.0
 
     waveform_bytes = waveform.view(np.uint8)
-    waveform_freq = 1.0 / (trimmed_sample_count * time_per_point)
+    waveform_freq = sample_rate_hz / trimmed_sample_count
 
     ch.output_function.function = ks.FunctionShape.ARBITRARY
     driver.display.arb_rate_unit = ks.DisplayARBRateUnits.FREQUENCY
@@ -372,7 +387,8 @@ def load_pulse_delay_waveform(
         f"Loaded {waveform_name}: {len(pulse_starts_ms)} pulses, "
         f"pulse_width={pulse_width_ms} ms, duration={waveform_duration_ms} ms, "
         f"trailing_settling={trailing_low_points * time_per_point * 1e3} ms, "
-        f"frequency={waveform_freq} Hz, downloaded_points="
+        f"sample_rate={sample_rate_hz} Sa/s, frequency={waveform_freq} Hz, "
+        f"downloaded_points="
         f"{trimmed_sample_count}/{sample_count}"
     )
 
@@ -381,6 +397,8 @@ def load_pulse_delay_waveform(
         "duration_ms": waveform_duration_ms,
         "frequency_hz": waveform_freq,
         "requested_frequency_hz": freq,
+        "sample_rate_hz": sample_rate_hz,
+        "downloaded_duration_ms": downloaded_duration_s * 1e3,
         "occupied_points": last_end_idx,
         "downloaded_points": trimmed_sample_count,
         "leading_low_points": leading_low_points,
@@ -506,6 +524,17 @@ def burst_mode(
         ch1.output.enabled = 0
         ch2.output.enabled = 0
 
+        # Stop any previous burst and select software triggering before
+        # configuring or enabling the next burst.
+        ch1.trigger.abort()
+        ch2.trigger.abort()
+
+        ch1.burst.enabled = False
+        ch2.burst.enabled = False
+
+        ch1.trigger.source = ks.TriggerSource.BUS
+        ch2.trigger.source = ks.TriggerSource.BUS
+
         if _stop_requested(stop_event):
             print("Stop requested before configuration.")
             return
@@ -598,14 +627,14 @@ def burst_mode(
 
             ch1_pw_ms = ch1_args.get("pw", 1)
             ch2_pw_ms = ch2_args.get("pw", ch1_pw_ms)
-            pulse_delay_waveform_freq = 1 / interstim_delay
+            stim_frequency_hz = 1 / interstim_delay
 
             load_pulse_delay_waveform(
                 ch=ch1,
                 driver=driver,
                 pulse_delay_values_ms=pulse_delay_values_ms,
                 pulse_width_ms=ch1_pw_ms,
-                freq=pulse_delay_waveform_freq,
+                freq=stim_frequency_hz,
                 v_min=0 if ch1_ttl else ch1_args.get("v_min", 0),
                 v_max=5 if ch1_ttl else ch1_args.get("v_max", 5),
                 waveform_name="PULSECSV1",
@@ -617,7 +646,7 @@ def burst_mode(
                     driver=driver,
                     pulse_delay_values_ms=pulse_delay_values_ms,
                     pulse_width_ms=ch2_pw_ms,
-                    freq=pulse_delay_waveform_freq,
+                    freq=stim_frequency_hz,
                     v_min=0 if ch2_ttl else ch2_args.get("v_min", 0),
                     v_max=5 if ch2_ttl else ch2_args.get("v_max", 5),
                     waveform_name="PULSECSV2",
@@ -645,12 +674,6 @@ def burst_mode(
             _set_burst_phase_zero(ch1, "CH1")
             if ch2_state:
                 _set_burst_phase_zero(ch2, "CH2")
-
-        ch1.burst.enabled = True
-        ch2.burst.enabled = True
-
-        ch1.trigger.source = ks.TriggerSource.BUS
-        ch2.trigger.source = ks.TriggerSource.BUS
 
         if rand_freq and pulse_delay_values_ms is None:
                 random_frequency = random.uniform(
@@ -693,6 +716,11 @@ def burst_mode(
             ch1.trigger.delay = datetime.timedelta(0, 0, 0, 0)
             ch2.trigger.delay = datetime.timedelta(0, 0, 0, 0)
 
+        # Arm burst only after frequency, cycle count, load, and trigger
+        # delay have all been configured.
+        ch1.burst.enabled = True
+        ch2.burst.enabled = bool(ch2_state)
+
         ch1.output.enabled = 1
         ch2.output.enabled = 1 if ch2_state else 0
 
@@ -728,6 +756,25 @@ def burst_mode(
                 ch1.output.frequency = pulse_freq
                 ch2.output.frequency = pulse_freq
 
+            # Give the armed output one complete interstim period to settle at
+            # the waveform's low starting point before the first trigger. This
+            # also makes startup timing consistent with all later stims.
+            print(
+                f"Waiting {interstim_delay:g} s before the first burst trigger."
+            )
+            initial_wait_complete = _wait_until_with_stop(
+                time.perf_counter() + interstim_delay,
+                stop_event=stop_event,
+            )
+            if initial_wait_complete:
+                print("Stop requested during initial interstim wait.")
+                return
+
+            if jitter:
+                # The initial wait is deliberately one exact period; jitter is
+                # applied only to intervals between subsequent stimulations.
+                jitter_delay_rows.append([1, interstim_delay])
+
             count = 1
             while count <= num_stims:
                 if _stop_requested(stop_event):
@@ -743,6 +790,13 @@ def burst_mode(
                     ch2.output.frequency = random_frequency
 
                 trigger_once()
+                print(f"Triggered burst {count}/{num_stims}.")
+
+                # There is no reason to remain armed for another full period
+                # after the final requested stimulation.
+                if count >= num_stims:
+                    break
+
                 # Start the deadline after the trigger command returns. This
                 # compensates the Python work below without ever shortening a
                 # requested wait to catch up after a slow VISA transaction.
@@ -755,7 +809,7 @@ def burst_mode(
                 )
                 rand = round(rand / jitter_quantize) * jitter_quantize
                 if jitter:
-                    jitter_delay_rows.append([count, rand])
+                    jitter_delay_rows.append([count + 1, rand])
 
                 stopped = _wait_until_with_stop(
                     trigger_complete_s + rand,
