@@ -204,7 +204,7 @@ def _estimated_run_time(num_stims, freq):
     return num_stims / freq
 
 
-def _shutdown_burst_channels(ch1, ch2):
+def _shutdown_burst_channels(ch1, ch2, *, abort_active=True):
     """
     Best-effort shutdown for both function-generator channels.
 
@@ -214,15 +214,16 @@ def _shutdown_burst_channels(ch1, ch2):
     """
     cleanup_errors = []
 
-    # Abort first so an in-progress finite or infinite burst is halted before
-    # changing its configuration.
-    for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
-        if channel is None:
-            continue
+    # One abort applies to both channels on a two-channel 33512B. Do not send a
+    # second abort, and do not abort at all after a finite CSV burst has already
+    # completed normally and returned to its low starting phase.
+    if abort_active:
+        abort_channel = ch1 if ch1 is not None else ch2
         try:
-            channel.trigger.abort()
+            if abort_channel is not None:
+                abort_channel.trigger.abort()
         except Exception as exc:
-            cleanup_errors.append(f"{channel_name} trigger abort: {exc}")
+            cleanup_errors.append(f"trigger abort: {exc}")
 
     # Remove the electrical output even if an abort command was unsuccessful.
     for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
@@ -293,12 +294,13 @@ def load_pulse_delay_waveform(
 
     Each CSV delay value is the low-time after a pulse ends before the next
     pulse starts. A list of N delays therefore creates N + 1 pulses.
-    ``sample_rate_hz`` defines the sample interval independently of ``freq``;
-    ``freq`` is used only to verify that the complete waveform fits before the
-    next stimulation trigger. The downloaded waveform starts with five low
-    samples and ends with a configurable low settling section after the final
-    pulse. ``sample_count`` is the maximum number of points that may be
-    downloaded.
+    ``sample_rate_hz`` defines the sample interval independently of ``freq``.
+    One downloaded waveform represents one complete stimulation period: it
+    starts with five low samples, contains the requested pulses and delays, and
+    is padded low through the end of the period. Repeating that waveform in a
+    hardware-timed N-cycle burst therefore preserves both the intra-stim pulse
+    timing and the requested start-to-start stimulation period. ``sample_count``
+    is the maximum number of points that may be downloaded.
     """
     pulse_delay_values_ms = [float(delay_ms) for delay_ms in pulse_delay_values_ms]
     pulse_width_ms = float(pulse_width_ms)
@@ -350,18 +352,30 @@ def load_pulse_delay_waveform(
         1,
         int(round(trailing_settling_ms * 1e-3 / time_per_point)),
     )
-    trimmed_sample_count = last_end_idx + trailing_low_points
-    downloaded_duration_s = trimmed_sample_count * time_per_point
-    if downloaded_duration_s > period:
+    minimum_waveform_points = last_end_idx + trailing_low_points
+    period_sample_count = int(round(period * sample_rate_hz))
+    if period_sample_count < 8:
+        raise ValueError(
+            "The selected stimulation period is shorter than the minimum "
+            "8-point arbitrary waveform."
+        )
+    if minimum_waveform_points > period_sample_count:
         raise ValueError(
             "Pulse delay waveform, including its leading and trailing low "
             "samples, exceeds one period at the selected frequency."
         )
-    if trimmed_sample_count > sample_count:
+    if period_sample_count > sample_count:
         raise ValueError(
-            "Pulse delay waveform exceeds the configured maximum of "
-            f"{sample_count} downloaded points at {sample_rate_hz:g} Sa/s."
+            "One complete stimulation period requires "
+            f"{period_sample_count} points, exceeding the configured maximum "
+            f"of {sample_count} points at {sample_rate_hz:g} Sa/s."
         )
+
+    # Include the entire interstim period in one waveform cycle. The portion
+    # after the final pulse remains low, so hardware cycle repetition defines
+    # the next stimulation onset without any per-stim software trigger latency.
+    trimmed_sample_count = period_sample_count
+    downloaded_duration_s = trimmed_sample_count * time_per_point
 
     waveform = np.full(trimmed_sample_count, -1.0, dtype=">f4")
     for start_idx, end_idx in pulse_ranges:
@@ -369,6 +383,9 @@ def load_pulse_delay_waveform(
 
     waveform_bytes = waveform.view(np.uint8)
     waveform_freq = sample_rate_hz / trimmed_sample_count
+    total_trailing_low_ms = (
+        (trimmed_sample_count - last_end_idx) * time_per_point * 1e3
+    )
 
     ch.output_function.function = ks.FunctionShape.ARBITRARY
     driver.display.arb_rate_unit = ks.DisplayARBRateUnits.FREQUENCY
@@ -386,7 +403,7 @@ def load_pulse_delay_waveform(
     print(
         f"Loaded {waveform_name}: {len(pulse_starts_ms)} pulses, "
         f"pulse_width={pulse_width_ms} ms, duration={waveform_duration_ms} ms, "
-        f"trailing_settling={trailing_low_points * time_per_point * 1e3} ms, "
+        f"trailing_low={total_trailing_low_ms} ms, "
         f"sample_rate={sample_rate_hz} Sa/s, frequency={waveform_freq} Hz, "
         f"downloaded_points="
         f"{trimmed_sample_count}/{sample_count}"
@@ -402,8 +419,9 @@ def load_pulse_delay_waveform(
         "occupied_points": last_end_idx,
         "downloaded_points": trimmed_sample_count,
         "leading_low_points": leading_low_points,
-        "trailing_low_points": trailing_low_points,
-        "trailing_settling_ms": trailing_low_points * time_per_point * 1e3,
+        "trailing_low_points": trimmed_sample_count - last_end_idx,
+        "trailing_settling_ms": total_trailing_low_ms,
+        "minimum_trailing_settling_ms": trailing_low_points * time_per_point * 1e3,
     }
 
 
@@ -448,6 +466,16 @@ def burst_mode(
         assert all(delay_ms >= 0 for delay_ms in pulse_delay_values_ms), (
             "pulse_delay_values_ms values must be >= 0 ms."
         )
+        if jitter:
+            raise ValueError(
+                "Jitter cannot be combined with a Pulse Delay CSV because "
+                "CSV timing is generated as one hardware-timed N-cycle burst."
+            )
+        if rand_freq:
+            raise ValueError(
+                "Random stimulation frequency cannot be combined with a "
+                "Pulse Delay CSV. Select one fixed interstim period or frequency."
+            )
     assert jitter_rate <= interstim_delay, (
         f"jitter_rate ({jitter_rate}s) must be <= interstim_delay ({interstim_delay}s) "
         "to avoid negative or invalid sleep intervals when jitter=True."
@@ -508,12 +536,18 @@ def burst_mode(
     driver = ks.Kt33000(resource_name, id_query, reset, options)
     ch1 = None
     ch2 = None
+    pulse_delay_waveform_info = None
+    csv_burst_completed_normally = False
 
     print("  identifier: ", driver.identity.identifier)
     print("  revision:   ", driver.identity.revision)
     print("  vendor:     ", driver.identity.vendor)
     print("  description:", driver.identity.description)
     print("  model:      ", driver.identity.instrument_model)
+    print(
+        "  firmware:   ",
+        getattr(driver.identity, "instrument_firmware_revision", "unknown"),
+    )
     print("  resource:   ", driver.driver_operation.io_resource_descriptor)
     print("  options:    ", driver.driver_operation.driver_setup)
 
@@ -524,10 +558,15 @@ def burst_mode(
         ch1.output.enabled = 0
         ch2.output.enabled = 0
 
-        # Stop any previous burst and select software triggering before
-        # configuring or enabling the next burst.
+        # Force the trigger system to remain idle after abort. Without this,
+        # continuous initiation can immediately re-arm a stale burst while the
+        # output and waveform parameters are being changed.
+        if pulse_delay_values_ms is not None:
+            ch1.trigger.initiate_continuous_enabled = False
+            ch2.trigger.initiate_continuous_enabled = False
+
+        # One abort applies to both channels on the 33512B.
         ch1.trigger.abort()
-        ch2.trigger.abort()
 
         ch1.burst.enabled = False
         ch2.burst.enabled = False
@@ -629,7 +668,7 @@ def burst_mode(
             ch2_pw_ms = ch2_args.get("pw", ch1_pw_ms)
             stim_frequency_hz = 1 / interstim_delay
 
-            load_pulse_delay_waveform(
+            pulse_delay_waveform_info = load_pulse_delay_waveform(
                 ch=ch1,
                 driver=driver,
                 pulse_delay_values_ms=pulse_delay_values_ms,
@@ -688,17 +727,24 @@ def burst_mode(
             ch1.output.frequency = 1 / interstim_delay
             ch2.output.frequency = 1 / interstim_delay
 
-        print(f"burst cycles = {burst_cycles}")
-
         if pulse_delay_values_ms is not None:
-            ch1.burst.number_of_cycles = 1
-            ch2.burst.number_of_cycles = 1
+            ch1.burst.number_of_cycles = num_stims
+            ch2.burst.number_of_cycles = num_stims
+            print(
+                "Pulse Delay CSV hardware burst: "
+                f"{num_stims} cycles x "
+                f"{pulse_delay_waveform_info['pulse_count']} pulses = "
+                f"{num_stims * pulse_delay_waveform_info['pulse_count']} "
+                "total pulses."
+            )
         elif (not jitter) and (burst_cycles == 1):
+            print(f"burst cycles = {burst_cycles}")
             print("burst = num_stims")
             ch1.burst.number_of_cycles = num_stims
             ch2.burst.number_of_cycles = num_stims
             jitter_rate = 0
         else:
+            print(f"burst cycles = {burst_cycles}")
             ch1.burst.number_of_cycles = burst_cycles
             ch2.burst.number_of_cycles = burst_cycles
 
@@ -721,6 +767,8 @@ def burst_mode(
         ch1.burst.enabled = True
         ch2.burst.enabled = bool(ch2_state)
 
+        if pulse_delay_values_ms is not None:
+            print("Enabling configured 0-5 V CSV output at its low starting point.")
         ch1.output.enabled = 1
         ch2.output.enabled = 1 if ch2_state else 0
 
@@ -737,11 +785,54 @@ def burst_mode(
             else:
                 ch2.trigger.software_trigger()
 
-        if (
-            jitter
-            or (burst_cycles > 1)
-            or (pulse_delay_values_ms is not None)
-        ):
+        if pulse_delay_values_ms is not None:
+            # The channel is armed and resting at the first low waveform point.
+            # Wait one exact period before starting the finite hardware burst.
+            initial_delay_s = pulse_delay_waveform_info["downloaded_duration_ms"] / 1e3
+            print(
+                f"Waiting {initial_delay_s:g} s before the first burst trigger."
+            )
+            if _wait_until_with_stop(
+                time.perf_counter() + initial_delay_s,
+                stop_event=stop_event,
+            ):
+                print("Stop requested during initial interstim wait.")
+                return
+
+            if _stop_requested(stop_event):
+                print("Stop requested before CSV hardware burst trigger.")
+                return
+
+            # Explicitly move from idle to wait-for-trigger only after the
+            # waveform, voltage, output relay, phase, and burst count are final.
+            print("Arming CSV burst and sending the only software trigger.")
+            ch1.trigger.initiate()
+            trigger_once()
+            print(
+                "Triggered Pulse Delay CSV hardware burst: "
+                f"{num_stims} stimulation cycles."
+            )
+
+            # Wait for every hardware-timed cycle to finish before normal
+            # cleanup. Starting after software_trigger returns is deliberately
+            # conservative and prevents aborting the final cycle early.
+            hardware_burst_duration_s = initial_delay_s * num_stims
+            if _wait_until_with_stop(
+                time.perf_counter() + hardware_burst_duration_s,
+                stop_event=stop_event,
+            ):
+                print("Stop requested during CSV hardware burst; aborting output.")
+                return
+
+            print(
+                "Pulse Delay CSV hardware burst completed: "
+                f"{num_stims * pulse_delay_waveform_info['pulse_count']} "
+                "pulses requested."
+            )
+
+            csv_burst_completed_normally = True
+
+        elif jitter or (burst_cycles > 1):
             
             if (
                 burst_cycles != 1
@@ -845,7 +936,11 @@ def burst_mode(
 
     finally:
         print("Disabling hardware")
-        if _shutdown_burst_channels(ch1, ch2):
+        if _shutdown_burst_channels(
+            ch1,
+            ch2,
+            abort_active=not csv_burst_completed_normally,
+        ):
             print("Hardware disabled")
 
         try:
