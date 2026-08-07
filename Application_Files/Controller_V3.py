@@ -228,6 +228,7 @@ class ControllerMain(QDialog):
 
         self.burst_thread = None
         self.burst_worker = None
+        self._burst_reset_pending = False
 
         self.trial_hw_busy = False
         self.trial_hw_thread = QThread(self)
@@ -357,6 +358,7 @@ class ControllerMain(QDialog):
 
         self.ui.pushButton_4.clicked.connect(self.apply_burst_mode_settings)
         self.ui.stop_button.clicked.connect(self.stop_burst_mode)
+        self.ui.pushButton_3.clicked.connect(self.reset_burst_mode)
         self.ui.stop_button.setEnabled(False)
         self.ui.pulse_delay_csv_browse.clicked.connect(self.browse_pulse_delay_csv)
         self.ui.pulse_delay_csv_clear.clicked.connect(self.clear_pulse_delay_csv)
@@ -1602,10 +1604,117 @@ class ControllerMain(QDialog):
     def _set_burst_ui_running(self, running: bool):
         self.ui.pushButton_4.setEnabled(not running)
         self.ui.stop_button.setEnabled(running)
+        self.ui.pushButton_3.setEnabled(not running and not self._burst_reset_pending)
 
     def _cleanup_burst_thread_refs(self):
         self.burst_thread = None
         self.burst_worker = None
+        if self._burst_reset_pending:
+            QTimer.singleShot(0, self._complete_burst_reset)
+
+    def _restore_burst_gui_defaults(self):
+        """Restore the Burst Mode controls to their application defaults."""
+        self.clear_pulse_delay_csv()
+        self.clear_intra_stim_delay_csv()
+
+        self.ui.radioButton_4.setChecked(True)       # Interstim period mode
+        self.ui.interstim_delay.setValue(1)
+        self.ui.num_stims.setValue(1)
+
+        self.ui.jitter_off_3.setChecked(True)
+        self.ui.doubleSpinBox_24.setValue(0)
+        self.ui.jitter_quantize_dropdown.setCurrentIndex(4)
+
+        self.ui.rf_off.setChecked(True)
+        self.ui.rf_lower.setValue(0)
+        self.ui.rf_upper.setValue(0)
+
+        self.ui.spinBox.setValue(1)
+        self.ui.radioButton_2.setChecked(True)       # Interpulse period mode
+        self.ui.doubleSpinBox.setValue(0)
+
+        self.ui.radioButton_6.setChecked(True)       # Channel 2 off
+        self.ui.doubleSpinBox_3.setValue(0)
+
+        self.ui.ch1_on_7.setChecked(True)            # CH1 TTL
+        self.ui.ch2_on_8.setChecked(True)            # CH2 TTL
+        self.ui.comboBox_19.setCurrentText("Pulse")
+        self.ui.comboBox_22.setCurrentText("Pulse")
+
+        self.ui.doubleSpinBox_37.setValue(0)         # CH1 low
+        self.ui.doubleSpinBox_38.setValue(5)         # CH1 high
+        self.ui.doubleSpinBox_43.setValue(0)         # CH2 low
+        self.ui.doubleSpinBox_44.setValue(5)         # CH2 high
+        self.ui.doubleSpinBox_39.setValue(1)         # CH1 pulse width, ms
+        self.ui.doubleSpinBox_47.setValue(1)         # CH2 pulse width, ms
+
+        self.ui.ch1_off_11.setChecked(True)          # CH1 charge balance off
+        self.ui.ch2_chargebalance.setChecked(True)   # CH2 charge balance off
+        self.ui.radioButton_33.setChecked(True)      # CH1 auto-k off
+        self.ui.radioButton_37.setChecked(True)      # CH2 auto-k off
+        self.ui.radioButton_35.setChecked(True)      # CH1 normal polarity
+        self.ui.radioButton_40.setChecked(True)      # CH2 normal polarity
+
+        self.ui.groupBox_26.setEnabled(False)
+        self.ui.groupBox_28.setEnabled(False)
+        self.ui.OutputMode_display_6.setText("N/A")
+        self.ui.textBrowser_2.setText("5")
+        self.ui.textBrowser.setText("0")
+
+        # Reapply dependent enabled/disabled states and unit labels after all
+        # radio-button and CSV selections have been restored.
+        self._switch_delay_freq_1(None)
+        self._switch_delay_freq_2(None)
+        self.enable_jitter_1(None)
+        self.enable_rf_freq()
+        self.enable_channel_2(None)
+        self.enable_ch1_waveform(None)
+        self.enable_ch2_waveform(None)
+
+    def reset_burst_mode(self):
+        """Restore defaults only after Burst Mode has completely stopped."""
+        if self._burst_reset_pending:
+            return
+
+        if self.burst_worker is not None or self.burst_thread is not None:
+            print("Burst reset ignored: press Stop and wait for shutdown to finish.")
+            QMessageBox.information(
+                self,
+                "Stop Burst First",
+                "Press Stop and wait for the burst to finish shutting down before "
+                "using Reset.",
+            )
+            return
+
+        self._burst_reset_pending = True
+        self.ui.pushButton_3.setEnabled(False)
+        self._complete_burst_reset()
+
+    def _complete_burst_reset(self):
+        try:
+            # This resets the stateful function-generator cache and explicitly
+            # turns CH1/CH2 output and burst mode off before changing the GUI.
+            func_gen_control_stateful(
+                reset=True,
+                hardware_enabled=self.hardware_enabled,
+            )
+        except Exception as exc:
+            traceback.print_exc()
+            QMessageBox.critical(
+                self,
+                "Burst Reset Error",
+                "Could not confirm that the function-generator outputs were "
+                f"turned off. GUI settings were not reset.\n\n{exc}",
+            )
+            self._burst_reset_pending = False
+            self.ui.pushButton_3.setEnabled(True)
+            return
+
+        self._restore_burst_gui_defaults()
+        self._burst_reset_pending = False
+        self.ui.pushButton_3.setEnabled(True)
+        self._set_burst_ui_running(False)
+        print("Burst Mode reset complete: outputs off and GUI defaults restored.")
 
     def _collect_burst_mode_settings(self) -> dict:
         # Collect values from the UI
