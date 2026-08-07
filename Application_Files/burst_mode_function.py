@@ -8,6 +8,13 @@ import time
 from pathlib import Path
 from FuncGen_Selector_Function_2 import func_gen_control
 
+
+# The Keysight documentation notes that changing OUTPut operates a physical
+# relay and that the signal can take about 1 ms to stabilize.  Keep later
+# abort/burst commands well outside that transition so they cannot leak through
+# a relay that is still opening or closing.
+OUTPUT_RELAY_SETTLE_S = 0.010
+
 # d188.py — minimal ctypes bridge for DGD188API.DLL (Windows) — fixed prototypes to allow None
 import ctypes as C
 from ctypes import wintypes as W
@@ -204,7 +211,38 @@ def _estimated_run_time(num_stims, freq):
     return num_stims / freq
 
 
-def _shutdown_burst_channels(ch1, ch2, *, abort_active=True):
+def _settle_output_relay(
+    driver,
+    settle_s=OUTPUT_RELAY_SETTLE_S,
+    *,
+    wait_for_operation=True,
+):
+    """Wait for an output-relay command and its electrical settling time."""
+    operation_error = None
+    try:
+        if driver is not None and wait_for_operation:
+            driver.system.wait_for_operation_complete(
+                datetime.timedelta(seconds=1)
+            )
+    except Exception as exc:
+        operation_error = exc
+    finally:
+        # *OPC completion does not by itself guarantee that the connector has
+        # passed the documented approximately 1 ms output-settling interval.
+        time.sleep(max(0.0, float(settle_s)))
+
+    if operation_error is not None:
+        raise operation_error
+
+
+def _shutdown_burst_channels(
+    ch1,
+    ch2,
+    *,
+    driver=None,
+    abort_active=True,
+    disconnect_before_abort=False,
+):
     """
     Best-effort shutdown for both function-generator channels.
 
@@ -214,10 +252,8 @@ def _shutdown_burst_channels(ch1, ch2, *, abort_active=True):
     """
     cleanup_errors = []
 
-    # One abort applies to both channels on a two-channel 33512B. Do not send a
-    # second abort, and do not abort at all after a finite CSV burst has already
-    # completed normally and returned to its low starting phase.
-    if abort_active:
+    def _abort_trigger_system():
+        """One abort applies to both channels on a two-channel 33512B."""
         abort_channel = ch1 if ch1 is not None else ch2
         try:
             if abort_channel is not None:
@@ -225,14 +261,42 @@ def _shutdown_burst_channels(ch1, ch2, *, abort_active=True):
         except Exception as exc:
             cleanup_errors.append(f"trigger abort: {exc}")
 
-    # Remove the electrical output even if an abort command was unsuccessful.
-    for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
-        if channel is None:
-            continue
+    def _disconnect_outputs():
+        for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
+            if channel is None:
+                continue
+            try:
+                channel.output.enabled = 0
+            except Exception as exc:
+                cleanup_errors.append(f"{channel_name} output disable: {exc}")
+
+        # Do not change burst mode while the output relay may still be moving.
+        # Otherwise disabling burst can briefly expose continuously playing ARB
+        # data through a relay that has not physically opened yet.
         try:
-            channel.output.enabled = 0
+            _settle_output_relay(
+                driver,
+                # Waiting for global operation completion during an active
+                # finite burst can wait for the burst itself. OUTPUT OFF plus
+                # the relay guard keeps interrupted Stop responsive.
+                wait_for_operation=not (
+                    abort_active and disconnect_before_abort
+                ),
+            )
         except Exception as exc:
-            cleanup_errors.append(f"{channel_name} output disable: {exc}")
+            cleanup_errors.append(f"output relay settle: {exc}")
+
+    # During an interrupted CSV burst, disconnect the electrical outputs before
+    # resetting the ARB phase with ABORt.  This prevents that abrupt phase jump
+    # from being delivered to the downstream stimulator.  Other modes retain
+    # abort-first behavior so an active non-CSV burst is halted immediately.
+    if abort_active and not disconnect_before_abort:
+        _abort_trigger_system()
+
+    _disconnect_outputs()
+
+    if abort_active and disconnect_before_abort:
+        _abort_trigger_system()
 
     # Leave burst mode disabled so a later trigger cannot resume the old run.
     for channel_name, channel in (("CH1", ch1), ("CH2", ch2)):
@@ -395,6 +459,13 @@ def load_pulse_delay_waveform(
         data=waveform_bytes,
     )
     ch.output_function.arbitrary_waveform.select_arb_waveform(waveform_name)
+    # Pulse edges must not be reconstructed with the ARB interpolation filter.
+    # Even the driver's default STEP filter can introduce pre-/overshoot around
+    # a discontinuity, which appears as a negative pulse before the train and
+    # small extra pulses after an edge on a sensitive downstream trigger.
+    ch.output_function.arbitrary_waveform.interpolation_enabled = (
+        ks.ArbWaveformInterpolation.OFF
+    )
     ch.output_function.arbitrary_waveform.frequency = waveform_freq
     ch.output.frequency = waveform_freq
     ch.output.voltage.high = v_max
@@ -558,12 +629,16 @@ def burst_mode(
         ch1.output.enabled = 0
         ch2.output.enabled = 0
 
-        # Force the trigger system to remain idle after abort. Without this,
-        # continuous initiation can immediately re-arm a stale burst while the
-        # output and waveform parameters are being changed.
-        if pulse_delay_values_ms is not None:
-            ch1.trigger.initiate_continuous_enabled = False
-            ch2.trigger.initiate_continuous_enabled = False
+        # Ensure both physical output relays are open before aborting or
+        # changing the previous burst configuration.  This is especially
+        # important when a new run follows an interrupted CSV run immediately.
+        _settle_output_relay(driver)
+
+        # Use explicit finite arming for every mode. This prevents a previous
+        # run's continuous-initiation state from either re-arming stale output
+        # during setup or leaving a later regular (non-CSV) trigger ignored.
+        ch1.trigger.initiate_continuous_enabled = False
+        ch2.trigger.initiate_continuous_enabled = False
 
         # One abort applies to both channels on the 33512B.
         ch1.trigger.abort()
@@ -772,12 +847,21 @@ def burst_mode(
         ch1.output.enabled = 1
         ch2.output.enabled = 1 if ch2_state else 0
 
+        # Configuration is already at the waveform's low first point.  Let the
+        # output relay close and stabilize before the channel is armed, so the
+        # relay transition cannot overlap the requested pulse train.
+        _settle_output_relay(driver)
+
         if _stop_requested(stop_event):
             print("Stop requested before trigger phase.")
             return
 
         # --- trigger ---
-        def trigger_once():
+        def arm_and_trigger_once():
+            # Abort above returns both channels to idle. A BUS trigger is
+            # ignored in that state, so every finite burst must first move the
+            # shared two-channel trigger system to wait-for-trigger.
+            ch1.trigger.initiate()
             if interpulse_delay >= 0:
                 # print("triggered")
                 # print(ch1.trigger.source)
@@ -806,8 +890,7 @@ def burst_mode(
             # Explicitly move from idle to wait-for-trigger only after the
             # waveform, voltage, output relay, phase, and burst count are final.
             print("Arming CSV burst and sending the only software trigger.")
-            ch1.trigger.initiate()
-            trigger_once()
+            arm_and_trigger_once()
             print(
                 "Triggered Pulse Delay CSV hardware burst: "
                 f"{num_stims} stimulation cycles."
@@ -821,7 +904,10 @@ def burst_mode(
                 time.perf_counter() + hardware_burst_duration_s,
                 stop_event=stop_event,
             ):
-                print("Stop requested during CSV hardware burst; aborting output.")
+                print(
+                    "Stop requested during CSV hardware burst; "
+                    "disconnecting outputs before abort."
+                )
                 return
 
             print(
@@ -880,7 +966,7 @@ def burst_mode(
                     ch1.output.frequency = random_frequency
                     ch2.output.frequency = random_frequency
 
-                trigger_once()
+                arm_and_trigger_once()
                 print(f"Triggered burst {count}/{num_stims}.")
 
                 # There is no reason to remain armed for another full period
@@ -912,10 +998,7 @@ def burst_mode(
 
                 count += 1
         else:
-            if interpulse_delay >= 0:
-                ch1.trigger.software_trigger()
-            else:
-                ch2.trigger.software_trigger()
+            arm_and_trigger_once()
 
             # Optional: if you want Stop to remain meaningful even in the
             # single-trigger/burst-engine case, wait cooperatively for the
@@ -939,7 +1022,12 @@ def burst_mode(
         if _shutdown_burst_channels(
             ch1,
             ch2,
+            driver=driver,
             abort_active=not csv_burst_completed_normally,
+            disconnect_before_abort=(
+                pulse_delay_values_ms is not None
+                and _stop_requested(stop_event)
+            ),
         ):
             print("Hardware disabled")
 
